@@ -1,0 +1,1 @@
+Current focus: Phase 1 scaffold — project structure, models, migrations, start.sh

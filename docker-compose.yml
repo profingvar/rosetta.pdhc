@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16
+    container_name: rosetta_pdhc_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-rosetta_pdhc_db}
+      POSTGRES_USER: ${DB_USER:-rosetta}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+    ports:
+      - "9091:5432"
+    volumes:
+      - rosetta_pdhc_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-rosetta} -d ${DB_NAME:-rosetta_pdhc_db}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  rosetta_pdhc_pgdata:

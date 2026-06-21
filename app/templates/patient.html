@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block h1 %}Patient — Rosetta View{% endblock %}
+{% block content %}
+<div class="card">
+  <p class="monospace text-muted">Patient GUID: {{ patient_guid }}</p>
+  <p>{{ obs_count }} observations cached</p>
+  <div class="button-group">
+    <a href="{{ url_for('views.landing') }}" class="btn btn-secondary btn-sm">← Back</a>
+    <form method="post" action="{{ url_for('views.convert', guid=patient_guid) }}" style="margin:0;">
+      <button type="submit" class="btn btn-primary btn-sm">Re-convert all</button>
+    </form>
+  </div>
+</div>
+
+<div class="grid-3">
+  <div class="card">
+    <h2>FHIR R5 <span class="badge badge-info">{{ fhir_rows|length }}</span></h2>
+    <div style="max-height:400px;overflow-y:auto;">
+      {% for r in fhir_rows[:5] %}
+      <details style="margin-bottom:0.5rem;">
+        <summary class="monospace" style="cursor:pointer;font-size:0.85em;">{{ r.resource_json.get('code', {}).get('text', r.guid[:12]) }}</summary>
+        <pre style="font-size:0.75em;background:var(--code-bg);padding:0.5rem;border-radius:4px;overflow-x:auto;max-height:200px;">{{ r.resource_json | tojson(indent=2) }}</pre>
+      </details>
+      {% endfor %}
+      {% if fhir_rows|length > 5 %}
+      <p class="text-muted" style="font-size:0.85em;">… and {{ fhir_rows|length - 5 }} more.
+        <a href="{{ url_for('api.patient_fhir', guid=patient_guid) }}">View all (JSON)</a></p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>openEHR <span class="badge badge-info">{{ openehr_rows|length }}</span></h2>
+    <div style="max-height:400px;overflow-y:auto;">
+      {% for r in openehr_rows[:5] %}
+      <details style="margin-bottom:0.5rem;">
+        <summary class="monospace" style="cursor:pointer;font-size:0.85em;">{{ r.composition_json.get('name', {}).get('value', r.guid[:12]) }}</summary>
+        <pre style="font-size:0.75em;background:var(--code-bg);padding:0.5rem;border-radius:4px;overflow-x:auto;max-height:200px;">{{ r.composition_json | tojson(indent=2) }}</pre>
+      </details>
+      {% endfor %}
+      {% if openehr_rows|length > 5 %}
+      <p class="text-muted" style="font-size:0.85em;">… and {{ openehr_rows|length - 5 }} more.
+        <a href="{{ url_for('api.patient_openehr', guid=patient_guid) }}">View all (JSON)</a></p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>OMOP CDM <span class="badge badge-info">{{ omop_rows|length }}</span></h2>
+    <div class="table-wrap" style="max-height:400px;overflow-y:auto;">
+      <table>
+        <thead><tr><th>Concept</th><th>Value</th><th>Unit</th><th>Date</th></tr></thead>
+        <tbody>
+          {% for m in omop_rows[:20] %}
+          <tr>
+            <td>{{ m.measurement_source_value }}</td>
+            <td>{{ m.value_as_number if m.value_as_number is not none else '—' }}</td>
+            <td>{{ m.unit_source_value or '—' }}</td>
+            <td>{{ m.measurement_date.strftime('%Y-%m-%d') if m.measurement_date else '—' }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% if omop_rows|length > 20 %}
+      <p class="text-muted" style="font-size:0.85em;">… and {{ omop_rows|length - 20 }} more.
+        <a href="{{ url_for('api.patient_omop', guid=patient_guid) }}">View all (JSON)</a></p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

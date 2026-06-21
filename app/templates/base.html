@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}rosetta.pdhc{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pdhc.css') }}">
+{% block head %}{% endblock %}
+</head>
+<body>
+<nav>
+  <a class="brand" href="{{ url_for('views.landing') }}">rosetta.pdhc</a>
+  <ul class="nav-links">
+    <li><a href="{{ url_for('views.landing') }}" {% if request.endpoint == 'views.landing' %}class="active"{% endif %}>Patients</a></li>
+    <li class="nav-separator"></li>
+    <li>
+      <form method="post" action="{{ url_for('views.refresh') }}" style="margin:0;">
+        <button type="submit" class="btn btn-sm" style="color:rgba(255,255,255,0.9);background:rgba(255,255,255,0.15);border:none;cursor:pointer;">Refresh</button>
+      </form>
+    </li>
+    <li style="margin-left:auto;">
+      {% if g.current_user %}
+        <span style="color:rgba(255,255,255,0.8);font-size:0.9em;">{{ g.current_user.username }}</span>
+      {% endif %}
+    </li>
+    <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+  </ul>
+</nav>
+<div class="container-wide">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <div class="flash flash-{{ category }}" role="alert">{{ message }}</div>
+    {% endfor %}
+  {% endwith %}
+  <div class="page-header">
+    <h1>{% block h1 %}Rosetta{% endblock %}</h1>
+  </div>
+  {% block content %}{% endblock %}
+</div>
+{% block scripts %}{% endblock %}
+</body>
+</html>
