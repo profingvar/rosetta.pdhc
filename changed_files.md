@@ -33,3 +33,9 @@
 - /Users/martiningvar/T7_sidewinder/rosetta.pdhc/app/__init__.py (2026-04-16: ticket #70 — /healthz adds Access-Control-Allow-Origin https://www.pdhc.se + Methods GET + Vary: Origin so services.html can use mode:'cors')
 - /Users/martiningvar/T7_sidewinder/rosetta.pdhc/app/__init__.py (2026-04-16: ticket #72 / CLAUDE.md §10 — replaced bare `{status:"ok"}` payload with real `SELECT 1` DB probe. Returns canonical `{status, service, database, auth_mode}` with HTTP 503 when the DB is unavailable; Cache-Control: no-store added. Deployed + SIGHUP'd master pid 7827; verified `curl https://rosetta.pdhc.se/healthz` returns `{"auth_mode":"sso","database":"connected","service":"rosetta.pdhc","status":"ok"}`. Server backup at `/tmp/rosetta_init.server.bak.20260416T201437Z.py`.)
 - /Users/martiningvar/T7_sidewinder/rosetta.pdhc/app/tests/test_scaffold.py (2026-04-16: ticket #72 — added assertions for `service == "rosetta.pdhc"` and `database in ("connected","unavailable")`. Passed via local pytest.)
+
+## 2026-07-06 — M0 #417: adopt affiliations[] Zone-1 scope + session_phases
+- app/auth.py — _scope_org_guids() (affiliations[].care_unit_guid, dual-read
+  fallback to organization_ids) used by _blob_to_user.org_ids; _phases()
+  (session_phases w/ effective_phases fallback) used by has_analysis_access.
+- app/tests/test_reform_scope.py — NEW, 8 tests.
