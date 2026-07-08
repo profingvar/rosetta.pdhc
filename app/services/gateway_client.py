@@ -12,6 +12,7 @@ import os
 import requests
 
 from app.models import db, ObservationCache, RefreshLog
+from app.services.session_headers import outbound_session_headers
 
 
 @dataclass
@@ -39,6 +40,7 @@ class GatewayClient:
         return {
             "Accept": "application/fhir+json",
             "Authorization": f"Bearer {self.token}",
+            **outbound_session_headers(),
         }
 
     def fetch_observations(self, org_guid: str) -> list[dict]:
