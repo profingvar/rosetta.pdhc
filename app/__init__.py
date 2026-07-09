@@ -20,6 +20,8 @@ def create_app(config=None):
         DATABASE_URL=os.environ.get("DATABASE_URL", ""),
         AUTH_MODE=os.environ.get("AUTH_MODE", "off"),
         GATEWAY_BASE_URL=os.environ.get("GATEWAY_BASE_URL", ""),
+        # #422 — consent verdicts (analysis-filter) come from ips.pdhc.
+        IPS_BASE_URL=os.environ.get("IPS_BASE_URL", ""),
         DEFAULT_ORG_GUIDS=os.environ.get("DEFAULT_ORG_GUIDS", ""),
     )
     if config:

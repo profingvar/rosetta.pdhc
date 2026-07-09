@@ -8,6 +8,7 @@ from flask import Blueprint, render_template, request, abort, g, redirect, url_f
 from app.models import db, ObservationCache, FhirRepresentation, OpenEhrRepresentation, OmopMeasurement, ConversionLog, RefreshLog, AuditLog
 from app.auth import scope_to_user_orgs, org_guids_for
 from app.services.gateway_client import refresh_org, GatewayClient
+from app.services.analysis_consent import check_patient_allowed
 from app.services.fhir_converter import convert_patient_fhir
 from app.services.openehr_converter import convert_patient_openehr
 from app.services.omop_converter import convert_patient_omop
@@ -81,6 +82,7 @@ def landing():
 
 @bp.get("/patient/<guid>")
 def patient(guid):
+    check_patient_allowed(guid)  # #422 — EHDS/research/qreg consent
     user_orgs = org_guids_for(g.current_user)
     q = ObservationCache.query.filter_by(patient_guid=guid)
     if not g.current_user.is_admin:
@@ -116,6 +118,7 @@ def patient(guid):
 
 @bp.post("/patient/<guid>/convert")
 def convert(guid):
+    check_patient_allowed(guid)  # #422
     fhir_n = convert_patient_fhir(guid)
     openehr_n = convert_patient_openehr(guid)
     omop_n = convert_patient_omop(guid)

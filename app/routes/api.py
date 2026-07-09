@@ -4,12 +4,14 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from flask import Blueprint, jsonify, abort
 from app.models import FhirRepresentation, OpenEhrRepresentation, OmopMeasurement
+from app.services.analysis_consent import check_patient_allowed
 
 bp = Blueprint("api", __name__, url_prefix="/api/v1")
 
 
 @bp.get("/patient/<guid>/fhir")
 def patient_fhir(guid):
+    check_patient_allowed(guid)  # #422 — EHDS/research/qreg consent
     rows = FhirRepresentation.query.filter_by(patient_guid=guid).all()
     if not rows:
         abort(404)
@@ -25,6 +27,7 @@ def patient_fhir(guid):
 
 @bp.get("/patient/<guid>/openehr")
 def patient_openehr(guid):
+    check_patient_allowed(guid)  # #422
     rows = OpenEhrRepresentation.query.filter_by(patient_guid=guid).all()
     if not rows:
         abort(404)
@@ -37,6 +40,7 @@ def patient_openehr(guid):
 
 @bp.get("/patient/<guid>/omop")
 def patient_omop(guid):
+    check_patient_allowed(guid)  # #422
     rows = OmopMeasurement.query.filter_by(person_id=guid).all()
     if not rows:
         abort(404)
