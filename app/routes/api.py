@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from flask import Blueprint, jsonify, abort
 from app.models import FhirRepresentation, OpenEhrRepresentation, OmopMeasurement
 from app.services.analysis_consent import check_patient_allowed
+from app.services.x1_audit import x1_read_audit
 
 bp = Blueprint("api", __name__, url_prefix="/api/v1")
 
@@ -15,6 +16,7 @@ def patient_fhir(guid):
     rows = FhirRepresentation.query.filter_by(patient_guid=guid).all()
     if not rows:
         abort(404)
+    x1_read_audit(guid, n_rows=len(rows))  # X1 #407
     bundle = {
         "resourceType": "Bundle",
         "type": "searchset",
@@ -31,6 +33,7 @@ def patient_openehr(guid):
     rows = OpenEhrRepresentation.query.filter_by(patient_guid=guid).all()
     if not rows:
         abort(404)
+    x1_read_audit(guid, n_rows=len(rows))  # X1 #407
     return jsonify({
         "patient_guid": guid,
         "total": len(rows),
@@ -44,6 +47,7 @@ def patient_omop(guid):
     rows = OmopMeasurement.query.filter_by(person_id=guid).all()
     if not rows:
         abort(404)
+    x1_read_audit(guid, n_rows=len(rows))  # X1 #407
     return jsonify({
         "patient_guid": guid,
         "total": len(rows),

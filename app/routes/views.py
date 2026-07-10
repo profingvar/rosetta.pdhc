@@ -92,6 +92,8 @@ def patient(guid):
     rows = q.order_by(ObservationCache.observed_at.asc()).all()
     if not rows:
         abort(404)
+    from app.services.x1_audit import x1_read_audit
+    x1_read_audit(guid, n_rows=len(rows))  # X1 #407
 
     # Check if conversions exist; if not, run them
     fhir_count = FhirRepresentation.query.filter_by(patient_guid=guid).count()
