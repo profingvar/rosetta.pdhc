@@ -39,3 +39,5 @@
   fallback to organization_ids) used by _blob_to_user.org_ids; _phases()
   (session_phases w/ effective_phases fallback) used by has_analysis_access.
 - app/tests/test_reform_scope.py — NEW, 8 tests.
+
+| 2026-07-12 | docs/user_manual.md, docs/technical.md (new) | Authored layman manual + technical spec (#452); published on www.pdhc.se/documentation.html via build_documentation.py. |
