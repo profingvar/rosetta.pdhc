@@ -1,0 +1,15 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.env
+.env.bak*
+*.pid
+gunicorn.pid
+logs/
+*.log
+flask.log
+results/
+.git/
+.DS_Store
+tests/

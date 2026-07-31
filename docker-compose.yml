@@ -8,7 +8,8 @@ services:
       POSTGRES_USER: ${DB_USER:-rosetta}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
     ports:
-      - "9091:5432"
+      # Loopback-only bind per CLAUDE.md §3 — never expose db to the LAN.
+      - "127.0.0.1:9091:5432"
     volumes:
       - rosetta_pdhc_pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -16,6 +17,22 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+
+  app:
+    build: .
+    container_name: rosetta_pdhc_app
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      # Real credentials come from .env (DB_USER / DB_PASSWORD / DB_NAME),
+      # which is gitignored — never hardcode the password here. Interpolation
+      # matches the db service block above.
+      DATABASE_URL: postgresql+psycopg2://${DB_USER:-rosetta}:${DB_PASSWORD:-changeme}@db:5432/${DB_NAME:-rosetta_pdhc_db}
+    ports:
+      - "127.0.0.1:9092:9092"
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   rosetta_pdhc_pgdata:

@@ -70,3 +70,8 @@ app/tests/test_converters.py (edit — openEHR tests updated to FLAT + mapped co
 - app/auth.py — EDIT. /api/v1/openehr/realisable is a public path (view enforces the service key).
 - app/__init__.py — EDIT. ROSETTA_SERVICE_KEY config.
 - app/tests/test_realisability.py — NEW. 8 tests (service + endpoint + service-key).
+
+## 2026-07-31 — commit rosetta prod infra to git (was server-only)
+- docker-compose.yml — REWRITE to the real containerized prod compose (app+db services, loopback binds), with the app DATABASE_URL password scrubbed to ${DB_USER}/${DB_PASSWORD}/${DB_NAME} interpolation (real values in gitignored .env). Was the stale db-only bare-metal version.
+- Dockerfile — NEW. The actual prod image build (python:3.12-slim, gunicorn app:create_app()). Was server-only, absent from git.
+- .dockerignore — NEW. Matches prod (excludes .env, venv, logs, tests, .git).
