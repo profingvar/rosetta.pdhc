@@ -1,0 +1,28 @@
+{
+  "pdhc_vital_signs/language|code": "en",
+  "pdhc_vital_signs/language|terminology": "ISO_639-1",
+  "pdhc_vital_signs/territory|code": "SE",
+  "pdhc_vital_signs/territory|terminology": "ISO_3166-1",
+  "pdhc_vital_signs/category|code": "433",
+  "pdhc_vital_signs/category|value": "event",
+  "pdhc_vital_signs/category|terminology": "openehr",
+  "pdhc_vital_signs/context/start_time": "2026-07-23T10:00:00Z",
+  "pdhc_vital_signs/context/setting|code": "238",
+  "pdhc_vital_signs/context/setting|value": "other care",
+  "pdhc_vital_signs/context/setting|terminology": "openehr",
+  "pdhc_vital_signs/composer|name": "rosetta.pdhc",
+
+  "pdhc_vital_signs/blood_pressure/any_event/time": "2026-07-23T10:00:00Z",
+  "pdhc_vital_signs/blood_pressure/any_event/systolic|magnitude": 128,
+  "pdhc_vital_signs/blood_pressure/any_event/systolic|unit": "mm[Hg]",
+  "pdhc_vital_signs/blood_pressure/any_event/diastolic|magnitude": 82,
+  "pdhc_vital_signs/blood_pressure/any_event/diastolic|unit": "mm[Hg]",
+
+  "pdhc_vital_signs/pulse_heart_beat/any_event/time": "2026-07-23T10:00:00Z",
+  "pdhc_vital_signs/pulse_heart_beat/any_event/rate|magnitude": 72,
+  "pdhc_vital_signs/pulse_heart_beat/any_event/rate|unit": "/min",
+
+  "pdhc_vital_signs/body_temperature/any_event/time": "2026-07-23T10:00:00Z",
+  "pdhc_vital_signs/body_temperature/any_event/temperature|magnitude": 37.2,
+  "pdhc_vital_signs/body_temperature/any_event/temperature|unit": "Cel"
+}

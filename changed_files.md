@@ -41,3 +41,32 @@
 - app/tests/test_reform_scope.py — NEW, 8 tests.
 
 | 2026-07-12 | docs/user_manual.md, docs/technical.md (new) | Authored layman manual + technical spec (#452); published on www.pdhc.se/documentation.html via build_documentation.py. |
+
+## 2026-07-23 — #502 openEHR vitals template (rollup #511)
+scripts/probe_openehr.sh            (added 2026-07-22, #508 generic REST probe)
+templates/README.md                 (new — template workspace + authoring workflow)
+templates/pdhc_vitals.v1.opt        (new — vitals OPT, derived from vital_signs_poc)
+templates/pdhc_vitals.v1.spec.md    (new — modelling spec + FLAT paths + concept binding)
+templates/reference/vital_signs_poc.opt             (new — proven sandbox exemplar)
+templates/reference/vital_signs_poc.webtemplate.json(new — FLAT path contract source)
+templates/pdhc_vitals.v1.webtemplate.json (new — frozen FLAT contract from cdr1, root pdhc_vital_signs)
+templates/samples/pdhc_vitals_roundtrip.flat.json (new — FLAT composition, round-trip proven on cdr1)
+scripts/sandbox_roundtrip.py (new — #507 round-trip harness: create EHR->POST FLAT->AQL assert)
+templates/pdhc_concept_map.json (new — #503 concept_guid->FLAT binding map, real plan.pdhc GUIDs)
+app/services/concept_map.py (new — #503 map loader/resolver, loud-fail on unmapped)
+app/tests/test_concept_map.py (new — #503 unit tests)
+app/services/flat_emitter.py (new — #504 FLAT emitter: canonical obs -> FLAT composition, multi-value, UCUM from map, loud-fail)
+app/tests/test_flat_emitter.py (new — #504 tests; anchor asserts emitted == proven round-trip sample)
+app/models/__init__.py (edit — OpenEhrRepresentation: +template_id, observation_cache_guid nullable, #504)
+app/services/openehr_converter.py (edit — convert_patient_openehr now emits FLAT via flat_emitter; old nested builder deprecated for #509)
+app/routes/api.py (edit — /patient/<guid>/openehr returns format=flat + template_id per composition)
+app/migrations/versions/c8a1d2e3f4a5_openehr_flat_template_id.py (new — add template_id, null observation_cache_guid)
+app/tests/test_converters.py (edit — openEHR tests updated to FLAT + mapped concepts + BP grouping + unmapped-skip)
+
+## 2026-07-31 — #523 openEHR-realisability check
+- app/services/realisability.py — NEW. Per-concept realisable/pending/unmapped + rollup over concept_map (#503). Pure, no DB/patient data.
+- app/services/concept_map.py — EDIT. pending_binding() exposes gaps.pending_template_extension (#502) for a richer "pending" status.
+- app/routes/api.py — EDIT. POST /api/v1/openehr/realisable (service-key guarded via ROSETTA_SERVICE_KEY; accepts concept_guids or plandef shape).
+- app/auth.py — EDIT. /api/v1/openehr/realisable is a public path (view enforces the service key).
+- app/__init__.py — EDIT. ROSETTA_SERVICE_KEY config.
+- app/tests/test_realisability.py — NEW. 8 tests (service + endpoint + service-key).

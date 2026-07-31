@@ -2,12 +2,40 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
-from flask import Blueprint, jsonify, abort
+from flask import Blueprint, jsonify, abort, request, current_app
 from app.models import FhirRepresentation, OpenEhrRepresentation, OmopMeasurement
 from app.services.analysis_consent import check_patient_allowed
 from app.services.x1_audit import x1_read_audit
+from app.services import realisability
 
 bp = Blueprint("api", __name__, url_prefix="/api/v1")
+
+
+@bp.post("/openehr/realisable")
+def openehr_realisable():
+    """Can a PlanDef's concepts be rendered into an openEHR template? (#523)
+
+    Modelling-metadata only — no patient data, no DB. Service-key guarded when
+    ``ROSETTA_SERVICE_KEY`` is configured (so plan.pdhc can proxy it); open in
+    dev (AUTH_MODE=off / no key). Body: ``{"concept_guids": [...]}`` or a
+    plandef-shaped payload (``transactions``/``goals`` with ``concept_guid``).
+    """
+    key = current_app.config.get("ROSETTA_SERVICE_KEY", "")
+    if key and request.headers.get("X-Service-Key") != key:
+        return jsonify({"error": "invalid service key"}), 401
+
+    data = request.get_json(silent=True) or {}
+    guids = data.get("concept_guids")
+    if guids is None:
+        guids = []
+        for t in (data.get("transactions") or []):
+            if isinstance(t, dict) and t.get("concept_guid"):
+                guids.append(t["concept_guid"])
+        for gl in (data.get("goals") or []):
+            if isinstance(gl, dict) and gl.get("concept_guid"):
+                guids.append(gl["concept_guid"])
+    names = data.get("concept_names") or {}
+    return jsonify(realisability.check_plandef(guids, names=names)), 200
 
 
 @bp.get("/patient/<guid>/fhir")
@@ -37,7 +65,10 @@ def patient_openehr(guid):
     return jsonify({
         "patient_guid": guid,
         "total": len(rows),
-        "compositions": [r.composition_json for r in rows],
+        "format": "flat",  # #504 — compositions are FLAT (simSDT), keyed by template_id
+        "compositions": [
+            {"template_id": r.template_id, "flat": r.composition_json} for r in rows
+        ],
     })
 
 

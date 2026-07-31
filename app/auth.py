@@ -116,6 +116,10 @@ def _public_path(path: str) -> bool:
         path.startswith("/auth/")
         or path == "/healthz"
         or path == "/metadata"
+        # #523 openEHR-realisability: modelling metadata only (no patient data).
+        # Skips the SSO redirect loader; the view itself enforces the
+        # ROSETTA_SERVICE_KEY when one is configured (prod).
+        or path == "/api/v1/openehr/realisable"
         or path.startswith("/static/")
     )
 

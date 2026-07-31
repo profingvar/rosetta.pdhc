@@ -53,11 +53,19 @@ class FhirRepresentation(db.Model):
 
 
 class OpenEhrRepresentation(db.Model):
-    """openEHR Composition for an observation."""
+    """An openEHR composition.
+
+    Since #504 the payload is a **FLAT (simSDT)** composition keyed by
+    ``template_id`` (root path derived from the composition concept), and a row
+    may span several observations (e.g. systolic + diastolic in one blood
+    pressure event). ``observation_cache_guid`` is therefore nullable — a
+    composition no longer maps 1:1 to a single cached observation.
+    """
     __tablename__ = "openehr_representations"
     guid = db.Column(UUID(as_uuid=False), primary_key=True, default=_uuid)
-    observation_cache_guid = db.Column(UUID(as_uuid=False), db.ForeignKey("observation_cache.guid"), nullable=False, index=True)
+    observation_cache_guid = db.Column(UUID(as_uuid=False), db.ForeignKey("observation_cache.guid"), nullable=True, index=True)
     patient_guid = db.Column(UUID(as_uuid=False), nullable=False, index=True)
+    template_id = db.Column(db.String(128), nullable=True, index=True)
     archetype_id = db.Column(db.String(256), nullable=False)
     composition_json = db.Column(JSON, nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), default=_now, nullable=False)

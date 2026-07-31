@@ -23,6 +23,9 @@ def create_app(config=None):
         # #422 — consent verdicts (analysis-filter) come from ips.pdhc.
         IPS_BASE_URL=os.environ.get("IPS_BASE_URL", ""),
         DEFAULT_ORG_GUIDS=os.environ.get("DEFAULT_ORG_GUIDS", ""),
+        # #523 — inbound service key for the openEHR-realisability endpoint
+        # (plan.pdhc proxies to it). Unset = open (dev); set = required.
+        ROSETTA_SERVICE_KEY=os.environ.get("ROSETTA_SERVICE_KEY", ""),
     )
     if config:
         app.config.update(config)

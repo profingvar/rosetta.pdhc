@@ -1,0 +1,79 @@
+{
+  "_comment": "Ticket #503 — maps plan.pdhc concept_guid -> pdhc_vitals.v1 FLAT binding. GUIDs are the REAL plan.pdhc concepts (pdhc_gateway.concepts, verified 2026-07-23). An unmapped concept must be a LOUD FAILURE in the emitter (#504), never a silent fallback — the silent fallback is what mislabelled all 7065 rows in cdr.",
+
+  "template": {
+    "template_id": "pdhc_vitals.v1",
+    "flat_root": "pdhc_vital_signs",
+    "composition_defaults": {
+      "category|code": "433",
+      "category|value": "event",
+      "category|terminology": "openehr",
+      "language|code": "en",
+      "language|terminology": "ISO_639-1",
+      "territory|code": "SE",
+      "territory|terminology": "ISO_3166-1",
+      "context/setting|code": "238",
+      "context/setting|value": "other care",
+      "context/setting|terminology": "openehr"
+    }
+  },
+
+  "unit_ucum_bridge": {
+    "_comment": "plan.pdhc units.unit_name -> archetype UCUM. plan.pdhc stores display-ish strings; the archetype constrains UCUM, so the emitter MUST translate or the CDR rejects the unit.",
+    "mmHg": "mm[Hg]",
+    "bpm": "/min",
+    "breaths/min": "/min",
+    "°C": "Cel",
+    "kg": "kg",
+    "cm": "cm",
+    "kg/m²": "kg/m2",
+    "%": "%"
+  },
+
+  "concepts": {
+    "64928bff-9a46-472a-bbf1-dcfc694f945b": {
+      "concept_name": "bp_systolic",
+      "flat_path": "pdhc_vital_signs/blood_pressure/any_event/systolic",
+      "time_path": "pdhc_vital_signs/blood_pressure/any_event/time",
+      "value_kind": "DV_QUANTITY",
+      "pdhc_unit": "mmHg",
+      "ucum": "mm[Hg]"
+    },
+    "fb6487d7-b473-4ace-bb39-6352d4497009": {
+      "concept_name": "bp_diastolic",
+      "flat_path": "pdhc_vital_signs/blood_pressure/any_event/diastolic",
+      "time_path": "pdhc_vital_signs/blood_pressure/any_event/time",
+      "value_kind": "DV_QUANTITY",
+      "pdhc_unit": "mmHg",
+      "ucum": "mm[Hg]"
+    },
+    "f94be41a-1443-462f-9ca1-2bfe0bd6572a": {
+      "concept_name": "heart_rate",
+      "flat_path": "pdhc_vital_signs/pulse_heart_beat/any_event/rate",
+      "time_path": "pdhc_vital_signs/pulse_heart_beat/any_event/time",
+      "value_kind": "DV_QUANTITY",
+      "pdhc_unit": "bpm",
+      "ucum": "/min"
+    },
+    "d7d81372-1c61-4459-88fe-5878d6586e64": {
+      "concept_name": "temperature",
+      "flat_path": "pdhc_vital_signs/body_temperature/any_event/temperature",
+      "time_path": "pdhc_vital_signs/body_temperature/any_event/time",
+      "value_kind": "DV_QUANTITY",
+      "pdhc_unit": "°C",
+      "ucum": "Cel"
+    }
+  },
+
+  "gaps": {
+    "_comment": "Known holes, tracked so the emitter's loud-fail is expected, not a surprise.",
+    "spo2": "pdhc_vitals.v1 has a pulse_oximetry observation, but plan.pdhc has NO oxygen-saturation concept — nothing to bind. Add the concept in plan.pdhc first.",
+    "pending_template_extension": {
+      "_comment": "Real concepts whose archetypes are NOT yet in pdhc_vitals.v1 — blocked on #502 (add body_weight/height/body_mass_index to the template in Archetype Designer). Bindings drafted; no flat_path until the archetype exists in the OPT.",
+      "465e9554-8be6-48f2-9e1a-154d4e1f911e": {"concept_name": "weight", "target_archetype": "openEHR-EHR-OBSERVATION.body_weight.v2", "pdhc_unit": "kg", "ucum": "kg"},
+      "79dfe9ce-6f99-4808-8751-b501f30fda67": {"concept_name": "Self reported body Weight", "target_archetype": "openEHR-EHR-OBSERVATION.body_weight.v2", "pdhc_unit": "kg", "ucum": "kg"},
+      "d5b0a33a-e620-4be3-ba41-8cbbdf4aed17": {"concept_name": "height", "target_archetype": "openEHR-EHR-OBSERVATION.height.v2", "pdhc_unit": "cm", "ucum": "cm"},
+      "7c54ef40-1327-46e1-991f-8ec53837b75b": {"concept_name": "bmi", "target_archetype": "openEHR-EHR-OBSERVATION.body_mass_index.v2", "pdhc_unit": "kg/m²", "ucum": "kg/m2"}
+    }
+  }
+}

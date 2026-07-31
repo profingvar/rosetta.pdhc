@@ -15,12 +15,19 @@ def _app():
     })
 
 
-def _make_obs(patient_guid, concept_name="B-glucose", value=5.4, unit="mmol/L"):
+# Real plan.pdhc vital concepts that the #503 map binds (needed for openEHR now).
+TEMPERATURE_GUID = "d7d81372-1c61-4459-88fe-5878d6586e64"
+BP_SYSTOLIC_GUID = "64928bff-9a46-472a-bbf1-dcfc694f945b"
+BP_DIASTOLIC_GUID = "fb6487d7-b473-4ace-bb39-6352d4497009"
+
+
+def _make_obs(patient_guid, concept_name="B-glucose", value=5.4, unit="mmol/L",
+              concept_guid=None):
     return ObservationCache(
         source_obs_guid=str(uuid.uuid4()),
         patient_guid=patient_guid,
         org_guid=str(uuid.uuid4()),
-        concept_guid=str(uuid.uuid4()),
+        concept_guid=concept_guid or str(uuid.uuid4()),
         concept_name=concept_name,
         value=value,
         unit=unit,
@@ -120,17 +127,53 @@ def test_convert_patient_fhir_persists():
         assert FhirRepresentation.query.filter_by(patient_guid=pguid).count() == 1
 
 
-def test_convert_patient_openehr_persists():
+def test_convert_patient_openehr_persists_flat_composition():
     app = _app()
     with app.app_context():
         db.create_all()
         pguid = str(uuid.uuid4())
-        obs = _make_obs(pguid)
-        db.session.add(obs)
+        # a mapped vital concept -> one FLAT composition
+        db.session.add(_make_obs(pguid, concept_name="temperature", value=37.2,
+                                 unit="°C", concept_guid=TEMPERATURE_GUID))
         db.session.commit()
         n = convert_patient_openehr(pguid)
         assert n == 1
-        assert OpenEhrRepresentation.query.filter_by(patient_guid=pguid).count() == 1
+        rows = OpenEhrRepresentation.query.filter_by(patient_guid=pguid).all()
+        assert len(rows) == 1
+        r = rows[0]
+        assert r.template_id == "pdhc_vitals.v1"
+        # FLAT payload with UCUM from the map (°C -> Cel), not the raw unit
+        flat = r.composition_json
+        assert flat["pdhc_vital_signs/body_temperature/any_event/temperature|magnitude"] == 37.2
+        assert flat["pdhc_vital_signs/body_temperature/any_event/temperature|unit"] == "Cel"
+
+
+def test_convert_patient_openehr_groups_bp_into_one_composition():
+    app = _app()
+    with app.app_context():
+        db.create_all()
+        pguid = str(uuid.uuid4())
+        # systolic + diastolic at the same time -> ONE composition (multi-value)
+        db.session.add(_make_obs(pguid, "bp_systolic", 128, "mmHg", BP_SYSTOLIC_GUID))
+        db.session.add(_make_obs(pguid, "bp_diastolic", 82, "mmHg", BP_DIASTOLIC_GUID))
+        db.session.commit()
+        n = convert_patient_openehr(pguid)
+        assert n == 1
+        flat = OpenEhrRepresentation.query.filter_by(patient_guid=pguid).one().composition_json
+        assert flat["pdhc_vital_signs/blood_pressure/any_event/systolic|magnitude"] == 128
+        assert flat["pdhc_vital_signs/blood_pressure/any_event/diastolic|magnitude"] == 82
+
+
+def test_convert_patient_openehr_skips_unmapped_concepts():
+    app = _app()
+    with app.app_context():
+        db.create_all()
+        pguid = str(uuid.uuid4())
+        db.session.add(_make_obs(pguid))  # random unmapped concept
+        db.session.commit()
+        n = convert_patient_openehr(pguid)
+        assert n == 0  # not coerced into a fallback archetype
+        assert OpenEhrRepresentation.query.filter_by(patient_guid=pguid).count() == 0
 
 
 def test_convert_patient_omop_persists():
