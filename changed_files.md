@@ -83,3 +83,7 @@ app/tests/test_converters.py (edit — openEHR tests updated to FLAT + mapped co
 - app/auth.py — EDIT. template-spec added to public paths (view enforces service key).
 - app/tests/test_template_synthesiser.py — NEW. 7 tests (service + endpoint).
 - docs/openehr_template_plan_502.md — the #502 modelling plan (committed 3346e29).
+
+## 2026-08-01 — #501 re-source rosetta ingest onto the canonical observation
+- app/services/gateway_client.py — EDIT (#501). normalise() prefers the canonical-observation extension (typed value/unit/response_type) over the lossy FHIR valueQuantity; categorical/boolean no longer coerced into a number (Float column gets numeric only; typed value survives in raw). Legacy resources fall back to valueQuantity.
+- app/tests/test_gateway_client_canonical.py — NEW. 4 tests (canonical wins, categorical/boolean not coerced, legacy fallback).

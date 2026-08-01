@@ -8,8 +8,13 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime, timezone
+import json
 import os
 import requests
+
+# #500/#501: gateway carries the canonical typed observation as this extension so
+# the openEHR projection reads the real typed value, not the lossy FHIR value[x].
+CANONICAL_OBS_EXT = "urn:pdhc:fhir:extension:canonical-observation"
 
 from app.models import db, ObservationCache, RefreshLog
 from app.services.session_headers import outbound_session_headers
@@ -52,6 +57,17 @@ class GatewayClient:
         return [e.get("resource", {}) for e in (bundle.get("entry") or [])]
 
 
+def _canonical_from_resource(resource: dict) -> dict | None:
+    """Extract the gateway canonical observation block, if present (#501)."""
+    for ext in (resource.get("extension") or []):
+        if ext.get("url") == CANONICAL_OBS_EXT and ext.get("valueString"):
+            try:
+                return json.loads(ext["valueString"])
+            except (ValueError, TypeError):
+                return None
+    return None
+
+
 def normalise(resource: dict, org_guid: str) -> NormalisedObservation | None:
     if resource.get("resourceType") != "Observation":
         return None
@@ -59,12 +75,26 @@ def normalise(resource: dict, org_guid: str) -> NormalisedObservation | None:
     subject = (resource.get("subject") or {}).get("reference", "")
     patient_guid = subject.split("/")[-1] if subject else None
     coding = ((resource.get("code") or {}).get("coding") or [{}])[0]
-    concept_guid = coding.get("code", "")
     concept_name = coding.get("display", "") or (resource.get("code") or {}).get("text", "")
-    vq = resource.get("valueQuantity") or {}
-    value = vq.get("value")
-    unit = vq.get("unit")
-    eff = resource.get("effectiveDateTime")
+
+    # #501: prefer the canonical typed block (source-of-truth) over the lossy
+    # FHIR value[x]. A categorical/boolean no longer silently becomes a number.
+    canonical = _canonical_from_resource(resource)
+    if canonical:
+        concept_guid = canonical.get("concept_guid") or coding.get("code", "")
+        raw_value = canonical.get("value")
+        # observation_cache.value is Float — only numeric lands there; the full
+        # typed value survives in `raw` for non-numeric renderers.
+        value = float(raw_value) if isinstance(raw_value, (int, float)) and not isinstance(raw_value, bool) else None
+        unit = canonical.get("unit") or canonical.get("unit_display")
+        eff = canonical.get("effective_at")
+    else:
+        concept_guid = coding.get("code", "")
+        vq = resource.get("valueQuantity") or {}
+        value = vq.get("value")
+        unit = vq.get("unit")
+        eff = resource.get("effectiveDateTime")
+
     if eff:
         try:
             observed_at = datetime.fromisoformat(eff.replace("Z", "+00:00"))
