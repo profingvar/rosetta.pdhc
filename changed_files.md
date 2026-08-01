@@ -95,3 +95,7 @@ app/tests/test_converters.py (edit — openEHR tests updated to FLAT + mapped co
 - app/services/openehr_identity.py — NEW (#505). subject_external_ref() (urn:pdhc:patient-guid, configurable) + get_ehr_id + resolve_or_create_ehr (creator injectable; live create depends on #506).
 - app/__init__.py — EDIT (#505). OPENEHR_SUBJECT_NAMESPACE config.
 - app/tests/test_openehr_identity.py — NEW (4 tests). app/tests/test_converters.py — +concept-id=0 assertions.
+
+## 2026-08-01 — #507 AQL round-trip harness: CI-runnable + pulse + cleanup
+- scripts/sandbox_roundtrip.py — REFACTOR (#507). run_roundtrip() importable (returns results/fails/ehr); AQL now reads back pulse.v2 too (rate 72 + /min) alongside temp + BP; opt-in best-effort EHR cleanup (OEHR_CLEANUP=1); CLI preserved.
+- app/tests/test_sandbox_roundtrip.py — NEW. Live round-trip test SKIPPED without OEHR_USER/OEHR_PASS (CI-safe); offline guards that the sample + assertions keep covering temp+BP+pulse magnitude AND unit.
