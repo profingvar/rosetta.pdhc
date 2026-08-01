@@ -26,6 +26,9 @@ def create_app(config=None):
         # #523 — inbound service key for the openEHR-realisability endpoint
         # (plan.pdhc proxies to it). Unset = open (dev); set = required.
         ROSETTA_SERVICE_KEY=os.environ.get("ROSETTA_SERVICE_KEY", ""),
+        # #505 — openEHR EHR subject namespace (contractual, agreed with the CDR).
+        OPENEHR_SUBJECT_NAMESPACE=os.environ.get(
+            "OPENEHR_SUBJECT_NAMESPACE", "urn:pdhc:patient-guid"),
     )
     if config:
         app.config.update(config)

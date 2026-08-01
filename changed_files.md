@@ -87,3 +87,11 @@ app/tests/test_converters.py (edit — openEHR tests updated to FLAT + mapped co
 ## 2026-08-01 — #501 re-source rosetta ingest onto the canonical observation
 - app/services/gateway_client.py — EDIT (#501). normalise() prefers the canonical-observation extension (typed value/unit/response_type) over the lossy FHIR valueQuantity; categorical/boolean no longer coerced into a number (Float column gets numeric only; typed value survives in raw). Legacy resources fall back to valueQuantity.
 - app/tests/test_gateway_client_canonical.py — NEW. 4 tests (canonical wins, categorical/boolean not coerced, legacy fallback).
+
+## 2026-08-01 — #510 OMOP concept-id fix + #505 openEHR EHR identity
+- app/services/omop_converter.py — EDIT (#510). measurement_concept_id / unit_concept_id / measurement_source_concept_id now "0" (OMOP-unmapped) instead of a PDHC GUID / UCUM string; raw values stay in *_source_value / source_url.
+- app/models/__init__.py — EDIT (#505). PatientEhr(patient_guid unique, ehr_id, namespace) — String(36) guids for sqlite portability.
+- app/migrations/versions/d9e0f1a2b3c4_patient_ehr_identity.py — NEW (#505). patient_ehr table; down_revision c8a1d2e3f4a5.
+- app/services/openehr_identity.py — NEW (#505). subject_external_ref() (urn:pdhc:patient-guid, configurable) + get_ehr_id + resolve_or_create_ehr (creator injectable; live create depends on #506).
+- app/__init__.py — EDIT (#505). OPENEHR_SUBJECT_NAMESPACE config.
+- app/tests/test_openehr_identity.py — NEW (4 tests). app/tests/test_converters.py — +concept-id=0 assertions.

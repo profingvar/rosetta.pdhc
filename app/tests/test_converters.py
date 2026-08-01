@@ -73,6 +73,11 @@ def test_omop_converter_produces_measurement():
         assert m["value_as_number"] == 5.4
         assert m["unit_source_value"] == "mmol/L"
         assert m["measurement_source_value"] == "B-glucose"
+        # #510: concept-id fields are OMOP-unmapped integers, never a GUID/UCUM
+        assert m["measurement_concept_id"] == "0"
+        assert m["measurement_source_concept_id"] == "0"
+        assert m["unit_concept_id"] == "0"
+        assert obs.concept_guid not in (m["measurement_concept_id"], m["unit_concept_id"])
 
 
 def test_fhir_converter_passthrough_rich_gateway_data():

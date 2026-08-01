@@ -125,3 +125,22 @@ class AuditLog(db.Model):
     patient_guid = db.Column(UUID(as_uuid=False), nullable=True)
     detail = db.Column(JSON, nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), default=_now, nullable=False)
+
+
+class PatientEhr(db.Model):
+    """openEHR EHR identity per patient (#505).
+
+    One EHR per patient in the target openEHR CDR. Persists the ``ehr_id`` the CDR
+    returns for the patient's agreed ``subject.external_ref`` (namespace +
+    patient_guid), so compositions can be filed under a real subject instead of
+    PARTY_SELF. ``namespace`` is a contractual value agreed with the receiving CDR.
+    """
+    __tablename__ = "patient_ehr"
+    # String(36) rather than the postgresql.UUID type: keeps the model dialect-
+    # portable (the UUID result processor misbehaves on sqlite in tests) and the
+    # values are the same 36-char guid strings used everywhere else.
+    guid = db.Column(db.String(36), primary_key=True, default=_uuid)
+    patient_guid = db.Column(db.String(36), unique=True, nullable=False)
+    ehr_id = db.Column(db.String(64), nullable=False)
+    namespace = db.Column(db.String(128), nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), default=_now, nullable=False)
