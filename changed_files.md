@@ -75,3 +75,11 @@ app/tests/test_converters.py (edit — openEHR tests updated to FLAT + mapped co
 - docker-compose.yml — REWRITE to the real containerized prod compose (app+db services, loopback binds), with the app DATABASE_URL password scrubbed to ${DB_USER}/${DB_PASSWORD}/${DB_NAME} interpolation (real values in gitignored .env). Was the stale db-only bare-metal version.
 - Dockerfile — NEW. The actual prod image build (python:3.12-slim, gunicorn app:create_app()). Was server-only, absent from git.
 - .dockerignore — NEW. Matches prod (excludes .env, venv, logs, tests, .git).
+
+## 2026-08-01 — #502 registry prep + #524 template synthesiser
+- templates/pdhc_concept_map.json — EDIT (#502). 61 per-template PENDING archetype bindings (anthropometry/laboratory/diagnoses/medications/care_events/lung_function) keyed by real prod GUIDs + target_template; UCUM bridge grown to 18 rows. flat_path filled once each .opt is authored.
+- app/services/template_synthesiser.py — NEW (#524). synthesise(concept_guids) -> template manifest (ready/partial/to_author + archetypes + unmapped). Pure over concept_map.
+- app/routes/api.py — EDIT (#524). POST /api/v1/openehr/template-spec (service-key guarded) + shared _service_key_ok/_concept_guids_from_body helpers (realisable refactored onto them).
+- app/auth.py — EDIT. template-spec added to public paths (view enforces service key).
+- app/tests/test_template_synthesiser.py — NEW. 7 tests (service + endpoint).
+- docs/openehr_template_plan_502.md — the #502 modelling plan (committed 3346e29).

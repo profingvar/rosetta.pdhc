@@ -120,6 +120,7 @@ def _public_path(path: str) -> bool:
         # Skips the SSO redirect loader; the view itself enforces the
         # ROSETTA_SERVICE_KEY when one is configured (prod).
         or path == "/api/v1/openehr/realisable"
+        or path == "/api/v1/openehr/template-spec"  # #524 (same modelling-metadata surface)
         or path.startswith("/static/")
     )
 

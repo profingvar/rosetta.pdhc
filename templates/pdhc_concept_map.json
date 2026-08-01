@@ -1,6 +1,5 @@
 {
   "_comment": "Ticket #503 — maps plan.pdhc concept_guid -> pdhc_vitals.v1 FLAT binding. GUIDs are the REAL plan.pdhc concepts (pdhc_gateway.concepts, verified 2026-07-23). An unmapped concept must be a LOUD FAILURE in the emitter (#504), never a silent fallback — the silent fallback is what mislabelled all 7065 rows in cdr.",
-
   "template": {
     "template_id": "pdhc_vitals.v1",
     "flat_root": "pdhc_vital_signs",
@@ -17,7 +16,6 @@
       "context/setting|terminology": "openehr"
     }
   },
-
   "unit_ucum_bridge": {
     "_comment": "plan.pdhc units.unit_name -> archetype UCUM. plan.pdhc stores display-ish strings; the archetype constrains UCUM, so the emitter MUST translate or the CDR rejects the unit.",
     "mmHg": "mm[Hg]",
@@ -27,9 +25,18 @@
     "kg": "kg",
     "cm": "cm",
     "kg/m²": "kg/m2",
-    "%": "%"
+    "%": "%",
+    "IU/L": "[IU]/L",
+    "mmol/L": "mmol/L",
+    "mmol/mol": "mmol/mol",
+    "µmol/L": "umol/L",
+    "pmol/L": "pmol/L",
+    "mIU/L": "m[IU]/L",
+    "g/L": "g/L",
+    "mL/min/1.73m²": "mL/min/{1.73_m2}",
+    "mg/mmol": "mg/mmol",
+    "L": "L"
   },
-
   "concepts": {
     "64928bff-9a46-472a-bbf1-dcfc694f945b": {
       "concept_name": "bp_systolic",
@@ -64,16 +71,402 @@
       "ucum": "Cel"
     }
   },
-
   "gaps": {
     "_comment": "Known holes, tracked so the emitter's loud-fail is expected, not a surprise.",
     "spo2": "pdhc_vitals.v1 has a pulse_oximetry observation, but plan.pdhc has NO oxygen-saturation concept — nothing to bind. Add the concept in plan.pdhc first.",
     "pending_template_extension": {
-      "_comment": "Real concepts whose archetypes are NOT yet in pdhc_vitals.v1 — blocked on #502 (add body_weight/height/body_mass_index to the template in Archetype Designer). Bindings drafted; no flat_path until the archetype exists in the OPT.",
-      "465e9554-8be6-48f2-9e1a-154d4e1f911e": {"concept_name": "weight", "target_archetype": "openEHR-EHR-OBSERVATION.body_weight.v2", "pdhc_unit": "kg", "ucum": "kg"},
-      "79dfe9ce-6f99-4808-8751-b501f30fda67": {"concept_name": "Self reported body Weight", "target_archetype": "openEHR-EHR-OBSERVATION.body_weight.v2", "pdhc_unit": "kg", "ucum": "kg"},
-      "d5b0a33a-e620-4be3-ba41-8cbbdf4aed17": {"concept_name": "height", "target_archetype": "openEHR-EHR-OBSERVATION.height.v2", "pdhc_unit": "cm", "ucum": "cm"},
-      "7c54ef40-1327-46e1-991f-8ec53837b75b": {"concept_name": "bmi", "target_archetype": "openEHR-EHR-OBSERVATION.body_mass_index.v2", "pdhc_unit": "kg/m²", "ucum": "kg/m2"}
+      "_comment": "#502 (2026-08-01): per-template PENDING archetype bindings for the concepts modelled in docs/openehr_template_plan_502.md. target_template = the .opt to author in Archetype Designer; flat_path is filled from that template's captured web template once uploaded. Diagnoses/medications flagged for clinical review (boolean present-absent / on-off representation).",
+      "465e9554-8be6-48f2-9e1a-154d4e1f911e": {
+        "concept_name": "weight",
+        "target_template": "pdhc_anthropometry.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.body_weight.v2",
+        "pdhc_unit": "kg",
+        "ucum": "kg"
+      },
+      "79dfe9ce-6f99-4808-8751-b501f30fda67": {
+        "concept_name": "Self reported body Weight",
+        "target_template": "pdhc_anthropometry.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.body_weight.v2",
+        "pdhc_unit": "kg",
+        "ucum": "kg"
+      },
+      "d5b0a33a-e620-4be3-ba41-8cbbdf4aed17": {
+        "concept_name": "height",
+        "target_template": "pdhc_anthropometry.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.height.v2",
+        "pdhc_unit": "cm",
+        "ucum": "cm"
+      },
+      "7c54ef40-1327-46e1-991f-8ec53837b75b": {
+        "concept_name": "bmi",
+        "target_template": "pdhc_anthropometry.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.body_mass_index.v2",
+        "pdhc_unit": "kg/m²",
+        "ucum": "kg/m2"
+      },
+      "598d2c39-f712-4fac-8169-9ee0d47732b7": {
+        "concept_name": "waist_circumference",
+        "target_template": "pdhc_anthropometry.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.waist_circumference.v1",
+        "pdhc_unit": "cm",
+        "ucum": "cm"
+      },
+      "6521528c-db59-45c5-a492-003c28f27623": {
+        "concept_name": "FEV1",
+        "target_template": "pdhc_lung_function.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.lung_function.v1",
+        "pdhc_unit": "L",
+        "ucum": "L"
+      },
+      "d45d6952-50d2-4ee8-98cd-321c357dc566": {
+        "concept_name": "alt",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "IU/L",
+        "ucum": "[IU]/L"
+      },
+      "218929d1-e08e-44fe-b5d1-40bc1e7180a2": {
+        "concept_name": "ast",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "IU/L",
+        "ucum": "[IU]/L"
+      },
+      "6780955a-f910-42c3-a3ac-d49daa1d878f": {
+        "concept_name": "ggt",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "IU/L",
+        "ucum": "[IU]/L"
+      },
+      "1c34a590-fc2d-430c-92e6-d123b95fe392": {
+        "concept_name": "B-glucos",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "mmol/L",
+        "ucum": "mmol/L"
+      },
+      "1316d00e-caca-4352-8075-8c370fded3fc": {
+        "concept_name": "fasting_plasma_glucose",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "mmol/L",
+        "ucum": "mmol/L"
+      },
+      "51a86a41-9ac9-4f2c-a162-3469da4f08af": {
+        "concept_name": "random_plasma_glucose",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "mmol/L",
+        "ucum": "mmol/L"
+      },
+      "d54e01a9-0b29-4d47-b91b-2133c8be21a4": {
+        "concept_name": "cgm_raw",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "mmol/L",
+        "ucum": "mmol/L"
+      },
+      "d83a8dac-523f-4d51-a602-654430dc7604": {
+        "concept_name": "cgm_mean_glucose",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "mmol/L",
+        "ucum": "mmol/L"
+      },
+      "c7bca77b-fc1a-48c6-84e9-8dc209e0a058": {
+        "concept_name": "hba1c",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "mmol/mol",
+        "ucum": "mmol/mol"
+      },
+      "a4cca2f9-a7b3-49c6-ac8f-ae7ce858940b": {
+        "concept_name": "cgm_cv",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "%",
+        "ucum": "%"
+      },
+      "dbd21700-6e27-4483-bfeb-6a4b22f2298e": {
+        "concept_name": "cgm_tir",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "%",
+        "ucum": "%"
+      },
+      "d9ad988b-4319-44af-a719-995cfb901109": {
+        "concept_name": "cgm_tar",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "%",
+        "ucum": "%"
+      },
+      "aa7786e8-84c5-4c8b-8a5e-210e3c5b4400": {
+        "concept_name": "cgm_tbr",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "%",
+        "ucum": "%"
+      },
+      "d368dd8e-706f-48fc-9689-2060bd3979f1": {
+        "concept_name": "cgm_hypo_count",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "ucum": "1"
+      },
+      "60a404c8-9854-4d93-9566-9c2616df442b": {
+        "concept_name": "total_cholesterol",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "mmol/L",
+        "ucum": "mmol/L"
+      },
+      "c21c1ad8-65b5-4d2e-876a-1c7432a82403": {
+        "concept_name": "ldl_cholesterol",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "mmol/L",
+        "ucum": "mmol/L"
+      },
+      "5b38a9af-5d7a-4638-84e8-eaeb8e5556e0": {
+        "concept_name": "hdl_cholesterol",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "mmol/L",
+        "ucum": "mmol/L"
+      },
+      "3cd06c8b-56fe-4f58-8886-5e491e8b08b1": {
+        "concept_name": "non_hdl_cholesterol",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "mmol/L",
+        "ucum": "mmol/L"
+      },
+      "8884f452-e4b2-4733-9ab9-4e0c7ae11b3b": {
+        "concept_name": "triglycerides",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "mmol/L",
+        "ucum": "mmol/L"
+      },
+      "76a3d5fa-cef2-4d53-955a-74f0dfe84ab9": {
+        "concept_name": "creatinine",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "µmol/L",
+        "ucum": "umol/L"
+      },
+      "60ee70da-97f4-44ac-a8c5-f6dbc16a6796": {
+        "concept_name": "egfr",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "mL/min/1.73m²",
+        "ucum": "mL/min/{1.73_m2}"
+      },
+      "59473d63-0a66-4398-b5db-55f1787097fc": {
+        "concept_name": "urine_acr",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "mg/mmol",
+        "ucum": "mg/mmol"
+      },
+      "4cd003ed-a220-4efd-9bf1-c0a10151df6f": {
+        "concept_name": "tsh",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "mIU/L",
+        "ucum": "m[IU]/L"
+      },
+      "dbfcf14f-8e12-473f-b528-39ef6c559c80": {
+        "concept_name": "free_t4",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "pmol/L",
+        "ucum": "pmol/L"
+      },
+      "46763489-be47-4ab0-91b3-d14292dd0582": {
+        "concept_name": "hemoglobin",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "g/L",
+        "ucum": "g/L"
+      },
+      "ff07c0fd-d4e2-49aa-b32b-cda5d24559a6": {
+        "concept_name": "leukocytes",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "10^9/L",
+        "ucum": "10*9/L"
+      },
+      "81ac94e8-7720-414e-91f1-c2e11986f4f1": {
+        "concept_name": "platelets",
+        "target_template": "pdhc_laboratory.v1",
+        "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+        "pdhc_unit": "10^9/L",
+        "ucum": "10*9/L"
+      },
+      "aecd1a50-fd77-46ae-826b-1f05266f90c3": {
+        "concept_name": "ckd_diagnosis",
+        "target_template": "pdhc_diagnoses.v1",
+        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
+        "clinical_review": "boolean present/absent — confirm openEHR representation"
+      },
+      "eb3495c0-5aae-4913-ba7d-96a1fb7f58b8": {
+        "concept_name": "diabetic_foot_ulcer",
+        "target_template": "pdhc_diagnoses.v1",
+        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
+        "clinical_review": "boolean present/absent — confirm openEHR representation"
+      },
+      "da2652f5-3a91-48b2-a366-93bc1bf7ebda": {
+        "concept_name": "diabetic_neuropathy",
+        "target_template": "pdhc_diagnoses.v1",
+        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
+        "clinical_review": "boolean present/absent — confirm openEHR representation"
+      },
+      "2ebfd877-6ce5-4eac-a690-7470d9991f80": {
+        "concept_name": "diabetic_retinopathy",
+        "target_template": "pdhc_diagnoses.v1",
+        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
+        "clinical_review": "boolean present/absent — confirm openEHR representation"
+      },
+      "24400783-2ef6-4b99-ad35-3a5d7e21af70": {
+        "concept_name": "heart_failure",
+        "target_template": "pdhc_diagnoses.v1",
+        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
+        "clinical_review": "boolean present/absent — confirm openEHR representation"
+      },
+      "e48783b8-37e3-4db5-8491-9c4a9364dc75": {
+        "concept_name": "hypertension_diagnosis",
+        "target_template": "pdhc_diagnoses.v1",
+        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
+        "clinical_review": "boolean present/absent — confirm openEHR representation"
+      },
+      "e95245e6-23cc-4ad3-b4f7-0bf44749b55a": {
+        "concept_name": "mi_history",
+        "target_template": "pdhc_diagnoses.v1",
+        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
+        "clinical_review": "boolean present/absent — confirm openEHR representation"
+      },
+      "1ebf5e2f-fa86-42d0-9bad-a790d4dd2d1b": {
+        "concept_name": "stroke_history",
+        "target_template": "pdhc_diagnoses.v1",
+        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
+        "clinical_review": "boolean present/absent — confirm openEHR representation"
+      },
+      "91072e9d-7453-45bc-8e93-27f9da8bd670": {
+        "concept_name": "t1dm_diagnosis",
+        "target_template": "pdhc_diagnoses.v1",
+        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
+        "clinical_review": "boolean present/absent — confirm openEHR representation"
+      },
+      "7fc32f65-508a-4484-8dc3-23368f8e2778": {
+        "concept_name": "t2dm_diagnosis",
+        "target_template": "pdhc_diagnoses.v1",
+        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
+        "clinical_review": "boolean present/absent — confirm openEHR representation"
+      },
+      "79a6cd4b-1af4-4c05-8f08-e5487a262237": {
+        "concept_name": "Asthma finding",
+        "target_template": "pdhc_diagnoses.v1",
+        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
+        "clinical_review": "boolean present/absent — confirm openEHR representation"
+      },
+      "3422f34b-b7dc-45ae-8fe6-d3426d6f843a": {
+        "concept_name": "dyslipidemia_diagnosis",
+        "target_template": "pdhc_diagnoses.v1",
+        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
+        "clinical_review": "boolean present/absent — confirm openEHR representation"
+      },
+      "cf727be6-f684-4db4-9b05-ebf588d60ff6": {
+        "concept_name": "med_acei",
+        "target_template": "pdhc_medications.v1",
+        "target_archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
+        "clinical_review": "boolean present/absent — confirm openEHR representation"
+      },
+      "b6bca95a-aa29-47c2-a4ec-2106f2557431": {
+        "concept_name": "med_arb",
+        "target_template": "pdhc_medications.v1",
+        "target_archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
+        "clinical_review": "boolean present/absent — confirm openEHR representation"
+      },
+      "fc2f9b90-6860-44b5-8acc-ff67fd939af4": {
+        "concept_name": "med_aspirin",
+        "target_template": "pdhc_medications.v1",
+        "target_archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
+        "clinical_review": "boolean present/absent — confirm openEHR representation"
+      },
+      "476b3f2a-2803-418e-bb41-d7d8b6524388": {
+        "concept_name": "med_glp1",
+        "target_template": "pdhc_medications.v1",
+        "target_archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
+        "clinical_review": "boolean present/absent — confirm openEHR representation"
+      },
+      "28a10b37-9100-4179-99be-7312e29aad8c": {
+        "concept_name": "med_insulin",
+        "target_template": "pdhc_medications.v1",
+        "target_archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
+        "clinical_review": "boolean present/absent — confirm openEHR representation"
+      },
+      "53e3dfea-0023-4ab5-95a5-62b4c4c7f717": {
+        "concept_name": "med_metformin",
+        "target_template": "pdhc_medications.v1",
+        "target_archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
+        "clinical_review": "boolean present/absent — confirm openEHR representation"
+      },
+      "3220b81d-9fc7-4302-8a9e-e0bd41913ce5": {
+        "concept_name": "med_sglt2",
+        "target_template": "pdhc_medications.v1",
+        "target_archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
+        "clinical_review": "boolean present/absent — confirm openEHR representation"
+      },
+      "f3f9135a-74cb-4e09-825b-63294767c8fe": {
+        "concept_name": "med_statin",
+        "target_template": "pdhc_medications.v1",
+        "target_archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
+        "clinical_review": "boolean present/absent — confirm openEHR representation"
+      },
+      "b4ecad4c-6593-4851-9a9d-22ff1c3df33f": {
+        "concept_name": "med_thiazide",
+        "target_template": "pdhc_medications.v1",
+        "target_archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
+        "clinical_review": "boolean present/absent — confirm openEHR representation"
+      },
+      "8861a054-41d2-4aca-89c5-5c3aed1cbb67": {
+        "concept_name": "proc_foot_screening",
+        "target_template": "pdhc_care_events.v1",
+        "target_archetype": "openEHR-EHR-ACTION.procedure.v1"
+      },
+      "40d98260-4710-4bc1-83d3-9746a893fbb1": {
+        "concept_name": "proc_hba1c_sampling",
+        "target_template": "pdhc_care_events.v1",
+        "target_archetype": "openEHR-EHR-ACTION.procedure.v1"
+      },
+      "28aa90ec-16da-408a-96ae-e50172ad571a": {
+        "concept_name": "proc_retinal_screening",
+        "target_template": "pdhc_care_events.v1",
+        "target_archetype": "openEHR-EHR-ACTION.procedure.v1"
+      },
+      "22d0f6c6-2438-4637-ad4e-9d85431b8edb": {
+        "concept_name": "CGM",
+        "target_template": "pdhc_care_events.v1",
+        "target_archetype": "openEHR-EHR-ACTION.procedure.v1"
+      },
+      "48710ad4-db38-4894-a722-c69cf5fa09ea": {
+        "concept_name": "enc_diabetes_nurse_visit",
+        "target_template": "pdhc_care_events.v1",
+        "target_archetype": "openEHR-EHR-ADMIN_ENTRY.encounter.v1"
+      },
+      "997b94bc-6e81-472b-a1b9-abe188001e3e": {
+        "concept_name": "enc_primary_care_visit",
+        "target_template": "pdhc_care_events.v1",
+        "target_archetype": "openEHR-EHR-ADMIN_ENTRY.encounter.v1"
+      },
+      "9c5889a5-d93b-4a8e-bbe5-80547f152361": {
+        "concept_name": "inpatient_admit",
+        "target_template": "pdhc_care_events.v1",
+        "target_archetype": "openEHR-EHR-ADMIN_ENTRY.admission.v0"
+      }
     }
   }
 }
