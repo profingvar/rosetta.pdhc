@@ -29,6 +29,16 @@ def create_app(config=None):
         # #505 — openEHR EHR subject namespace (contractual, agreed with the CDR).
         OPENEHR_SUBJECT_NAMESPACE=os.environ.get(
             "OPENEHR_SUBJECT_NAMESPACE", "urn:pdhc:patient-guid"),
+        # #506 — openEHR delivery client. OFF by default: wiring ships before the
+        # sandbox is live, and delivery is a hard no-op until this is truthy.
+        OPENEHR_DELIVERY_ENABLED=os.environ.get(
+            "OPENEHR_DELIVERY_ENABLED", "").strip().lower() in ("1", "true", "yes"),
+        OPENEHR_DELIVERY_TRANSPORT=os.environ.get("OPENEHR_DELIVERY_TRANSPORT", "asha"),
+        OEHR_BASE=os.environ.get("OEHR_BASE", ""),
+        OEHR_USER=os.environ.get("OEHR_USER", ""),
+        OEHR_PASS=os.environ.get("OEHR_PASS", ""),
+        OEHR_INSTANCE=os.environ.get("OEHR_INSTANCE", "cdr1"),
+        OEHR_TOKEN=os.environ.get("OEHR_TOKEN", ""),  # reserved for spec_rest transport
     )
     if config:
         app.config.update(config)

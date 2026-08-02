@@ -99,3 +99,12 @@ app/tests/test_converters.py (edit — openEHR tests updated to FLAT + mapped co
 ## 2026-08-01 — #507 AQL round-trip harness: CI-runnable + pulse + cleanup
 - scripts/sandbox_roundtrip.py — REFACTOR (#507). run_roundtrip() importable (returns results/fails/ehr); AQL now reads back pulse.v2 too (rate 72 + /min) alongside temp + BP; opt-in best-effort EHR cleanup (OEHR_CLEANUP=1); CLI preserved.
 - app/tests/test_sandbox_roundtrip.py — NEW. Live round-trip test SKIPPED without OEHR_USER/OEHR_PASS (CI-safe); offline guards that the sample + assertions keep covering temp+BP+pulse magnitude AND unit.
+
+## 2026-08-02 — #506 openEHR delivery client (transport-agnostic + ASHA)
+- app/services/openehr_transports.py — NEW. Transport seam: AshaTransport (form-login/create-EHR/upload-composition, reuses #507 flow), SpecRestTransport stub, build_transport() factory.
+- app/services/openehr_delivery.py — NEW. Delivery machinery: deliver() (flag gate + #505 EHR resolve-or-create wiring + dedup + delivery-log), process_pending() (retry w/ exponential backoff, MAX_ATTEMPTS=5), rejection captured as failed row (last_error/last_status), not raised.
+- app/models/__init__.py — EDIT. OpenEhrDelivery model (openehr_delivery table): status/ehr_id/composition_id/attempt_count/last_error/last_status/payload/dedup_key(unique).
+- app/migrations/versions/e0a1b2c3d4e5_openehr_delivery.py — NEW. Creates openehr_delivery (down_revision d9e0f1a2b3c4; linear).
+- app/__init__.py — EDIT. Config: OPENEHR_DELIVERY_ENABLED (default OFF), OPENEHR_DELIVERY_TRANSPORT, OEHR_BASE/USER/PASS/INSTANCE/TOKEN.
+- .env.example — EDIT. Documented the delivery block (flag OFF by default; asha transport; sandbox base/instance; operator-held creds).
+- app/tests/test_openehr_delivery.py — NEW (12 tests). Flag gate, identity wiring, dedup, rejection-capture, retry/backoff, transport factory, ASHA classifier. Full suite 90 passed / 1 skipped (live).

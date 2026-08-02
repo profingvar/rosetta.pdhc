@@ -144,3 +144,33 @@ class PatientEhr(db.Model):
     ehr_id = db.Column(db.String(64), nullable=False)
     namespace = db.Column(db.String(128), nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), default=_now, nullable=False)
+
+
+class OpenEhrDelivery(db.Model):
+    """Per-composition delivery log to the target openEHR CDR (#506).
+
+    Mirrors the cdr cambio_client delivery discipline, kept in rosetta: one row
+    per composition we try to send, carrying its status, the EHR it filed under,
+    the server-assigned composition id, attempt count, and last error. The FLAT
+    ``payload`` is stored so a failed delivery can be retried by
+    ``openehr_delivery.process_pending`` without rebuilding it.
+
+    ``dedup_key`` makes delivery idempotent: a caller passes a stable key (e.g.
+    the source observation/composition guid) and a re-run finds the delivered row
+    instead of double-filing. String(36)/String columns (not postgresql.UUID) so
+    the model stays sqlite-portable for tests — same lesson as PatientEhr.
+    """
+    __tablename__ = "openehr_delivery"
+    guid = db.Column(db.String(36), primary_key=True, default=_uuid)
+    patient_guid = db.Column(db.String(36), nullable=False, index=True)
+    template_id = db.Column(db.String(128), nullable=True)
+    dedup_key = db.Column(db.String(128), unique=True, nullable=True, index=True)
+    status = db.Column(db.String(16), nullable=False, default="pending")  # pending|delivered|failed
+    ehr_id = db.Column(db.String(64), nullable=True)
+    composition_id = db.Column(db.String(128), nullable=True)
+    attempt_count = db.Column(db.Integer, nullable=False, default=0)
+    last_error = db.Column(db.Text, nullable=True)
+    last_status = db.Column(db.Integer, nullable=True)  # last HTTP status from the CDR
+    payload = db.Column(JSON, nullable=True)  # the FLAT composition, for retry
+    created_at = db.Column(db.DateTime(timezone=True), default=_now, nullable=False)
+    updated_at = db.Column(db.DateTime(timezone=True), default=_now, onupdate=_now, nullable=False)
