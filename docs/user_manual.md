@@ -3,15 +3,17 @@
 Rosetta is the platform's **"Rosetta Stone" for clinical data**. It takes the
 patient observations the platform already collects (blood glucose, blood
 pressure, lab results, and so on) and re-expresses that *same* data in three
-international standards at once, so different downstream tools can each read it
-in the format they understand:
+international standards, so different downstream tools can each read it in the
+format they understand:
 
 - **FHIR R5** — the modern healthcare interoperability standard.
-- **openEHR** — the European archetype-based clinical record format.
+- **openEHR** — the European archetype-based clinical record format, emitted as
+  **FLAT (simSDT)** compositions.
 - **OMOP CDM** — the research/analytics common data model (measurements).
 
-Nothing new is *measured* here — Rosetta only **translates** observations that
-already exist, and shows all three translations side by side.
+Nothing new is *measured* here — Rosetta **translates** observations that
+already exist. It can also **deliver** the openEHR translation onward to an
+external openEHR CDR (see "Delivering to an openEHR CDR").
 
 Live at **https://rosetta.pdhc.se**. Sign-in is via the platform's single
 sign-on (SSO); it is an **analysis-phase** tool, so your account needs
@@ -38,15 +40,16 @@ their own tooling.
 
 ```
 gateway.pdhc  ──(observations)──►  Rosetta cache  ──►  FHIR R5
-                                                   ├──►  openEHR
+                                                   ├──►  openEHR (FLAT)  ──►  external openEHR CDR
                                                    └──►  OMOP CDM
 ```
 
 1. You (or the 5-minute auto-refresh) pull the latest observations for your
    organisation(s) from **gateway.pdhc** into Rosetta's local cache.
-2. Rosetta converts each cached observation into all three standards and
-   stores the results.
-3. You view or download any of the three representations for a patient.
+2. Rosetta reads the platform's **canonical typed value** for each observation
+   (not the lossy FHIR value) and converts it into all three standards.
+3. You view or download any of the three representations for a patient. The
+   openEHR translation can additionally be delivered to an external openEHR CDR.
 
 Concept meaning (what a code *is*) always links back to **plan.pdhc** — Rosetta
 never invents codes, it passes through the platform concept and records its
@@ -54,7 +57,23 @@ human-readable name.
 
 ---
 
-## 3. Using the web UI
+## 3. The openEHR translation is FLAT and grouped
+
+Rosetta builds openEHR **FLAT (simSDT)** compositions on the
+`openEHR-EHR-COMPOSITION.encounter.v1` composition (template `pdhc_vitals.v1`).
+Two things follow from this that are worth knowing:
+
+- **Observations are grouped by patient and time.** A systolic and a diastolic
+  reading taken at the same moment become **one** blood-pressure composition,
+  not two disconnected rows — the way a real clinical record represents them.
+- **Only mapped concepts are emitted.** A concept that has no openEHR binding
+  yet is **skipped and logged**, never forced into the wrong archetype. So a
+  patient's openEHR view may contain fewer data points than their FHIR view if
+  some of their concepts are not yet modelled.
+
+---
+
+## 4. Using the web UI
 
 Sign in at https://rosetta.pdhc.se (SSO). You land on the **patient list** —
 one row per patient in your organisation(s), with the observation count, the
@@ -72,7 +91,7 @@ concepts seen, and the latest timestamp.
 
 ---
 
-## 4. Getting the data programmatically (API)
+## 5. Getting the data programmatically (API)
 
 Every representation is also a REST endpoint (SSO bearer token required),
 under `/api/v1`:
@@ -80,8 +99,17 @@ under `/api/v1`:
 | You want… | Call |
 |---|---|
 | FHIR R5 Observations for a patient | `GET /api/v1/patient/<guid>/fhir` → a FHIR searchset Bundle |
-| openEHR Compositions | `GET /api/v1/patient/<guid>/openehr` |
+| openEHR FLAT Compositions | `GET /api/v1/patient/<guid>/openehr` → `{patient_guid, total, format:"flat", compositions:[{template_id, flat}]}` |
 | OMOP measurements | `GET /api/v1/patient/<guid>/omop` |
+
+Two further endpoints answer **modelling** questions for plan.pdhc (no patient
+data — they only reason about concepts and archetypes), and are guarded by a
+shared service key rather than SSO:
+
+| Question | Call |
+|---|---|
+| Can a PlanDef's concepts be rendered into openEHR at all? | `POST /api/v1/openehr/realisable` |
+| Which openEHR templates would a PlanDef need? | `POST /api/v1/openehr/template-spec` |
 
 Machine capabilities are described at **`/metadata`** (a FHIR R5
 CapabilityStatement). Service health is at **`/healthz`**.
@@ -90,7 +118,26 @@ Full request/response shapes are in the [technical manual](technical.html).
 
 ---
 
-## 5. Who can use it (access & privacy)
+## 6. Delivering to an openEHR CDR
+
+Rosetta is no longer read-only: it can **write** the FLAT openEHR compositions
+onward to an external openEHR CDR. This is a deliberate, gated capability:
+
+- It is **off by default** and only runs when an operator turns it on (the
+  target CDR and its credentials must be configured first). Until then,
+  delivery is a hard no-op.
+- Every delivery is **logged, retried, and de-duplicated** — a composition is
+  never filed twice, and a rejected composition is recorded (with the CDR's
+  reason) for follow-up rather than silently lost.
+- Each patient gets **one EHR** in the target CDR, created on first delivery
+  and reused thereafter.
+
+The current delivery target is a **sandbox** (Phanera's openEHR test CDR). This
+is a test path, not a route to any production patient record.
+
+---
+
+## 7. Who can use it (access & privacy)
 
 Rosetta handles real patient data, so access is tightly gated:
 
@@ -107,17 +154,24 @@ Rosetta handles real patient data, so access is tightly gated:
   what legal basis, with the session id — so a data-controller (PDL
   kontrollör) audit can trace exactly what was accessed.
 
+The two `/openehr/*` modelling endpoints are the exception: they carry **no
+patient data**, so they are guarded by a service key (for the plan.pdhc
+sibling) instead of the SSO login flow.
+
 ---
 
-## 6. Good to know
+## 8. Good to know
 
 - The three representations are always derived from the same cached
   observation, so they can't disagree.
+- The openEHR view groups by patient + time and skips unmapped concepts, so it
+  is intentionally the "cleanest" of the three, not necessarily the most
+  complete.
 - "Re-convert" is the fix if a representation looks stale — it rebuilds from
   the current cache.
-- Rosetta is read-and-translate only: it never writes back to gateway,
-  plan.pdhc, or the patient record.
-- For the exact field-by-field mapping in each standard, the auth/consent
-  rules, the data model, and how to deploy or operate the service, see the
-  **technical manual** (link at the top of this page — and both manuals have a
-  **Download (Markdown)** button).
+- For the exact field-by-field mapping in each standard, the openEHR delivery
+  machinery, the auth/consent rules, the data model, and how to deploy or
+  operate the service, see the **technical manual** (link at the top of this
+  page — and both manuals have a **Download (Markdown)** button).
+</content>
+</invoke>
