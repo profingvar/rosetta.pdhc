@@ -108,3 +108,4 @@ app/tests/test_converters.py (edit — openEHR tests updated to FLAT + mapped co
 - app/__init__.py — EDIT. Config: OPENEHR_DELIVERY_ENABLED (default OFF), OPENEHR_DELIVERY_TRANSPORT, OEHR_BASE/USER/PASS/INSTANCE/TOKEN.
 - .env.example — EDIT. Documented the delivery block (flag OFF by default; asha transport; sandbox base/instance; operator-held creds).
 - app/tests/test_openehr_delivery.py — NEW (12 tests). Flag gate, identity wiring, dedup, rejection-capture, retry/backoff, transport factory, ASHA classifier. Full suite 90 passed / 1 skipped (live).
+- rosetta.pdhc/docs/technical.md (Port Allocation section)

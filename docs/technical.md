@@ -320,3 +320,13 @@ target is the Phanera sandbox.
 (X-Operator-Session-Id, #408), `test_x1_audit` (audit tuple, #407),
 `test_concept_map` (#503 registry).
 </content>
+
+## Port Allocation
+
+All ports bind to `127.0.0.1` (loopback only); external traffic arrives
+via the reverse proxy.
+
+| Port | Service |
+|------|---------|
+| 9092 | Flask application (Gunicorn) |
+| 9091 | PostgreSQL database |
