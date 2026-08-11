@@ -69,11 +69,19 @@
       "value_kind": "DV_QUANTITY",
       "pdhc_unit": "°C",
       "ucum": "Cel"
+    },
+    "2f15ae94-209e-4b0c-81bd-c91d76e74475": {
+      "concept_name": "spo2",
+      "flat_path": "pdhc_vital_signs/pulse_oximetry/any_event/spo2",
+      "time_path": "pdhc_vital_signs/pulse_oximetry/any_event/time",
+      "value_kind": "DV_PROPORTION",
+      "pdhc_unit": "%",
+      "ucum": "%"
     }
   },
   "gaps": {
     "_comment": "Known holes, tracked so the emitter's loud-fail is expected, not a surprise.",
-    "spo2": "pdhc_vitals.v1 has a pulse_oximetry observation, but plan.pdhc has NO oxygen-saturation concept — nothing to bind. Add the concept in plan.pdhc first.",
+    "spo2_RESOLVED_2026-08-11": "plan.pdhc now HAS an oxygen-saturation concept (spo2 = 2f15ae94-209e-4b0c-81bd-c91d76e74475, created during the asthma home-monitoring build), so spo2 is now bound above to the pdhc_vitals.v1 pulse_oximetry observation (DV_PROPORTION, |numerator). NOTE: the DV_PROPORTION FLAT emission (numerator only; denominator/type assumed template-fixed at 100/percent) has NOT been round-trip-validated on the sandbox yet — #507 proved DV_QUANTITY (temp/BP) only. Validate spo2 on openehr.phanera.se before enabling delivery.",
     "pending_template_extension": {
       "_comment": "#502 (2026-08-01): per-template PENDING archetype bindings for the concepts modelled in docs/openehr_template_plan_502.md. target_template = the .opt to author in Archetype Designer; flat_path is filled from that template's captured web template once uploaded. Diagnoses/medications flagged for clinical review (boolean present-absent / on-off representation).",
       "465e9554-8be6-48f2-9e1a-154d4e1f911e": {

@@ -109,3 +109,6 @@ app/tests/test_converters.py (edit — openEHR tests updated to FLAT + mapped co
 - .env.example — EDIT. Documented the delivery block (flag OFF by default; asha transport; sandbox base/instance; operator-held creds).
 - app/tests/test_openehr_delivery.py — NEW (12 tests). Flag gate, identity wiring, dedup, rejection-capture, retry/backoff, transport factory, ASHA classifier. Full suite 90 passed / 1 skipped (live).
 - rosetta.pdhc/docs/technical.md (Port Allocation section)
+- templates/pdhc_concept_map.json (bind spo2 2f15ae94 → pulse_oximetry DV_PROPORTION; clear stale "no oxygen-saturation concept" gap — plan.pdhc now has spo2 from the asthma build)
+- templates/pdhc_vitals.v1.spec.md (mark SpO₂ gap resolved)
+- app/tests/test_flat_emitter.py (+ spo2 DV_PROPORTION |numerator test; suite 91 passed)

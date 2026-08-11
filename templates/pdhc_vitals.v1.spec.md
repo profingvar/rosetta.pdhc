@@ -111,11 +111,16 @@ Four concepts bound (all the current template can carry):
 | heart_rate | `f94be41a…` | bpm → `/min` | `…/pulse_heart_beat/any_event/rate` |
 | temperature | `d7d81372…` | °C → `Cel` | `…/body_temperature/any_event/temperature` |
 
-Gaps (documented in the map, not #503's fault): **SpO₂** — template has a
-pulse_oximetry slot but plan.pdhc has **no** oxygen-saturation concept; and
-**weight / height / bmi** — real concepts exist but their archetypes aren't in
-`pdhc_vitals.v1` yet (blocked on the #502 template extension). Their draft
-bindings are parked under `gaps.pending_template_extension` in the map.
+Gaps (documented in the map, not #503's fault): ~~**SpO₂** — template has a
+pulse_oximetry slot but plan.pdhc has no oxygen-saturation concept~~ —
+**RESOLVED 2026-08-11**: plan.pdhc now has `spo2` (`2f15ae94…`, added in the
+asthma home-monitoring build), so SpO₂ is bound to the pulse_oximetry slot
+(DV_PROPORTION → `spo2|numerator`). DV_PROPORTION FLAT emission is not yet
+round-trip-validated on the sandbox (#507 covered DV_QUANTITY only) — validate
+before enabling delivery. Still open: **weight / height / bmi** — real concepts
+exist but their archetypes aren't in `pdhc_vitals.v1` yet (blocked on the #502
+template extension). Their draft bindings are parked under
+`gaps.pending_template_extension` in the map.
 
 Unmapped concept → **loud failure**, never a silent fallback (that silent
 fallback is what mislabelled all 7065 rows in cdr).

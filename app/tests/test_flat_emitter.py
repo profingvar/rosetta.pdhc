@@ -16,6 +16,7 @@ BP_SYSTOLIC = "64928bff-9a46-472a-bbf1-dcfc694f945b"
 BP_DIASTOLIC = "fb6487d7-b473-4ace-bb39-6352d4497009"
 HEART_RATE = "f94be41a-1443-462f-9ca1-2bfe0bd6572a"
 TEMPERATURE = "d7d81372-1c61-4459-88fe-5878d6586e64"
+SPO2 = "2f15ae94-209e-4b0c-81bd-c91d76e74475"
 T = "2026-07-23T10:00:00Z"
 
 _SAMPLE = os.path.join(os.path.dirname(__file__), "..", "..", "templates", "samples",
@@ -52,6 +53,18 @@ def test_different_times_produce_separate_compositions():
            fe.Observation(TEMPERATURE, 37.5, "2026-07-23T12:00:00Z", "p1")]
     res = fe.emit_flat_compositions(obs)
     assert len(res.compositions) == 2
+
+
+def test_spo2_emits_as_dv_proportion_numerator():
+    # spo2 is now bound (2026-08-11): DV_PROPORTION → |numerator, no |magnitude/|unit.
+    assert cm.is_mapped(SPO2)
+    b = cm.resolve(SPO2)
+    assert b.value_kind == "DV_PROPORTION"
+    res = fe.emit_flat_compositions([fe.Observation(SPO2, 98, T, "p1")])
+    flat = res.compositions[0]["flat"]
+    assert flat["pdhc_vital_signs/pulse_oximetry/any_event/spo2|numerator"] == 98
+    assert "pdhc_vital_signs/pulse_oximetry/any_event/spo2|magnitude" not in flat
+    assert flat["pdhc_vital_signs/pulse_oximetry/any_event/time"] == T
 
 
 def test_ucum_comes_from_the_map_not_the_raw_unit():
