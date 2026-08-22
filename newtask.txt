@@ -1,37 +1,36 @@
-Current focus: openEHR export consolidation onto rosetta (rollup #511).
+Current focus
+=============
 
-DONE this session:
-- #508 capability probe of external sandbox openehr.phanera.se (Phanera ASHA-PDHC).
-  UI-wrapped, ASP.NET form login, no spec /rest/openehr/v1. OPT upload = YES into
-  empty cdr1. Ingest = FLAT JSON / CSV. AQL present. See ticket #508 + memory
-  project_openehr_sandbox_phanera.
-- #507 ROUND-TRIP PROVEN on cdr1: FLAT composition POST -> AQL read-back returned
-  temp 37.2/Cel, systolic 128, diastolic 82, mm[Hg] (magnitudes+units survived).
-  Harness: scripts/sandbox_roundtrip.py. Sample: templates/samples/pdhc_vitals_roundtrip.flat.json.
-- #502 STARTED: templates/ workspace + README; pdhc_vitals.v1.opt authored
-  (derived from proven vital_signs_poc, identity renamed, XML well-formed);
-  pdhc_vitals.v1.spec.md with real FLAT paths + UCUM units + concept-binding shape.
-  Covers BP/pulse/temp/SpO2.
+#502 / #569 — openEHR operational templates (.opt) for anthropometry /
+lung_function / laboratory. The .opt AUTHORING itself is the external
+Archetype-Designer + Phanera-sandbox step (openehr.phanera.se) — NOT code.
 
-NEXT (in order):
-1. #502 finish: add body_weight/height/respiration in Archetype Designer, re-export
-   OPT. (Needs the GUI flattener — no Java runtime locally.)
-2. Validate pdhc_vitals.v1.opt on the sandbox (validera tab) — needs go-ahead.
-3. Upload to cdr1, download its web template, freeze the FLAT contract.
-4. #503 DONE: templates/pdhc_concept_map.json + app/services/concept_map.py (resolve()->Binding,
-   loud-fail) + test_concept_map.py. 4 real bindings (bp_sys/bp_dia/heart_rate/temperature);
-   UCUM bridge mmHg->mm[Hg], bpm->/min, °C->Cel. Gaps: SpO2 (no plan concept), weight/height/bmi
-   (need #502 template extension).
-5. #504 EMITTER DONE + PROVEN: app/services/flat_emitter.py emits FLAT compositions from
-   canonical observations via concept_map; groups by (patient,time) -> BP multi-value; UCUM from
-   map; unmapped reported (strict raises). Anchor test: emitted == proven round-trip sample
-   (byte-for-byte), so transitively CDR-accepted. #504 INTEGRATION DONE 2026-07-29: convert_patient_openehr emits FLAT via flat_emitter;
-   openehr_representations +template_id (migration c8a1d2e3f4a5, single head); read API returns
-   format=flat+template_id; tests rewritten; FULL SUITE 53 passed. Old nested builder retained
-   (dead) for CLIP #509. (was: wire into the convert
-   path (needs a template_id column on openehr_representations + read-API decision); retire the
-   old nested builder under #509.
-6. #506 delivery decision (see #512): script app handlers vs backend REST vs learning-only.
+PREWORK DONE 2026-08-22 (commit b635466):
+  docs/openehr_flat_opt_field_map_502.md — the FLAT↔.opt field-mapping spec.
+  Read this first. It gives, per template: flat_root, composition_defaults,
+  per-concept target FLAT paths + UCUM, the laboratory repeating-analyte
+  cluster pattern, worked FLAT examples, 5 open modelling decisions, and a
+  coder checklist. pdhc_concept_map.json gaps now carry draft binding_kind +
+  target_flat_path / analyte_cluster_path (not runtime-read).
 
-Rule 16 drift to fix before rosetta goes on a data path: it has run under the
-Flask dev server, not gunicorn (#501).
+TWO CODE DELTAS the new templates need (see doc §2), do AFTER the .opt web
+templates are captured:
+  1. Registry: single `template` object → a per-template `templates` map
+     (each with its own flat_root + composition_defaults); Binding carries
+     its template's context.
+  2. Emitter: grouping key (patient,time) → (patient,time,template_id); add a
+     `repeating_analyte` mode for pdhc_laboratory.v1 (one generic
+     laboratory_test_result OBSERVATION, repeating analyte CLUSTER keyed by
+     analyte_name+LOINC at index :N).
+
+Next-up (order): anthropometry.v1 (smallest, all-standard) → laboratory.v1
+(biggest ROI, ~27 concepts, one archetype) → lung_function.v1 (1 concept).
+Each: author .opt → capture web template → promote gap bindings → extend
+emitter → #507 round-trip on the sandbox → commit .opt + web template.
+
+Resolve with the sandbox owner/clinician first: D-A1 self-reported weight,
+D-LF1 FEV1 leaf-vs-cluster, D-L1 analyte terminology (LOINC vs local),
+D-L2 counts (cgm_hypo_count), D-L3 panel vs per-analyte compositions.
+
+spo2 (live, DV_PROPORTION) still awaits its own sandbox round-trip before
+delivery is enabled — same gate.
