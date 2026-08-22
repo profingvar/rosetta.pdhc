@@ -83,236 +83,401 @@
     "_comment": "Known holes, tracked so the emitter's loud-fail is expected, not a surprise.",
     "spo2_RESOLVED_2026-08-11": "plan.pdhc now HAS an oxygen-saturation concept (spo2 = 2f15ae94-209e-4b0c-81bd-c91d76e74475, created during the asthma home-monitoring build), so spo2 is now bound above to the pdhc_vitals.v1 pulse_oximetry observation (DV_PROPORTION, |numerator). NOTE: the DV_PROPORTION FLAT emission (numerator only; denominator/type assumed template-fixed at 100/percent) has NOT been round-trip-validated on the sandbox yet — #507 proved DV_QUANTITY (temp/BP) only. Validate spo2 on openehr.phanera.se before enabling delivery.",
     "pending_template_extension": {
-      "_comment": "#502 (2026-08-01): per-template PENDING archetype bindings for the concepts modelled in docs/openehr_template_plan_502.md. target_template = the .opt to author in Archetype Designer; flat_path is filled from that template's captured web template once uploaded. Diagnoses/medications flagged for clinical review (boolean present-absent / on-off representation).",
+      "_comment": "#502 (2026-08-01): per-template PENDING archetype bindings. As of 2026-08-22 the anthropometry (5), lung_function (1) and laboratory (24) entries carry DRAFT binding_kind + target_flat_path (fixed_quantity) or analyte_cluster_path (repeating_analyte) per docs/openehr_flat_opt_field_map_502.md. These are NOT read by resolve() — promote into the live per-template registry after the .opt web template is captured (see that doc's coder checklist). Diagnoses/medications/care_events remain name+archetype only (later tickets, need clinical-modelling judgement).",
       "465e9554-8be6-48f2-9e1a-154d4e1f911e": {
         "concept_name": "weight",
         "target_template": "pdhc_anthropometry.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.body_weight.v2",
         "pdhc_unit": "kg",
-        "ucum": "kg"
+        "ucum": "kg",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "fixed_quantity",
+        "target_flat_path": "pdhc_anthropometry/body_weight/any_event/weight",
+        "target_time_path": "pdhc_anthropometry/body_weight/any_event/time",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "79dfe9ce-6f99-4808-8751-b501f30fda67": {
         "concept_name": "Self reported body Weight",
         "target_template": "pdhc_anthropometry.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.body_weight.v2",
         "pdhc_unit": "kg",
-        "ucum": "kg"
+        "ucum": "kg",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "fixed_quantity",
+        "target_flat_path": "pdhc_anthropometry/body_weight/any_event/weight",
+        "target_time_path": "pdhc_anthropometry/body_weight/any_event/time",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "d5b0a33a-e620-4be3-ba41-8cbbdf4aed17": {
         "concept_name": "height",
         "target_template": "pdhc_anthropometry.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.height.v2",
         "pdhc_unit": "cm",
-        "ucum": "cm"
+        "ucum": "cm",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "fixed_quantity",
+        "target_flat_path": "pdhc_anthropometry/height_length/any_event/height",
+        "target_time_path": "pdhc_anthropometry/height_length/any_event/time",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "7c54ef40-1327-46e1-991f-8ec53837b75b": {
         "concept_name": "bmi",
         "target_template": "pdhc_anthropometry.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.body_mass_index.v2",
         "pdhc_unit": "kg/m²",
-        "ucum": "kg/m2"
+        "ucum": "kg/m2",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "fixed_quantity",
+        "target_flat_path": "pdhc_anthropometry/body_mass_index/any_event/body_mass_index",
+        "target_time_path": "pdhc_anthropometry/body_mass_index/any_event/time",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "598d2c39-f712-4fac-8169-9ee0d47732b7": {
         "concept_name": "waist_circumference",
         "target_template": "pdhc_anthropometry.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.waist_circumference.v1",
         "pdhc_unit": "cm",
-        "ucum": "cm"
+        "ucum": "cm",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "fixed_quantity",
+        "target_flat_path": "pdhc_anthropometry/waist_circumference/any_event/waist_circumference",
+        "target_time_path": "pdhc_anthropometry/waist_circumference/any_event/time",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "6521528c-db59-45c5-a492-003c28f27623": {
         "concept_name": "FEV1",
         "target_template": "pdhc_lung_function.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.lung_function.v1",
         "pdhc_unit": "L",
-        "ucum": "L"
+        "ucum": "L",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "fixed_quantity",
+        "target_flat_path": "pdhc_lung_function/lung_function/any_event/fev1",
+        "target_time_path": "pdhc_lung_function/lung_function/any_event/time",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "d45d6952-50d2-4ee8-98cd-321c357dc566": {
         "concept_name": "alt",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "IU/L",
-        "ucum": "[IU]/L"
+        "ucum": "[IU]/L",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "218929d1-e08e-44fe-b5d1-40bc1e7180a2": {
         "concept_name": "ast",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "IU/L",
-        "ucum": "[IU]/L"
+        "ucum": "[IU]/L",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "6780955a-f910-42c3-a3ac-d49daa1d878f": {
         "concept_name": "ggt",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "IU/L",
-        "ucum": "[IU]/L"
+        "ucum": "[IU]/L",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "1c34a590-fc2d-430c-92e6-d123b95fe392": {
         "concept_name": "B-glucos",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "mmol/L",
-        "ucum": "mmol/L"
+        "ucum": "mmol/L",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "1316d00e-caca-4352-8075-8c370fded3fc": {
         "concept_name": "fasting_plasma_glucose",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "mmol/L",
-        "ucum": "mmol/L"
+        "ucum": "mmol/L",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "51a86a41-9ac9-4f2c-a162-3469da4f08af": {
         "concept_name": "random_plasma_glucose",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "mmol/L",
-        "ucum": "mmol/L"
+        "ucum": "mmol/L",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "d54e01a9-0b29-4d47-b91b-2133c8be21a4": {
         "concept_name": "cgm_raw",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "mmol/L",
-        "ucum": "mmol/L"
+        "ucum": "mmol/L",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "d83a8dac-523f-4d51-a602-654430dc7604": {
         "concept_name": "cgm_mean_glucose",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "mmol/L",
-        "ucum": "mmol/L"
+        "ucum": "mmol/L",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "c7bca77b-fc1a-48c6-84e9-8dc209e0a058": {
         "concept_name": "hba1c",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "mmol/mol",
-        "ucum": "mmol/mol"
+        "ucum": "mmol/mol",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "a4cca2f9-a7b3-49c6-ac8f-ae7ce858940b": {
         "concept_name": "cgm_cv",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "%",
-        "ucum": "%"
+        "ucum": "%",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "dbd21700-6e27-4483-bfeb-6a4b22f2298e": {
         "concept_name": "cgm_tir",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "%",
-        "ucum": "%"
+        "ucum": "%",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "d9ad988b-4319-44af-a719-995cfb901109": {
         "concept_name": "cgm_tar",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "%",
-        "ucum": "%"
+        "ucum": "%",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "aa7786e8-84c5-4c8b-8a5e-210e3c5b4400": {
         "concept_name": "cgm_tbr",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "%",
-        "ucum": "%"
+        "ucum": "%",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "d368dd8e-706f-48fc-9689-2060bd3979f1": {
         "concept_name": "cgm_hypo_count",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
-        "ucum": "1"
+        "ucum": "1",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "60a404c8-9854-4d93-9566-9c2616df442b": {
         "concept_name": "total_cholesterol",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "mmol/L",
-        "ucum": "mmol/L"
+        "ucum": "mmol/L",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "c21c1ad8-65b5-4d2e-876a-1c7432a82403": {
         "concept_name": "ldl_cholesterol",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "mmol/L",
-        "ucum": "mmol/L"
+        "ucum": "mmol/L",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "5b38a9af-5d7a-4638-84e8-eaeb8e5556e0": {
         "concept_name": "hdl_cholesterol",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "mmol/L",
-        "ucum": "mmol/L"
+        "ucum": "mmol/L",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "3cd06c8b-56fe-4f58-8886-5e491e8b08b1": {
         "concept_name": "non_hdl_cholesterol",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "mmol/L",
-        "ucum": "mmol/L"
+        "ucum": "mmol/L",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "8884f452-e4b2-4733-9ab9-4e0c7ae11b3b": {
         "concept_name": "triglycerides",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "mmol/L",
-        "ucum": "mmol/L"
+        "ucum": "mmol/L",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "76a3d5fa-cef2-4d53-955a-74f0dfe84ab9": {
         "concept_name": "creatinine",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "µmol/L",
-        "ucum": "umol/L"
+        "ucum": "umol/L",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "60ee70da-97f4-44ac-a8c5-f6dbc16a6796": {
         "concept_name": "egfr",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "mL/min/1.73m²",
-        "ucum": "mL/min/{1.73_m2}"
+        "ucum": "mL/min/{1.73_m2}",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "59473d63-0a66-4398-b5db-55f1787097fc": {
         "concept_name": "urine_acr",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "mg/mmol",
-        "ucum": "mg/mmol"
+        "ucum": "mg/mmol",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "4cd003ed-a220-4efd-9bf1-c0a10151df6f": {
         "concept_name": "tsh",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "mIU/L",
-        "ucum": "m[IU]/L"
+        "ucum": "m[IU]/L",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "dbfcf14f-8e12-473f-b528-39ef6c559c80": {
         "concept_name": "free_t4",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "pmol/L",
-        "ucum": "pmol/L"
+        "ucum": "pmol/L",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "46763489-be47-4ab0-91b3-d14292dd0582": {
         "concept_name": "hemoglobin",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "g/L",
-        "ucum": "g/L"
+        "ucum": "g/L",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "ff07c0fd-d4e2-49aa-b32b-cda5d24559a6": {
         "concept_name": "leukocytes",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "10^9/L",
-        "ucum": "10*9/L"
+        "ucum": "10*9/L",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "81ac94e8-7720-414e-91f1-c2e11986f4f1": {
         "concept_name": "platelets",
         "target_template": "pdhc_laboratory.v1",
         "target_archetype": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
         "pdhc_unit": "10^9/L",
-        "ucum": "10*9/L"
+        "ucum": "10*9/L",
+        "value_kind": "DV_QUANTITY",
+        "binding_kind": "repeating_analyte",
+        "analyte_cluster_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+        "analyte_terminology": "LOINC|urn:pdhc:concept (decision D-L1)",
+        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
       },
       "aecd1a50-fd77-46ae-826b-1f05266f90c3": {
         "concept_name": "ckd_diagnosis",

@@ -112,3 +112,7 @@ app/tests/test_converters.py (edit — openEHR tests updated to FLAT + mapped co
 - templates/pdhc_concept_map.json (bind spo2 2f15ae94 → pulse_oximetry DV_PROPORTION; clear stale "no oxygen-saturation concept" gap — plan.pdhc now has spo2 from the asthma build)
 - templates/pdhc_vitals.v1.spec.md (mark SpO₂ gap resolved)
 - app/tests/test_flat_emitter.py (+ spo2 DV_PROPORTION |numerator test; suite 91 passed)
+
+## 2026-08-22 — #502/#569: FLAT↔.opt field-mapping draft (pre-modelling)
+- docs/openehr_flat_opt_field_map_502.md — NEW. Field-level bridge between the 3 pending .opt templates (anthropometry/lung_function/laboratory) and the FLAT (simSDT) keys the emitter must produce. Spells out the two REQUIRED code deltas (single-template registry → per-template `templates` map; emitter grouping key +=template_id and a `repeating_analyte` mode for labs), per-concept target FLAT paths + UCUM, the laboratory repeating-analyte cluster pattern, worked FLAT examples per template, 5 open modelling decisions (D-A1 self-reported weight, D-LF1 FEV1 leaf-vs-cluster, D-L1 analyte terminology, D-L2 counts, D-L3 panel-vs-per-analyte), and a coder checklist.
+- templates/pdhc_concept_map.json — enriched gaps.pending_template_extension with DRAFT machine-readable bindings: 6 fixed_quantity (anthropometry×5 + FEV1) get binding_kind+target_flat_path+target_time_path+value_kind; 27 laboratory entries get binding_kind=repeating_analyte+analyte_cluster_path+analyte_terminology. NOT read by resolve() (live path untouched, 5 concepts). Suite 91 passed / 1 skipped.
