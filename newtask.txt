@@ -1,7 +1,8 @@
 Current focus
 =============
 
-#502 / #569 — openEHR operational templates (.opt) for anthropometry /
+#728 (merges #680/#681, formerly #502/#569) — openEHR operational
+templates (.opt) for anthropometry /
 lung_function / laboratory. The .opt AUTHORING itself is the external
 Archetype-Designer + Phanera-sandbox step (openehr.phanera.se) — NOT code.
 
