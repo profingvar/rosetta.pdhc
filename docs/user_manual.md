@@ -173,5 +173,3 @@ sibling) instead of the SSO login flow.
   machinery, the auth/consent rules, the data model, and how to deploy or
   operate the service, see the **technical manual** (link at the top of this
   page — and both manuals have a **Download (Markdown)** button).
-</content>
-</invoke>
