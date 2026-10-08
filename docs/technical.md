@@ -60,7 +60,7 @@ All under the `/api/v1` prefix (blueprint `api`).
 | POST | `/openehr/template-spec` | service key | `template_synthesiser.synthesise(...)` manifest (#524) — see §3a |
 
 The three `GET /patient/...` reads are consent-gated (`check_patient_allowed`,
-#422), audited (`x1_read_audit`, #407), and `abort(404)` when the patient has
+(#422), audited (`x1_read_audit`, #407), and `abort(404)` when the patient has
 no rows of that representation.
 
 HTML views (blueprint `views`): `GET /` (patient list, org-scoped, auto-refresh
@@ -316,7 +316,7 @@ target is the Phanera sandbox.
 (#524), `test_openehr_identity` (#505 resolve-or-create), `test_openehr_delivery`
 (#506 deliver / dedup / backoff / rejection), `test_sandbox_roundtrip`
 (FLAT round-trip), `test_analysis_consent` (purpose derivation + ips filter,
-#422), `test_reform_scope` (Zone-1 org scoping, #417), `test_session_propagation`
+(#422), `test_reform_scope` (Zone-1 org scoping, #417), `test_session_propagation`
 (X-Operator-Session-Id, #408), `test_x1_audit` (audit tuple, #407),
 `test_concept_map` (#503 registry).
 </content>
