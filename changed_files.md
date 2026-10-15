@@ -121,3 +121,8 @@ app/tests/test_converters.py (edit — openEHR tests updated to FLAT + mapped co
 - /Users/martiningvar/T7_sidewinder/rosetta.pdhc/newtask.txt — current focus repointed from the dead ticket numbers (#502/#569, recreated as #680/#681) to the merged #728. No scope change.
 - /Users/martiningvar/T7_sidewinder/rosetta.pdhc/progress.md — recorded the merge and the two corrections it carried: #680's "hardcodes one archetype / zero .opt" premise is dead (#504 + pdhc_vitals.v1.opt), and #681's "the CODE side is READY" is false (the two §2 deltas are still outstanding). Also that the pending map now spans six templates, not three. No source touched.
 - 2026-10-13 app/__init__.py — #816: SESSION_COOKIE_SECURE/HTTPONLY/SAMESITE
+
+## 2026-10-15 — #708 sibling smoke, and the banner it found lying
+- deploy/smoke_siblings.py                      (NEW: 10 read-only checks against sso, ips, gateway)
+- app/routes/views.py                           (a refresh where EVERY org failed no longer flashes "Refresh ok")
+- app/tests/test_refresh_reports_failure.py     (NEW)

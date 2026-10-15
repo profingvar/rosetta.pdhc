@@ -144,12 +144,28 @@ def refresh():
         return redirect(url_for("views.landing"))
     client = GatewayClient(token=token or "dev", base_url=current_app.config.get("GATEWAY_BASE_URL"))
     ok = 0
+    succeeded, failed = 0, 0
     for org in orgs:
         try:
             log = refresh_org(user.guid, org, client=client)
             ok += getattr(log, "rows_fetched", 0) or 0
+            succeeded += 1
         except Exception as exc:
+            failed += 1
             current_app.logger.exception("refresh failed for %s", org)
             flash(f"Error: {exc}", "danger")
-    flash(f"Refresh ok — {ok} observations.", "success")
+    # The success banner used to be unconditional. A refresh in which EVERY
+    # organisation failed — a gateway 401, say — showed the red error AND
+    # "Refresh ok — 0 observations." next to it, and 0 is also what a
+    # genuinely empty org returns. Found while writing the #708 sibling smoke,
+    # which drives this client against gateway with a token it will refuse.
+    if failed and not succeeded:
+        flash("Refresh FAILED — no organisation could be read, so nothing was "
+              "updated. The error above is the reason.", "danger")
+    elif failed:
+        flash(f"Refresh partial — {ok} observations from {succeeded} of "
+              f"{succeeded + failed} organisations; {failed} failed.",
+              "warning")
+    else:
+        flash(f"Refresh ok — {ok} observations.", "success")
     return redirect(url_for("views.landing"))
