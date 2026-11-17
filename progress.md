@@ -54,3 +54,9 @@ the spo2 DV_PROPORTION round-trip, still unvalidated on the sandbox.
 
 `newtask.txt` repointed to #728. Rollup #683's references to #680/#681 now mean
 #728. No source touched, no tests run (nothing to run).
+
+## 2026-11-17 — #728 openEHR templates (milestone 1) deployed
+- Generated `.opt` for anthropometry, laboratory (repeating analyte) and lung function (spirometry_result.v2); generator reproduces vitals byte-for-byte. All three uploaded to ASHA cdr1, Explore paths captured, emitter output accepted by ASHA's validator; wrong units / unknown path / SpO2 150% refused.
+- Multi-template registry + emitter; self-reported weight own composition (D-A1); lab panel with 22 verified LOINC + 5 local (D-L1). SpO2 now sends denominator 100 + type percent (numerator alone was refused).
+- Deployed 2026-11-17T22:27Z (overlay on :pre728; also carries the never-deployed #708 views.py banner fix). Dry run new PASS / old FAIL; in-container check PASS; sibling smoke 10/10. Delivery still OFF.
+- Milestone 2 (diagnoses, medications, care events; 28 concepts) not started — needs clinical modelling.
