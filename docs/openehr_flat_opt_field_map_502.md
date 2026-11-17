@@ -27,6 +27,22 @@ Status of inputs, all verified against the repo 2026-08-22:
 
 ---
 
+## 0. Decisions taken (operator, 2026-11-17, #728)
+
+All five open modelling decisions are decided, each as this spec recommended:
+
+| | decision | taken |
+|---|---|---|
+| D-A1 | self-reported weight | **same path** as measured (`body_weight/any_event/weight`); self-report recorded at composition level (composer / other_context) |
+| D-LF1 | FEV1 | **fixed leaf** for v1, in an archetype that can grow to FVC, FEV1/FVC, PEF without a template rename |
+| D-L1 | analyte coding | **LOINC where verified, local `urn:pdhc:concept` fallback** |
+| D-L2 | `cgm_hypo_count` | **DV_QUANTITY, unit `1`**, inside the lab panel |
+| D-L3 | lab composition | **one panel** per (patient, time), analytes as repeating clusters |
+
+Authoring path (operator, same day): **B** -- the `.opt` files are generated
+from the public CKM archetypes (not hand-authored in Archetype Designer) and
+validated by upload to the Phanera/ASHA sandbox; anthropometry first.
+
 ## 1. The single most important structural fact
 
 `pdhc_vitals.v1` and `pdhc_anthropometry.v1` are **fixed-path** templates: each
