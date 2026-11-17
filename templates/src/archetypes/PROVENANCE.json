@@ -3,6 +3,30 @@
   "fetched": "2026-11-17",
   "archetypes": [
     {
+      "archetype_id": "openEHR-EHR-CLUSTER.laboratory_test_analyte.v1",
+      "ckm_cid": "1013.1.2881",
+      "ckm_revision": "1.2.3",
+      "ckm_asset_version": 29,
+      "ckm_status": "PUBLISHED",
+      "ckm_modification_time": "2026-07-21T18:14:23+02:00",
+      "ckm_build_uid": "b0f08214-c8af-4437-9fdf-7ee6b24f83a1",
+      "ckm_page": "https://ckm.openehr.org/ckm/archetypes/1013.1.2881",
+      "downloads": {
+        "xml": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2881/xml",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2881/xml?asset-version=29",
+          "file": "openEHR-EHR-CLUSTER.laboratory_test_analyte.v1.xml",
+          "sha256": "1e576903a67d52e24ee3748cbfdf6c2d6cc6d33fe83d1956cedd15c818052b0f"
+        },
+        "adl": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2881/adl",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2881/adl?asset-version=29",
+          "file": "openEHR-EHR-CLUSTER.laboratory_test_analyte.v1.adl",
+          "sha256": "2e305858b1dd4cdd459daf228850f8d3b82ca620a603c7f08e514f79c6b9d3c7"
+        }
+      }
+    },
+    {
       "archetype_id": "openEHR-EHR-COMPOSITION.encounter.v1",
       "ckm_cid": "1013.1.120",
       "ckm_revision": "1.0.12",
@@ -147,6 +171,30 @@
       }
     },
     {
+      "archetype_id": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+      "ckm_cid": "1013.1.2191",
+      "ckm_revision": "1.2.8",
+      "ckm_asset_version": 26,
+      "ckm_status": "PUBLISHED",
+      "ckm_modification_time": "2026-07-16T15:50:39+02:00",
+      "ckm_build_uid": "f4a7641f-8b09-4a06-b0d8-306eaa56b9af",
+      "ckm_page": "https://ckm.openehr.org/ckm/archetypes/1013.1.2191",
+      "downloads": {
+        "xml": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2191/xml",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2191/xml?asset-version=26",
+          "file": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1.xml",
+          "sha256": "ebe7b1ec11f3deadf0208ba0e2cba52ca0917b53c8f24cb9cbdd065018d03658"
+        },
+        "adl": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2191/adl",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2191/adl?asset-version=26",
+          "file": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1.adl",
+          "sha256": "67c82cd37e5e1bae6fac379b098725058299b551b2c2be27f7719f8a32dd685e"
+        }
+      }
+    },
+    {
       "archetype_id": "openEHR-EHR-OBSERVATION.pulse.v2",
       "ckm_cid": "1013.1.4295",
       "ckm_revision": "2.0.9",
@@ -195,6 +243,30 @@
       }
     },
     {
+      "archetype_id": "openEHR-EHR-OBSERVATION.spirometry_result.v2",
+      "ckm_cid": "1013.1.6655",
+      "ckm_revision": "2.0.1",
+      "ckm_asset_version": 2,
+      "ckm_status": "PUBLISHED",
+      "ckm_modification_time": "2024-02-05T11:59:57+01:00",
+      "ckm_build_uid": "c92d5ec3-921f-4162-8bc8-4ba4ff57b49a",
+      "ckm_page": "https://ckm.openehr.org/ckm/archetypes/1013.1.6655",
+      "downloads": {
+        "xml": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.6655/xml",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.6655/xml?asset-version=2",
+          "file": "openEHR-EHR-OBSERVATION.spirometry_result.v2.xml",
+          "sha256": "f11f9b6ea2fd8fc8e12ec0de448979ef17e23e92527eddacf5219db44dfd32cd"
+        },
+        "adl": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.6655/adl",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.6655/adl?asset-version=2",
+          "file": "openEHR-EHR-OBSERVATION.spirometry_result.v2.adl",
+          "sha256": "de0b1c34093e0e16f832bef33f9ec49ec76ff6e50bb42362383bcdc0e716e37e"
+        }
+      }
+    },
+    {
       "archetype_id": "openEHR-EHR-OBSERVATION.waist_circumference.v1",
       "ckm_cid": "1013.1.2814",
       "ckm_revision": "1.0.5",
@@ -218,5 +290,10 @@
         }
       }
     }
-  ]
+  ],
+  "selection_notes": {
+    "openEHR-EHR-OBSERVATION.spirometry_result.v2": "pdhc_lung_function.v1 (D-LF1). The spec's OBSERVATION.lung_function.v1 does not exist on public CKM (citeable-identifier lookup 404), nor does a CLUSTER.spirometry_result. CKM search 'spirometry'/'lung function' returns OBSERVATION.spirometry_result.v2 (PUBLISHED 2.0.1) and .v1 (1013.1.1414, DEPRECATED 2022-12-13). v2 chosen: published, and it already holds FVC/FEV1/FEV6 (Volume), FEV1/FVC (Ratio) and PEFR (Flow rate) as named result clusters, so v1 of the template grows without a rename.",
+    "openEHR-EHR-OBSERVATION.laboratory_test_result.v1": "pdhc_laboratory.v1 panel (D-L3); PUBLISHED, named in the spec.",
+    "openEHR-EHR-CLUSTER.laboratory_test_analyte.v1": "pdhc_laboratory.v1 repeating analyte; PUBLISHED, admitted by laboratory_test_result.v1's 'Test result' slot (at0097) include pattern."
+  }
 }

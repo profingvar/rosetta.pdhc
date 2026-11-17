@@ -154,3 +154,58 @@ def test_concept_naming_an_unknown_template_fails_loud_728(monkeypatch):
         "flat_path": "a", "time_path": "b", "value_kind": "DV_QUANTITY", "pdhc_unit": "kg", "ucum": "kg"})
     with pytest.raises(cm.UnmappedConceptError, match="nope.v1"):
         cm.resolve("x-bad")
+
+
+# --- #728: laboratory (repeating analyte) and lung function -----------------
+def _lab_lung_rows(order=1):
+    from app.services import concept_map as cm
+    from app.services.flat_emitter import Observation
+    vals = {"cgm_hypo_count": 2, "hba1c": 48, "egfr": 78}
+    rows = []
+    for g in cm.mapped_guids():
+        b = cm.resolve(g)
+        if b.template_id in ("pdhc_laboratory.v1", "pdhc_lung_function.v1"):
+            v = vals.get(b.concept_name, 3.42 if b.template_id == "pdhc_lung_function.v1" else 5.1)
+            rows.append(Observation(g, v, "2026-11-17T08:00:00Z", "synthetic-patient-728"))
+    return rows[::order]
+
+
+def _samples(name):
+    return _json.load(open(_os.path.join(_os.path.dirname(__file__), "..", "..", "templates", "samples", name)))
+
+
+def test_full_lab_panel_and_fev1_match_the_asha_accepted_samples_728():
+    """Both samples were accepted by ASHA's validator on 2026-11-17: 27 analytes
+    in ONE panel (22 LOINC, 5 urn:pdhc:concept) and FEV1 in L."""
+    from app.services.flat_emitter import emit_flat_compositions
+    for order in (1, -1):   # input order must not change the output (stable :N)
+        res = emit_flat_compositions(_lab_lung_rows(order), strict=True)
+        by = {c["template_id"]: c["flat"] for c in res.compositions}
+        assert set(by) == {"pdhc_laboratory.v1", "pdhc_lung_function.v1"}
+        assert by["pdhc_laboratory.v1"] == _samples("pdhc_laboratory_full_panel_valid.flat.json")
+        assert by["pdhc_lung_function.v1"] == _samples("pdhc_lung_function_valid.flat.json")
+
+
+def test_lab_codes_follow_d_l1_728():
+    from app.services import concept_map as cm
+    flat = _samples("pdhc_laboratory_full_panel_valid.flat.json")
+    codes = {flat[k.replace("|terminology", "|code")]: v for k, v in flat.items()
+             if k.endswith("analyte_name|terminology")}
+    assert sum(v == "LOINC" for v in codes.values()) == 22
+    for g in cm.mapped_guids():
+        b = cm.resolve(g)
+        if b.binding_kind == "repeating_analyte":
+            assert codes[b.loinc or b.concept_guid] == ("LOINC" if b.loinc else "urn:pdhc:concept")
+    # the codes the concepts carried before plan.pdhc was corrected must be gone
+    for wrong in ("2093-3", "4548-4", "97508-6", "97509-4", "97511-0", "41653-7"):
+        assert wrong not in codes
+
+
+def test_spo2_sends_denominator_and_type_728():
+    """Numerator alone was refused by EHRbase on ASHA 2026-11-17; this sample,
+    with denominator 100 and type percent, was accepted the same day."""
+    from app.services import concept_map as cm
+    from app.services.flat_emitter import emit_flat_compositions, Observation
+    g = [g for g in cm.mapped_guids() if cm.resolve(g).value_kind == "DV_PROPORTION"][0]
+    res = emit_flat_compositions([Observation(g, 97, "2026-11-17T08:00:00Z", "synthetic-patient-728")], strict=True)
+    assert res.compositions[0]["flat"] == _samples("pdhc_vitals_spo2_valid.flat.json")

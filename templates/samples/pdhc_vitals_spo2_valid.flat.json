@@ -1,0 +1,18 @@
+{
+ "pdhc_vital_signs/category|code": "433",
+ "pdhc_vital_signs/category|value": "event",
+ "pdhc_vital_signs/category|terminology": "openehr",
+ "pdhc_vital_signs/language|code": "en",
+ "pdhc_vital_signs/language|terminology": "ISO_639-1",
+ "pdhc_vital_signs/territory|code": "SE",
+ "pdhc_vital_signs/territory|terminology": "ISO_3166-1",
+ "pdhc_vital_signs/context/setting|code": "238",
+ "pdhc_vital_signs/context/setting|value": "other care",
+ "pdhc_vital_signs/context/setting|terminology": "openehr",
+ "pdhc_vital_signs/context/start_time": "2026-11-17T08:00:00Z",
+ "pdhc_vital_signs/composer|name": "rosetta.pdhc",
+ "pdhc_vital_signs/pulse_oximetry/any_event/spo2|numerator": 97,
+ "pdhc_vital_signs/pulse_oximetry/any_event/spo2|denominator": 100.0,
+ "pdhc_vital_signs/pulse_oximetry/any_event/spo2|type": 2,
+ "pdhc_vital_signs/pulse_oximetry/any_event/time": "2026-11-17T08:00:00Z"
+}

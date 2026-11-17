@@ -1,0 +1,1056 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?> 
+<template xmlns="http://schemas.openehr.org/v1">
+    <language>
+        <terminology_id>
+            <value>ISO_639-1</value>
+        </terminology_id>
+        <code_string>en</code_string>
+    </language>
+    <description>
+        <original_author id="date">2026-11-17</original_author>
+        <lifecycle_state>unmanaged</lifecycle_state>
+        <other_details id="licence"></other_details>
+        <other_details id="custodian_organisation"></other_details>
+        <other_details id="original_namespace"></other_details>
+        <other_details id="original_publisher"></other_details>
+        <other_details id="custodian_namespace"></other_details>
+        <other_details id="sem_ver">0.1.0</other_details>
+        <other_details id="build_uid">e6624168-8cec-5b3e-8332-de7b1a8a66c5</other_details>
+        <details>
+            <language>
+                <terminology_id>
+                    <value>ISO_639-1</value>
+                </terminology_id>
+                <code_string>en</code_string>
+            </language>
+            <purpose>Not Specified</purpose>
+        </details>
+    </description>
+    <uid>
+        <value>03acfaf1-ab2b-5797-9ad0-f4440a8a7012</value>
+    </uid>
+    <template_id>
+        <value>pdhc_lung_function.v1</value>
+    </template_id>
+    <concept>PDHC Lung Function</concept>
+    <definition>
+        <rm_type_name>COMPOSITION</rm_type_name>
+        <occurrences>
+            <lower_included>true</lower_included>
+            <upper_included>true</upper_included>
+            <lower_unbounded>false</lower_unbounded>
+            <upper_unbounded>false</upper_unbounded>
+            <lower>1</lower>
+            <upper>1</upper>
+        </occurrences>
+        <node_id>at0000</node_id>
+        <attributes xsi:type="C_SINGLE_ATTRIBUTE" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <rm_attribute_name>category</rm_attribute_name>
+            <existence>
+                <lower_included>true</lower_included>
+                <upper_included>true</upper_included>
+                <lower_unbounded>false</lower_unbounded>
+                <upper_unbounded>false</upper_unbounded>
+                <lower>1</lower>
+                <upper>1</upper>
+            </existence>
+            <match_negated>false</match_negated>
+            <children xsi:type="C_COMPLEX_OBJECT">
+                <rm_type_name>DV_CODED_TEXT</rm_type_name>
+                <occurrences>
+                    <lower_included>true</lower_included>
+                    <upper_included>true</upper_included>
+                    <lower_unbounded>false</lower_unbounded>
+                    <upper_unbounded>false</upper_unbounded>
+                    <lower>1</lower>
+                    <upper>1</upper>
+                </occurrences>
+                <node_id></node_id>
+                <attributes xsi:type="C_SINGLE_ATTRIBUTE">
+                    <rm_attribute_name>defining_code</rm_attribute_name>
+                    <existence>
+                        <lower_included>true</lower_included>
+                        <upper_included>true</upper_included>
+                        <lower_unbounded>false</lower_unbounded>
+                        <upper_unbounded>false</upper_unbounded>
+                        <lower>1</lower>
+                        <upper>1</upper>
+                    </existence>
+                    <match_negated>false</match_negated>
+                    <children xsi:type="C_CODE_PHRASE">
+                        <rm_type_name>CODE_PHRASE</rm_type_name>
+                        <occurrences>
+                            <lower_included>true</lower_included>
+                            <upper_included>true</upper_included>
+                            <lower_unbounded>false</lower_unbounded>
+                            <upper_unbounded>false</upper_unbounded>
+                            <lower>1</lower>
+                            <upper>1</upper>
+                        </occurrences>
+                        <node_id></node_id>
+                        <terminology_id>
+                            <value>openehr</value>
+                        </terminology_id>
+                        <code_list>433</code_list>
+                    </children>
+                </attributes>
+            </children>
+        </attributes>
+        <attributes xsi:type="C_SINGLE_ATTRIBUTE" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <rm_attribute_name>context</rm_attribute_name>
+            <existence>
+                <lower_included>true</lower_included>
+                <upper_included>true</upper_included>
+                <lower_unbounded>false</lower_unbounded>
+                <upper_unbounded>false</upper_unbounded>
+                <lower>0</lower>
+                <upper>1</upper>
+            </existence>
+            <match_negated>false</match_negated>
+            <children xsi:type="C_COMPLEX_OBJECT">
+                <rm_type_name>EVENT_CONTEXT</rm_type_name>
+                <occurrences>
+                    <lower_included>true</lower_included>
+                    <upper_included>true</upper_included>
+                    <lower_unbounded>false</lower_unbounded>
+                    <upper_unbounded>false</upper_unbounded>
+                    <lower>1</lower>
+                    <upper>1</upper>
+                </occurrences>
+                <node_id></node_id>
+                <attributes xsi:type="C_SINGLE_ATTRIBUTE">
+                    <rm_attribute_name>other_context</rm_attribute_name>
+                    <existence>
+                        <lower_included>true</lower_included>
+                        <upper_included>true</upper_included>
+                        <lower_unbounded>false</lower_unbounded>
+                        <upper_unbounded>false</upper_unbounded>
+                        <lower>0</lower>
+                        <upper>1</upper>
+                    </existence>
+                    <match_negated>false</match_negated>
+                    <children xsi:type="C_COMPLEX_OBJECT">
+                        <rm_type_name>ITEM_TREE</rm_type_name>
+                        <occurrences>
+                            <lower_included>true</lower_included>
+                            <upper_included>true</upper_included>
+                            <lower_unbounded>false</lower_unbounded>
+                            <upper_unbounded>false</upper_unbounded>
+                            <lower>1</lower>
+                            <upper>1</upper>
+                        </occurrences>
+                        <node_id>at0001</node_id>
+                        <attributes xsi:type="C_MULTIPLE_ATTRIBUTE">
+                            <rm_attribute_name>items</rm_attribute_name>
+                            <existence>
+                                <lower_included>true</lower_included>
+                                <upper_included>true</upper_included>
+                                <lower_unbounded>false</lower_unbounded>
+                                <upper_unbounded>false</upper_unbounded>
+                                <lower>0</lower>
+                                <upper>1</upper>
+                            </existence>
+                            <match_negated>false</match_negated>
+                            <children xsi:type="ARCHETYPE_SLOT">
+                                <rm_type_name>CLUSTER</rm_type_name>
+                                <occurrences>
+                                    <lower_included>true</lower_included>
+                                    <upper_included>false</upper_included>
+                                    <lower_unbounded>false</lower_unbounded>
+                                    <upper_unbounded>true</upper_unbounded>
+                                    <lower>0</lower>
+                                </occurrences>
+                                <node_id>at0002</node_id>
+                                <includes>
+                                    <string_expression>archetype_id/value matches {/.*/}</string_expression>
+                                    <expression xsi:type="EXPR_BINARY_OPERATOR">
+                                        <type>Boolean</type>
+                                        <operator>2007</operator>
+                                        <precedence_overridden>false</precedence_overridden>
+                                        <left_operand xsi:type="EXPR_LEAF">
+                                            <type>String</type>
+                                            <item xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">archetype_id/value</item>
+                                            <reference_type>attribute</reference_type>
+                                        </left_operand>
+                                        <right_operand xsi:type="EXPR_LEAF">
+                                            <type>String</type>
+                                            <item xsi:type="C_STRING">
+                                                <pattern>.*</pattern>
+                                            </item>
+                                            <reference_type>constraint</reference_type>
+                                        </right_operand>
+                                    </expression>
+                                </includes>
+                            </children>
+                            <cardinality>
+                                <is_ordered>false</is_ordered>
+                                <is_unique>false</is_unique>
+                                <interval>
+                                    <lower_included>true</lower_included>
+                                    <upper_included>false</upper_included>
+                                    <lower_unbounded>false</lower_unbounded>
+                                    <upper_unbounded>true</upper_unbounded>
+                                    <lower>0</lower>
+                                </interval>
+                            </cardinality>
+                        </attributes>
+                    </children>
+                </attributes>
+            </children>
+        </attributes>
+        <attributes xsi:type="C_MULTIPLE_ATTRIBUTE" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <rm_attribute_name>content</rm_attribute_name>
+            <existence>
+                <lower_included>true</lower_included>
+                <upper_included>true</upper_included>
+                <lower_unbounded>false</lower_unbounded>
+                <upper_unbounded>false</upper_unbounded>
+                <lower>0</lower>
+                <upper>1</upper>
+            </existence>
+            <match_negated>false</match_negated>
+            <children xsi:type="C_ARCHETYPE_ROOT">
+                <rm_type_name>OBSERVATION</rm_type_name>
+                <occurrences>
+                    <lower_included>true</lower_included>
+                    <upper_included>true</upper_included>
+                    <lower_unbounded>false</lower_unbounded>
+                    <upper_unbounded>false</upper_unbounded>
+                    <lower>0</lower>
+                    <upper>1</upper>
+                </occurrences>
+                <node_id>at0000</node_id>
+                <attributes xsi:type="C_SINGLE_ATTRIBUTE">
+                    <rm_attribute_name>data</rm_attribute_name>
+                    <existence>
+                        <lower_included>true</lower_included>
+                        <upper_included>true</upper_included>
+                        <lower_unbounded>false</lower_unbounded>
+                        <upper_unbounded>false</upper_unbounded>
+                        <lower>1</lower>
+                        <upper>1</upper>
+                    </existence>
+                    <match_negated>false</match_negated>
+                    <children xsi:type="C_COMPLEX_OBJECT">
+                        <rm_type_name>HISTORY</rm_type_name>
+                        <occurrences>
+                            <lower_included>true</lower_included>
+                            <upper_included>true</upper_included>
+                            <lower_unbounded>false</lower_unbounded>
+                            <upper_unbounded>false</upper_unbounded>
+                            <lower>1</lower>
+                            <upper>1</upper>
+                        </occurrences>
+                        <node_id>at0001</node_id>
+                        <attributes xsi:type="C_MULTIPLE_ATTRIBUTE">
+                            <rm_attribute_name>events</rm_attribute_name>
+                            <existence>
+                                <lower_included>true</lower_included>
+                                <upper_included>true</upper_included>
+                                <lower_unbounded>false</lower_unbounded>
+                                <upper_unbounded>false</upper_unbounded>
+                                <lower>0</lower>
+                                <upper>1</upper>
+                            </existence>
+                            <match_negated>false</match_negated>
+                            <children xsi:type="C_COMPLEX_OBJECT">
+                                <rm_type_name>EVENT</rm_type_name>
+                                <occurrences>
+                                    <lower_included>true</lower_included>
+                                    <upper_included>false</upper_included>
+                                    <lower_unbounded>false</lower_unbounded>
+                                    <upper_unbounded>true</upper_unbounded>
+                                    <lower>0</lower>
+                                </occurrences>
+                                <node_id>at0002</node_id>
+                                <attributes xsi:type="C_SINGLE_ATTRIBUTE">
+                                    <rm_attribute_name>data</rm_attribute_name>
+                                    <existence>
+                                        <lower_included>true</lower_included>
+                                        <upper_included>true</upper_included>
+                                        <lower_unbounded>false</lower_unbounded>
+                                        <upper_unbounded>false</upper_unbounded>
+                                        <lower>1</lower>
+                                        <upper>1</upper>
+                                    </existence>
+                                    <match_negated>false</match_negated>
+                                    <children xsi:type="C_COMPLEX_OBJECT">
+                                        <rm_type_name>ITEM_TREE</rm_type_name>
+                                        <occurrences>
+                                            <lower_included>true</lower_included>
+                                            <upper_included>true</upper_included>
+                                            <lower_unbounded>false</lower_unbounded>
+                                            <upper_unbounded>false</upper_unbounded>
+                                            <lower>1</lower>
+                                            <upper>1</upper>
+                                        </occurrences>
+                                        <node_id>at0003</node_id>
+                                        <attributes xsi:type="C_MULTIPLE_ATTRIBUTE">
+                                            <rm_attribute_name>items</rm_attribute_name>
+                                            <existence>
+                                                <lower_included>true</lower_included>
+                                                <upper_included>true</upper_included>
+                                                <lower_unbounded>false</lower_unbounded>
+                                                <upper_unbounded>false</upper_unbounded>
+                                                <lower>0</lower>
+                                                <upper>1</upper>
+                                            </existence>
+                                            <match_negated>false</match_negated>
+                                            <children xsi:type="C_COMPLEX_OBJECT">
+                                                <rm_type_name>CLUSTER</rm_type_name>
+                                                <occurrences>
+                                                    <lower_included>true</lower_included>
+                                                    <upper_included>true</upper_included>
+                                                    <lower_unbounded>false</lower_unbounded>
+                                                    <upper_unbounded>false</upper_unbounded>
+                                                    <lower>0</lower>
+                                                    <upper>1</upper>
+                                                </occurrences>
+                                                <node_id>at0052</node_id>
+                                                <attributes xsi:type="C_MULTIPLE_ATTRIBUTE">
+                                                    <rm_attribute_name>items</rm_attribute_name>
+                                                    <existence>
+                                                        <lower_included>true</lower_included>
+                                                        <upper_included>true</upper_included>
+                                                        <lower_unbounded>false</lower_unbounded>
+                                                        <upper_unbounded>false</upper_unbounded>
+                                                        <lower>1</lower>
+                                                        <upper>1</upper>
+                                                    </existence>
+                                                    <match_negated>false</match_negated>
+                                                    <children xsi:type="C_COMPLEX_OBJECT">
+                                                        <rm_type_name>ELEMENT</rm_type_name>
+                                                        <occurrences>
+                                                            <lower_included>true</lower_included>
+                                                            <upper_included>true</upper_included>
+                                                            <lower_unbounded>false</lower_unbounded>
+                                                            <upper_unbounded>false</upper_unbounded>
+                                                            <lower>0</lower>
+                                                            <upper>1</upper>
+                                                        </occurrences>
+                                                        <node_id>at0053</node_id>
+                                                        <attributes xsi:type="C_SINGLE_ATTRIBUTE">
+                                                            <rm_attribute_name>value</rm_attribute_name>
+                                                            <existence>
+                                                                <lower_included>true</lower_included>
+                                                                <upper_included>true</upper_included>
+                                                                <lower_unbounded>false</lower_unbounded>
+                                                                <upper_unbounded>false</upper_unbounded>
+                                                                <lower>0</lower>
+                                                                <upper>1</upper>
+                                                            </existence>
+                                                            <match_negated>false</match_negated>
+                                                            <children xsi:type="C_DV_QUANTITY">
+                                                                <rm_type_name>DV_QUANTITY</rm_type_name>
+                                                                <occurrences>
+                                                                    <lower_included>true</lower_included>
+                                                                    <upper_included>true</upper_included>
+                                                                    <lower_unbounded>false</lower_unbounded>
+                                                                    <upper_unbounded>false</upper_unbounded>
+                                                                    <lower>1</lower>
+                                                                    <upper>1</upper>
+                                                                </occurrences>
+                                                                <node_id></node_id>
+                                                                <property>
+                                                                    <terminology_id>
+                                                                        <value>openehr</value>
+                                                                    </terminology_id>
+                                                                    <code_string>129</code_string>
+                                                                </property>
+                                                                <list>
+                                                                    <magnitude>
+                                                                        <lower_included>true</lower_included>
+                                                                        <upper_included>false</upper_included>
+                                                                        <lower_unbounded>false</lower_unbounded>
+                                                                        <upper_unbounded>true</upper_unbounded>
+                                                                        <lower>0.0</lower>
+                                                                    </magnitude>
+                                                                    <precision>
+                                                                        <lower_included>true</lower_included>
+                                                                        <upper_included>true</upper_included>
+                                                                        <lower_unbounded>false</lower_unbounded>
+                                                                        <upper_unbounded>false</upper_unbounded>
+                                                                        <lower>3</lower>
+                                                                        <upper>3</upper>
+                                                                    </precision>
+                                                                    <units>L</units>
+                                                                </list>
+                                                            </children>
+                                                        </attributes>
+                                                    </children>
+                                                    <cardinality>
+                                                        <is_ordered>false</is_ordered>
+                                                        <is_unique>false</is_unique>
+                                                        <interval>
+                                                            <lower_included>true</lower_included>
+                                                            <upper_included>false</upper_included>
+                                                            <lower_unbounded>false</lower_unbounded>
+                                                            <upper_unbounded>true</upper_unbounded>
+                                                            <lower>1</lower>
+                                                        </interval>
+                                                    </cardinality>
+                                                </attributes>
+                                                <attributes xsi:type="C_SINGLE_ATTRIBUTE">
+                                                    <rm_attribute_name>name</rm_attribute_name>
+                                                    <existence>
+                                                        <lower_included>true</lower_included>
+                                                        <upper_included>true</upper_included>
+                                                        <lower_unbounded>false</lower_unbounded>
+                                                        <upper_unbounded>false</upper_unbounded>
+                                                        <lower>1</lower>
+                                                        <upper>1</upper>
+                                                    </existence>
+                                                    <match_negated>false</match_negated>
+                                                    <children xsi:type="C_COMPLEX_OBJECT">
+                                                        <rm_type_name>DV_CODED_TEXT</rm_type_name>
+                                                        <occurrences>
+                                                            <lower_included>true</lower_included>
+                                                            <upper_included>true</upper_included>
+                                                            <lower_unbounded>false</lower_unbounded>
+                                                            <upper_unbounded>false</upper_unbounded>
+                                                            <lower>1</lower>
+                                                            <upper>1</upper>
+                                                        </occurrences>
+                                                        <node_id></node_id>
+                                                        <attributes xsi:type="C_SINGLE_ATTRIBUTE">
+                                                            <rm_attribute_name>defining_code</rm_attribute_name>
+                                                            <existence>
+                                                                <lower_included>true</lower_included>
+                                                                <upper_included>true</upper_included>
+                                                                <lower_unbounded>false</lower_unbounded>
+                                                                <upper_unbounded>false</upper_unbounded>
+                                                                <lower>1</lower>
+                                                                <upper>1</upper>
+                                                            </existence>
+                                                            <match_negated>false</match_negated>
+                                                            <children xsi:type="C_CODE_PHRASE">
+                                                                <rm_type_name>CODE_PHRASE</rm_type_name>
+                                                                <occurrences>
+                                                                    <lower_included>true</lower_included>
+                                                                    <upper_included>true</upper_included>
+                                                                    <lower_unbounded>false</lower_unbounded>
+                                                                    <upper_unbounded>false</upper_unbounded>
+                                                                    <lower>1</lower>
+                                                                    <upper>1</upper>
+                                                                </occurrences>
+                                                                <node_id></node_id>
+                                                                <terminology_id>
+                                                                    <value>local</value>
+                                                                </terminology_id>
+                                                                <code_list>at0067</code_list>
+                                                            </children>
+                                                        </attributes>
+                                                    </children>
+                                                </attributes>
+                                            </children>
+                                            <cardinality>
+                                                <is_ordered>false</is_ordered>
+                                                <is_unique>false</is_unique>
+                                                <interval>
+                                                    <lower_included>true</lower_included>
+                                                    <upper_included>false</upper_included>
+                                                    <lower_unbounded>false</lower_unbounded>
+                                                    <upper_unbounded>true</upper_unbounded>
+                                                    <lower>0</lower>
+                                                </interval>
+                                            </cardinality>
+                                        </attributes>
+                                    </children>
+                                </attributes>
+                            </children>
+                            <cardinality>
+                                <is_ordered>false</is_ordered>
+                                <is_unique>false</is_unique>
+                                <interval>
+                                    <lower_included>true</lower_included>
+                                    <upper_included>false</upper_included>
+                                    <lower_unbounded>false</lower_unbounded>
+                                    <upper_unbounded>true</upper_unbounded>
+                                    <lower>1</lower>
+                                </interval>
+                            </cardinality>
+                        </attributes>
+                    </children>
+                </attributes>
+                <archetype_id>
+                    <value>openEHR-EHR-OBSERVATION.spirometry_result.v2</value>
+                </archetype_id>
+                <term_definitions code="at0001">
+                    <items id="text">Event Series</items>
+                    <items id="description">@ internal @</items>
+                </term_definitions>
+                <term_definitions code="at0002">
+                    <items id="text">Any event</items>
+                    <items id="description">Default, unspecified point in time or interval which may be explicitly defined in a template or at run-time.</items>
+                </term_definitions>
+                <term_definitions code="at0003">
+                    <items id="text">Tree</items>
+                    <items id="description">@ internal @</items>
+                </term_definitions>
+                <term_definitions code="at0008">
+                    <items id="text">Predicted result</items>
+                    <items id="description">Predicted flow rate.</items>
+                </term_definitions>
+                <term_definitions code="at0013">
+                    <items id="text">Forced expiratory time (FET)</items>
+                    <items id="description">The time taken to complete a forced expiration.</items>
+                </term_definitions>
+                <term_definitions code="at0018">
+                    <items id="text">Predicted result</items>
+                    <items id="description">Predicted ratio.</items>
+                </term_definitions>
+                <term_definitions code="at0029">
+                    <items id="text">Tree</items>
+                    <items id="description">@ internal @</items>
+                </term_definitions>
+                <term_definitions code="at0030">
+                    <items id="text">Device</items>
+                    <items id="description">Details of the device used to measure spirometry.</items>
+                </term_definitions>
+                <term_definitions code="at0031">
+                    <items id="text">Tree</items>
+                    <items id="description">@ internal @</items>
+                </term_definitions>
+                <term_definitions code="at0044">
+                    <items id="text">Measured/predicted ratio</items>
+                    <items id="description">The ratio of the measured to predicted test results.</items>
+                </term_definitions>
+                <term_definitions code="at0052">
+                    <items id="text">Volume</items>
+                    <items id="description">Test result represented as a measured volume or calculated capacity.</items>
+                    <items id="comment">Each test result is recorded using a separate instance of this cluster.</items>
+                </term_definitions>
+                <term_definitions code="at0053">
+                    <items id="text">Result</items>
+                    <items id="description">Measured volume.</items>
+                </term_definitions>
+                <term_definitions code="at0054">
+                    <items id="text">Predicted result</items>
+                    <items id="description">Predicted volume.</items>
+                </term_definitions>
+                <term_definitions code="at0055">
+                    <items id="text">Ratio</items>
+                    <items id="description">A calculated test result expressed as a ratio.</items>
+                    <items id="comment">Each ratio is recorded using a separate instance of this cluster.</items>
+                </term_definitions>
+                <term_definitions code="at0056">
+                    <items id="text">Result</items>
+                    <items id="description">Calculated ratio.</items>
+                </term_definitions>
+                <term_definitions code="at0057">
+                    <items id="text">Flow rate</items>
+                    <items id="description">Test result represented as a measured flow rate.</items>
+                    <items id="comment">Each test result is recorded using a separate instance of this cluster.</items>
+                </term_definitions>
+                <term_definitions code="at0058">
+                    <items id="text">Result</items>
+                    <items id="description">Measured flow rate.</items>
+                </term_definitions>
+                <term_definitions code="at0064">
+                    <items id="text">SVC</items>
+                    <items id="description">Slow vital capacity (SVC) is the maximal volume of air that can be slowly exhaled from a position of full inspiration. Also known as Expiratory vital capacity (EVC). Equal to IRV + TV + ERV.</items>
+                </term_definitions>
+                <term_definitions code="at0065">
+                    <items id="text">FVC</items>
+                    <items id="description">Forced vital capacity (FVC) is the maximal volume of air that can be forcibly exhaled from a position of full inspiration.</items>
+                </term_definitions>
+                <term_definitions code="at0067">
+                    <items id="text">FEV1</items>
+                    <items id="description">Forced expiratory volume at 1 second (FEV1) is the volume of air that has been exhaled during the first second of forced exhalation, during the performance of FVC.</items>
+                </term_definitions>
+                <term_definitions code="at0068">
+                    <items id="text">FEV3</items>
+                    <items id="description">Forced expiratory volume at 3 seconds (FEV3) is the volume of air that has been exhaled during the first three seconds of forced exhalation, during the performance of FVC.</items>
+                </term_definitions>
+                <term_definitions code="at0069">
+                    <items id="text">FEV6</items>
+                    <items id="description">Forced expiratory volume at 6 seconds (FEV6) is the volume of air that has been exhaled during the first six seconds of forced exhalation, during the performance of FVC.</items>
+                </term_definitions>
+                <term_definitions code="at0070">
+                    <items id="text">FEV0.75</items>
+                    <items id="description">Forced expiratory volume at 0.75 seconds (FEV0.75) is the volume of air that has been exhaled during the first three quarters of a second of forced exhalation, during the performance of FVC.</items>
+                </term_definitions>
+                <term_definitions code="at0072">
+                    <items id="text">FEF25-75%</items>
+                    <items id="description">Forced expiratory flow 25-75 % (FEF25-75%) is the mean forced expiratory flow of air measured during the expiration of 25-75 % of the volume of the forced vital capacity (FVC).</items>
+                </term_definitions>
+                <term_definitions code="at0073">
+                    <items id="text">FEF25-50%</items>
+                    <items id="description">Forced expiratory flow 25-50 % (FEF25-50%) is the mean forced expiratory flow of air measured during the expiration of 25-50 % of the volume of the forced vital capacity (FVC).</items>
+                </term_definitions>
+                <term_definitions code="at0074">
+                    <items id="text">FIF25-75%</items>
+                    <items id="description">Forced inspiratory flow 25-75 % (FIF25-75%) is the mean forced inspiratory flow of air measured during the inspiration of 25-75 % of the volume of the forced inspiratory vital capacity (FIVC).</items>
+                </term_definitions>
+                <term_definitions code="at0075">
+                    <items id="text">FIF25-50%</items>
+                    <items id="description">Forced inspiratory flow 25-50 % (FIF25-50%) is the mean forced inspiratory flow of air measured during the inspiration of 25-50 % of the volume of the forced inspiratory vital capacity (FIVC).</items>
+                </term_definitions>
+                <term_definitions code="at0076">
+                    <items id="text">IC</items>
+                    <items id="description">Inspiratory capacity (IC) is the maximal volume of air that can be inhaled after exhalation of normal tidal volume. Equal to TV + IRV.</items>
+                </term_definitions>
+                <term_definitions code="at0077">
+                    <items id="text">ERV</items>
+                    <items id="description">Expiratory reserve volume (ERV) is the maximal volume of air that can be forcibly exhaled after exhalation of normal tidal volume.</items>
+                </term_definitions>
+                <term_definitions code="at0078">
+                    <items id="text">IRV</items>
+                    <items id="description">Inspiratory reserve volume (IRV) is the maximal volume of air that can be forcibly inhaled after a inhalation of normal tidal volume.</items>
+                </term_definitions>
+                <term_definitions code="at0080">
+                    <items id="text">FEV1/SVC ratio</items>
+                    <items id="description">The ratio of 'Forced expiratory volume in 1 second (FEV1)' to 'Slow vital capacity (SVC)'.</items>
+                </term_definitions>
+                <term_definitions code="at0081">
+                    <items id="text">FEV1/FVC ratio</items>
+                    <items id="description">The ratio of 'Forced expiratory volume in 1 second (FEV1)' to 'Forced vital capacity (FVC)'. Also known as FEV1%FVC or FEV1%F.</items>
+                </term_definitions>
+                <term_definitions code="at0082">
+                    <items id="text">TV</items>
+                    <items id="description">Tidal volume (TV) is the normal volume of air that can be inhaled or exhaled during one respiratory cycle when no extra effort is applied. Also known as Vᴛ.</items>
+                </term_definitions>
+                <term_definitions code="at0098">
+                    <items id="text">Confounding factors</items>
+                    <items id="description">Record any issues or factors that may impact on the spirometry test.</items>
+                    <items id="comment">For example: known COPD.</items>
+                </term_definitions>
+                <term_definitions code="at0101">
+                    <items id="text">Comment</items>
+                    <items id="description">Additional narrative about the test results and intepretation not captured in other fields.</items>
+                </term_definitions>
+                <term_definitions code="at0115">
+                    <items id="text">Position</items>
+                    <items id="description">The body position of the individual at the time of measurement.</items>
+                </term_definitions>
+                <term_definitions code="at0116">
+                    <items id="text">Standing</items>
+                    <items id="description">Standing at the time of measurement.</items>
+                </term_definitions>
+                <term_definitions code="at0117">
+                    <items id="text">Sitting</items>
+                    <items id="description">Sitting (for example on a bed or chair) at the time of measurement.</items>
+                </term_definitions>
+                <term_definitions code="at0118">
+                    <items id="text">Reclining</items>
+                    <items id="description">Reclining at the time of measurement.</items>
+                </term_definitions>
+                <term_definitions code="at0119">
+                    <items id="text">Lying</items>
+                    <items id="description">Lying flat at the time of measurement.</items>
+                </term_definitions>
+                <term_definitions code="at0122">
+                    <items id="text">Measured/predicted ratio</items>
+                    <items id="description">The ratio of measured to predicted test results.</items>
+                </term_definitions>
+                <term_definitions code="at0130">
+                    <items id="text">Clinical interpretation</items>
+                    <items id="description">Overall clinical interpretation about all of the measurements and calculated ratios.</items>
+                </term_definitions>
+                <term_definitions code="at0131">
+                    <items id="text">Multimedia representation</items>
+                    <items id="description">Digital representation of the test results.</items>
+                    <items id="comment">For example: Flow volume loop; or volume-time tracing.</items>
+                </term_definitions>
+                <term_definitions code="at0132">
+                    <items id="text">Extension</items>
+                    <items id="description">Additional information required to capture local content or to align with other reference models/formalisms.</items>
+                    <items id="comment">For example: local information requirements or additional metadata to align with FHIR equivalents.</items>
+                </term_definitions>
+                <term_definitions code="at0145">
+                    <items id="text">FEV0.5</items>
+                    <items id="description">Forced expiratory volume at 0.5 seconds (FEV0.5) is the volume of air that has been exhaled during the first half second of forced exhalation, during the performance of FVC.</items>
+                </term_definitions>
+                <term_definitions code="at0146">
+                    <items id="text">FEV2</items>
+                    <items id="description">Forced expiratory volume at 2 seconds (FEV2) is the volume of air that has been exhaled during the first two seconds of forced exhalation, during the performance of FVC.</items>
+                </term_definitions>
+                <term_definitions code="at0152">
+                    <items id="text">PEFR</items>
+                    <items id="description">Peak expiratory flow rate (PEFR) is the peak flow rate during a forced vital capacity (FVC) maneuver. Also known as forced expiratory flow at maximum effort (FEFmax).</items>
+                </term_definitions>
+                <term_definitions code="at0156">
+                    <items id="text">Pressure</items>
+                    <items id="description">Test result represented as a measured pressure.</items>
+                    <items id="comment">Each test result is recorded using a separate instance of this cluster.</items>
+                </term_definitions>
+                <term_definitions code="at0165">
+                    <items id="text">Result</items>
+                    <items id="description">Measured pressure.</items>
+                </term_definitions>
+                <term_definitions code="at0166">
+                    <items id="text">Predicted result</items>
+                    <items id="description">Predicted pressure.</items>
+                </term_definitions>
+                <term_definitions code="at0167">
+                    <items id="text">Measured/predicted ratio</items>
+                    <items id="description">The ratio of measured to predicted test results.</items>
+                </term_definitions>
+                <term_definitions code="at0170">
+                    <items id="text">MEP</items>
+                    <items id="description">Maximal expiratory pressure (MEP) is the maximal expiratory pressure during a forced vital capacity (FVC) maneuver.</items>
+                </term_definitions>
+                <term_definitions code="at0171">
+                    <items id="text">FIV1</items>
+                    <items id="description">Forced inspiratory volume at 1 second (FIV1) is the volume of air that has been inhaled during the first second of forced inhalation, during the performance of FIVC.</items>
+                </term_definitions>
+                <term_definitions code="at0172">
+                    <items id="text">FIVC</items>
+                    <items id="description">Forced inspiratory vital capacity (FIVC) is the maximal volume of air that can be forcibly inhaled from a position of full expiration.</items>
+                </term_definitions>
+                <term_definitions code="at0174">
+                    <items id="text">IVC</items>
+                    <items id="description">Inspiratory vital capacity (IVC) is the maximal volume of air that can be slowly inhaled from a position of full expiration. Equal to ERV + TV + IRV.</items>
+                </term_definitions>
+                <term_definitions code="at0176">
+                    <items id="text">MVV</items>
+                    <items id="description">Maximum voluntary ventilation (MVV) is the maximum volume of air the individual can breathe during a period of time specified by an interval event.</items>
+                </term_definitions>
+                <term_definitions code="at0177">
+                    <items id="text">FEF25%</items>
+                    <items id="description">Forced expiratory flow 25 % (FEF25%) is the maximal instantaneous expiratory flow when 25 % of the of the volume of the forced vital capacity (FVC) has been expired. Also known as maximal voluntary flow 75% (MEF75%).</items>
+                </term_definitions>
+                <term_definitions code="at0178">
+                    <items id="text">FEF50%</items>
+                    <items id="description">Forced expiratory flow 50 % (FEF50%) is the maximal instantaneous expiratory flow when 50 % of the of the volume of the forced vital capacity (FVC) has been expired. Also known as maximal voluntary flow 50 % (MEF50%).</items>
+                </term_definitions>
+                <term_definitions code="at0179">
+                    <items id="text">FEF75%</items>
+                    <items id="description">Forced expiratory flow 75 % (FEF75%) is the maximal instantaneous expiratory flow when 75 % of the of the volume of the forced vital capacity (FVC) has been expired. Also known as maximal voluntary flow 25 % (MEF25%).</items>
+                </term_definitions>
+                <term_definitions code="at0181">
+                    <items id="text">MIP</items>
+                    <items id="description">Maximal inspiratory pressure (MIP) is the maximal inspiratory pressure during a forced inspiratory vital capacity (FIVC) maneuver.</items>
+                </term_definitions>
+                <term_definitions code="at0182">
+                    <items id="text">SNIP</items>
+                    <items id="description">Sniff nasal inspiratory pressure (SNIP) is the maximal inspiratory pressure in one occluded nostril during a maximal sniff performed from relaxed end-expiration through the other patent nostril.</items>
+                </term_definitions>
+                <term_definitions code="at0185">
+                    <items id="text">Predicted results source</items>
+                    <items id="description">The knowledge base used for the predicted results.</items>
+                    <items id="comment">For example: GLI 2012.</items>
+                </term_definitions>
+                <term_definitions code="at0186">
+                    <items id="text">FIF25%</items>
+                    <items id="description">Forced inspiratory flow 25 % (FIF25%) is the maximal instantaneous inspiratory flow when 25 % of the of the volume of the forced inspiratory vital capacity (FIVC) has been inspired. Also known as maximum inspiratory flow 75% (MIF75%).</items>
+                </term_definitions>
+                <term_definitions code="at0187">
+                    <items id="text">FIF50%</items>
+                    <items id="description">Forced inspiratory flow 50 % (FIF50%) is the maximal instantaneous inspiratory flow when 50 % of the of the volume of the forced inspiratory vital capacity (FIVC) has been inspired. Also known as maximum inspiratory flow 50% (MIF50%).</items>
+                </term_definitions>
+                <term_definitions code="at0188">
+                    <items id="text">FIF75%</items>
+                    <items id="description">Forced inspiratory flow 75 % (FIF75%) is the maximal instantaneous inspiratory flow when 75 % of the of the volume of the forced inspiratory vital capacity (FIVC) has been inspired. Also known as maximum inspiratory flow 25% (MIF25%).</items>
+                </term_definitions>
+                <term_definitions code="at0189">
+                    <items id="text">FEV1/FEV6 ratio</items>
+                    <items id="description">The ratio of 'Forced expiratory volume in 1 second (FEV1)' to 'Forced expiratory volume in 6 seconds (FEV6)'.</items>
+                </term_definitions>
+                <term_definitions code="at0190">
+                    <items id="text">FEV1/IVC ratio</items>
+                    <items id="description">The ratio of 'Forced expiratory volume in 1 second (FEV1)' to 'Inspired vital capacity (IVC)'.</items>
+                </term_definitions>
+                <term_definitions code="at0191">
+                    <items id="text">Level of exertion</items>
+                    <items id="description">Details about physical activity undertaken at the time of spirometry recording.</items>
+                </term_definitions>
+                <term_definitions code="at0192">
+                    <items id="text">Challenge/reversibility</items>
+                    <items id="description">Statement about whether the spirometry test was performed as a reversibility test or a bronchial challenge test.</items>
+                    <items id="comment">A reversibility test is usually performed using an inhaled bronchodilator such as salbutamol, and is sometimes known as a post bronchodilator test. A bronchial challenge test is usually performed using an inhaled bronchoconstrictor such as methacholine, vigorous exercise, or inhalation of cold/dry air.</items>
+                </term_definitions>
+                <term_definitions code="at0193">
+                    <items id="text">None</items>
+                    <items id="description">The spirometry test was performed neither as a reversibility test nor a bronchial challenge test.</items>
+                </term_definitions>
+                <term_definitions code="at0194">
+                    <items id="text">Bronchial challenge test</items>
+                    <items id="description">The spirometry test was performed as a bronchial challenge test.</items>
+                </term_definitions>
+                <term_definitions code="at0195">
+                    <items id="text">Reversibility test</items>
+                    <items id="description">The spirometry test was performed as a reversibility test.</items>
+                </term_definitions>
+                <term_definitions code="at0196">
+                    <items id="text">Type of measurement</items>
+                    <items id="description">Type of measurement of spirometry.</items>
+                    <items id="comment">This is particularly relevant for PEFR and PIFR tests.</items>
+                </term_definitions>
+                <term_definitions code="at0197">
+                    <items id="text">Mechanical</items>
+                    <items id="description">Measurement using a purely mechanical device.</items>
+                </term_definitions>
+                <term_definitions code="at0198">
+                    <items id="text">Electronic</items>
+                    <items id="description">Measurement using an electronic device.</items>
+                </term_definitions>
+                <term_definitions code="at0199">
+                    <items id="text">Method</items>
+                    <items id="description">Method used to perform the test.</items>
+                    <items id="comment">For example: measurements performed orally using a mouth piece and nose clip, or nasally using a face mask with the mouth firmly closed. Measurements with different methods will have to be recorded using separate instances of the archetype.</items>
+                </term_definitions>
+                <term_definitions code="at0205">
+                    <items id="text">PIFR</items>
+                    <items id="description">Peak inspiratory flow rate (PIFR) is the peak flow rate during a forced inspiratory vital capacity (FIVC) maneuver.</items>
+                </term_definitions>
+                <term_definitions code="at0209">
+                    <items id="text">Environmental conditions</items>
+                    <items id="description">Details about environmental conditions undertaken at the time of spirometry recording.</items>
+                </term_definitions>
+                <term_definitions code="at0000">
+                    <items id="text">Spirometry result</items>
+                    <items id="description">Pulmonary function test results using a spirometer or peak flow meter.</items>
+                </term_definitions>
+                <term_bindings terminology="SNOMED-CT">
+                    <items code="at0065">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::50834005]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0064">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::83411002]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0067">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::59328004]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0069">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::878869001]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0070">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::251910007]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0072">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::251932003]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0076">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::29533001]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0077">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::55532004]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0078">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::55562005]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0081">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::251944000]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0082">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::13621006]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0152">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::18491006]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0171">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::251912004]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0174">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::251913009]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0186">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::251927004]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0187">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::251926008]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0188">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::251924006]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0177">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::251921003]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0178">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::251920002]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0179">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::251919008]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0181">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::27913002]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0170">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::17202005]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0205">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::251923000]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0189">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::702534005]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0116">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::10904000]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0117">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::33586001]</code_string>
+                        </value>
+                    </items>
+                    <items code="at0118">
+                        <value>
+                            <terminology_id>
+                                <value>SNOMED-CT</value>
+                            </terminology_id>
+                            <code_string>[SNOMED-CT::272580008]</code_string>
+                        </value>
+                    </items>
+                </term_bindings>
+            </children>
+            <cardinality>
+                <is_ordered>false</is_ordered>
+                <is_unique>false</is_unique>
+                <interval>
+                    <lower_included>true</lower_included>
+                    <upper_included>false</upper_included>
+                    <lower_unbounded>false</lower_unbounded>
+                    <upper_unbounded>true</upper_unbounded>
+                    <lower>1</lower>
+                </interval>
+            </cardinality>
+        </attributes>
+        <archetype_id>
+            <value>openEHR-EHR-COMPOSITION.encounter.v1</value>
+        </archetype_id>
+        <template_id>
+            <value>pdhc_lung_function.v1</value>
+        </template_id>
+        <term_definitions code="at0001">
+            <items id="text">Tree</items>
+            <items id="description">@ internal @</items>
+        </term_definitions>
+        <term_definitions code="at0002">
+            <items id="text">Extension</items>
+            <items id="description">Additional information required to extend the model with local content or to align with other reference models or formalisms.</items>
+            <items id="comment">For example: local information requirements; or additional metadata to align with FHIR.</items>
+        </term_definitions>
+        <term_definitions code="at0000">
+            <items id="text">PDHC Lung Function</items>
+            <items id="description">Interaction, contact or care event between a subject of care and healthcare provider(s).</items>
+        </term_definitions>
+    </definition>
+</template>

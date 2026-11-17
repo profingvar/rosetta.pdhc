@@ -58,6 +58,8 @@ def test_baked_ucum_matches_the_unit_bridge():
     # pdhc_unit — catches drift between per-concept ucum and the shared table.
     for guid in cm.mapped_guids():
         b = cm.resolve(guid)
+        if b.pdhc_unit == "" and b.ucum == "1":
+            continue  # #728 D-L2: a count with no plan unit, sent as UCUM 1 -- not a bridge entry
         assert cm.ucum_for(b.pdhc_unit) == b.ucum, f"{b.concept_name} ucum drift"
 
 

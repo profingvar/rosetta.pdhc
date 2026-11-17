@@ -1,0 +1,79 @@
+{
+  "_status": "DRAFT — predicted, NOT captured. Compare with ASHA Explore after upload; the captured paths win.",
+  "_how": "scripts/build_opt.py predict_web_template() over the built template (reproduces all 73 leaves of the captured vitals web template and the captured anthropometry paths; see app/tests/test_build_opt.py).",
+  "template_id": "pdhc_lung_function.v1",
+  "flat_root": "pdhc_lung_function",
+  "_flat_root_derivation": "web-template id of the composition root name 'PDHC Lung Function' (encounter.v1 at0000 overridden), as for vitals/anthropometry; not the template_id.",
+  "archetype": "openEHR-EHR-OBSERVATION.spirometry_result.v2",
+  "composition_keys": [
+    "pdhc_lung_function/language|code",
+    "pdhc_lung_function/language|terminology",
+    "pdhc_lung_function/territory|code",
+    "pdhc_lung_function/territory|terminology",
+    "pdhc_lung_function/category|code",
+    "pdhc_lung_function/category|value",
+    "pdhc_lung_function/category|terminology",
+    "pdhc_lung_function/context/start_time",
+    "pdhc_lung_function/context/setting|code",
+    "pdhc_lung_function/context/setting|value",
+    "pdhc_lung_function/context/setting|terminology",
+    "pdhc_lung_function/composer|name"
+  ],
+  "leaves": [
+    {
+      "concept": "FEV1",
+      "concepts": [
+        {
+          "concept_guid": "6521528c-db59-45c5-a492-003c28f27623",
+          "concept_name": "FEV1",
+          "concept_map_draft_flat_path": "pdhc_lung_function/lung_function/any_event/fev1",
+          "agrees_with_prediction": false
+        }
+      ],
+      "binding_kind": "fixed_quantity",
+      "value_kind": "DV_QUANTITY",
+      "flat_path": "pdhc_lung_function/spirometry_result/any_event/fev1/result",
+      "magnitude": "pdhc_lung_function/spirometry_result/any_event/fev1/result|magnitude",
+      "unit": "pdhc_lung_function/spirometry_result/any_event/fev1/result|unit",
+      "allowed_units": [
+        "L"
+      ],
+      "time_path": "pdhc_lung_function/spirometry_result/any_event/time",
+      "aql_path": "/content[openEHR-EHR-OBSERVATION.spirometry_result.v2]/data[at0001]/events[at0002]/data[at0003]/items[at0052 and name/value='FEV1']/items[at0053]"
+    }
+  ],
+  "web_template_leaves": [
+    {
+      "flat_path": "pdhc_lung_function/spirometry_result/any_event/time",
+      "flat_path_indexed": "pdhc_lung_function/spirometry_result/any_event:N/time",
+      "aql_path": "/content[openEHR-EHR-OBSERVATION.spirometry_result.v2]/data[at0001]/events[at0002]/time",
+      "rm_types": [
+        "DV_DATE_TIME"
+      ],
+      "units": null,
+      "min": 1,
+      "max": 1
+    },
+    {
+      "flat_path": "pdhc_lung_function/spirometry_result/any_event/fev1/result",
+      "flat_path_indexed": "pdhc_lung_function/spirometry_result/any_event:N/fev1/result",
+      "aql_path": "/content[openEHR-EHR-OBSERVATION.spirometry_result.v2]/data[at0001]/events[at0002]/data[at0003]/items[at0052 and name/value='FEV1']/items[at0053]",
+      "rm_types": [
+        "DV_QUANTITY"
+      ],
+      "units": [
+        "L"
+      ],
+      "min": 0,
+      "max": 1
+    }
+  ],
+  "mandatory": [
+    "any_event/time (RM)",
+    "if the fev1 cluster is present: its items (>=1, i.e. result) and its name, fixed by the template to FEV1 (at0067) -- EHRbase derives the name from the single-code constraint"
+  ],
+  "uncertain": [
+    "The cluster id 'fev1' assumes EHRbase names a node whose coded name is narrowed to ONE code after that code's text -- it does exactly this per code for pulse.v2 at1023 (name in {at1057, at1058} -> clinical_interpretation / rhythm) in the captured vitals web template. If the sandbox instead shows 'volume', the leaf is .../any_event/volume/result and the emitter must also send .../volume/name|code=at0067.",
+    "The concept map draft (lung_function/any_event/fev1) named an archetype that does not exist on CKM; the leaf is one level deeper (fev1/result) because spirometry_result.v2 holds each result in a named cluster."
+  ]
+}

@@ -44,6 +44,7 @@ class Binding:
     ucum: str               # archetype UCUM code, e.g. "mm[Hg]"
     binding_kind: str = "fixed_quantity"
     provenance: str | None = None   # "self_reported" (D-A1): own composition, patient as composer
+    loinc: str | None = None        # verified LOINC (D-L1); None -> the concept's own urn:pdhc:concept code
 
     @property
     def magnitude_key(self) -> str:
@@ -102,6 +103,7 @@ def resolve(concept_guid: str) -> Binding:
         ucum=d["ucum"],
         binding_kind=d.get("binding_kind", "fixed_quantity"),
         provenance=d.get("provenance"),
+        loinc=d.get("loinc"),
     )
 
 
@@ -132,6 +134,12 @@ def template_id() -> str:
 
 def flat_root(tid: str | None = None) -> str:
     return _tpl(tid)["flat_root"]
+
+
+def event_defaults(tid: str | None = None) -> dict:
+    """Fixed FLAT keys under the root that the template requires on every
+    composition (#728: laboratory's mandatory test_name)."""
+    return dict(_tpl(tid).get("event_defaults") or {})
 
 
 def composition_defaults(tid: str | None = None) -> dict:

@@ -47,7 +47,22 @@ archetypes whole):
   kept node (and not inside one) is removed, except attributes the archetype
   makes mandatory (existence lower >= 1). Removing a mandatory object is an error.
 * ``constrain[path].units`` — narrows a ``C_DV_QUANTITY`` unit list. Each unit
-  must already be allowed by the archetype (a template can only narrow).
+  must already be allowed by the archetype (a template can only narrow). An
+  ELEMENT whose value the archetype leaves unconstrained (any data type) is
+  narrowed to a DV_QUANTITY with exactly those units.
+* ``constrain[path].codes`` — narrows a local code list (e.g. a cluster's coded
+  ``name``: a spirometry Volume cluster fixed to FEV1).
+* ``constrain[path].occurrences`` — narrows a node's occurrences; never widens.
+* ``constrain[path].allow_coded_text`` — adds an open DV_CODED_TEXT alternative
+  before a DV_TEXT value (the coded-or-text choice CKM itself uses).
+* ``slots{slot path: [archetype spec, ...]}`` — fills an ARCHETYPE_SLOT with
+  nested C_ARCHETYPE_ROOTs (each built by the same rules, own ontology); the
+  archetype id must match the slot's include pattern and the slot must be kept.
+
+``predict_web_template()`` walks the built template the way EHRbase builds a web
+template and lists every data leaf with its predicted FLAT path. Its control is
+the captured vitals web template: all 73 leaves, ids, aqlPaths, min and max
+match, both ways (see the tests).
 
 Pure stdlib, deterministic: the same inputs give the same bytes.
 
@@ -122,6 +137,11 @@ class Node:
     def findtext(self, tag, default=None):
         c = self.find(tag)
         return default if c is None else (c.text or "")
+
+    def iter_nodes(self):
+        yield self
+        for c in self.children:
+            yield from c.iter_nodes()
 
     def index(self, tag):
         for i, c in enumerate(self.children):
@@ -394,10 +414,27 @@ def prune(root: Node, keep_paths):
         resolve(root, p)
 
 
+def _value_attr(el: Node):
+    return next((a for a in el.findall("attributes") if a.findtext("rm_attribute_name") == "value"), None)
+
+
 def constrain_units(root: Node, element_path: str, units):
+    """Narrow an ELEMENT's DV_QUANTITY units. If the archetype leaves the value
+    unconstrained (any data type, e.g. laboratory_test_analyte 'Analyte result'),
+    narrow it to a DV_QUANTITY carrying exactly ``units`` (no property: the
+    units may span several properties)."""
     el = resolve(root, element_path)
-    q = [c for a in el.findall("attributes") if a.findtext("rm_attribute_name") == "value"
-         for c in a.findall("children") if c.get("xsi:type") == "C_DV_QUANTITY"]
+    va = _value_attr(el)
+    if va is None:
+        if el.findtext("rm_type_name") != "ELEMENT":
+            raise BuildError("%s: units apply to an ELEMENT" % element_path)
+        q = Node("children", [("xsi:type", "C_DV_QUANTITY")], children=[
+            leaf("rm_type_name", "DV_QUANTITY"), _interval("occurrences", 1, 1), leaf("node_id", "")]
+            + [Node("list", children=[leaf("units", u)]) for u in units])
+        el.children.append(Node("attributes", [("xsi:type", "C_SINGLE_ATTRIBUTE")], children=[
+            leaf("rm_attribute_name", "value"), _interval("existence", 0, 1), q]))
+        return
+    q = [c for c in va.findall("children") if c.get("xsi:type") == "C_DV_QUANTITY"]
     if len(q) != 1:
         raise BuildError("%s: expected one C_DV_QUANTITY value, found %d" % (element_path, len(q)))
     q = q[0]
@@ -413,12 +450,79 @@ def constrain_units(root: Node, element_path: str, units):
     q.children = rest[:first] + [by_unit[u] for u in units] + rest[first:]
 
 
-def quantity_units(node: Node):
+def constrain_codes(root: Node, path: str, codes):
+    """Narrow the local code list of the DV_CODED_TEXT at ``path`` (e.g. a cluster's
+    coded ``name``) to ``codes``, which must all be allowed by the archetype."""
+    target = resolve(root, path)
+    cps = [c for a in target.findall("attributes") if a.findtext("rm_attribute_name") == "defining_code"
+           for c in a.findall("children") if c.get("xsi:type") == "C_CODE_PHRASE"]
+    if len(cps) != 1:
+        raise BuildError("%s: expected one C_CODE_PHRASE, found %d" % (path, len(cps)))
+    cp = cps[0]
+    allowed = [c.text for c in cp.findall("code_list")]
+    bad = [c for c in codes if c not in allowed]
+    if bad:
+        raise BuildError("%s: codes %s not allowed by the archetype" % (path, bad))
+    first = cp.index("code_list")
+    rest = [c for c in cp.children if c.tag != "code_list"]
+    cp.children = rest[:first] + [leaf("code_list", c) for c in codes] + rest[first:]
+
+
+def constrain_occurrences(root: Node, path: str, lower, upper):
+    node = resolve(root, path)
+    o = node.find("occurrences")
+    alo = int(o.findtext("lower", "0"))
+    aup = None if o.findtext("upper_unbounded") == "true" else int(o.findtext("upper"))
+    if lower < alo or (aup is not None and (upper is None or upper > aup)):
+        raise BuildError("%s: occurrences %s..%s widen the archetype's %s..%s"
+                         % (path, lower, upper, alo, aup))
+    _set_occurrences(node, lower, upper)
+
+
+def allow_coded_text(root: Node, element_path: str):
+    """Add an open DV_CODED_TEXT alternative before an ELEMENT's DV_TEXT value
+    (DV_CODED_TEXT is a DV_TEXT, so this narrows nothing away; it is the
+    'coded or text' choice CKM itself writes, e.g. blood_pressure at0014)."""
+    va = _value_attr(resolve(root, element_path))
+    kids = va.findall("children") if va is not None else []
+    if [k.findtext("rm_type_name") for k in kids] != ["DV_TEXT"]:
+        raise BuildError("%s: allow_coded_text needs a DV_TEXT-only value" % element_path)
+    i = va.children.index(kids[0])
+    va.children.insert(i, Node("children", [("xsi:type", "C_COMPLEX_OBJECT")], children=[
+        leaf("rm_type_name", "DV_CODED_TEXT"), _interval("occurrences", 1, 1), leaf("node_id", "")]))
+
+
+def apply_constraints(root: Node, constrain: dict):
+    for path, c in sorted((constrain or {}).items()):
+        unknown = set(c) - {"units", "codes", "occurrences", "allow_coded_text"}
+        if unknown:
+            raise BuildError("%s: unknown constraint(s) %s" % (path, sorted(unknown)))
+        if "units" in c:
+            constrain_units(root, path, c["units"])
+        if "codes" in c:
+            constrain_codes(root, path, c["codes"])
+        if "occurrences" in c:
+            constrain_occurrences(root, path, *c["occurrences"])
+        if c.get("allow_coded_text"):
+            allow_coded_text(root, path)
+
+
+def slot_include_patterns(slot: Node):
+    """The archetype-id regexes of an ARCHETYPE_SLOT's ``includes``."""
+    return [n.findtext("pattern") for inc in slot.findall("includes")
+            for n in inc.iter_nodes() if n.tag == "item" and n.get("xsi:type") == "C_STRING"]
+
+
+def quantity_units(node: Node, skip_roots=False):
+    """Units of every C_DV_QUANTITY below ``node`` (not inside nested archetype
+    roots when ``skip_roots``: those carry their own unit terms)."""
     out = set()
     if node.get("xsi:type") == "C_DV_QUANTITY":
         out |= {l.findtext("units") for l in node.findall("list")}
     for c in node.children:
-        out |= quantity_units(c)
+        if skip_roots and c.get("xsi:type") == "C_ARCHETYPE_ROOT":
+            continue
+        out |= quantity_units(c, skip_roots)
     return out
 
 
@@ -488,26 +592,61 @@ def _set_occurrences(node: Node, lower, upper):
     node.children[node.index("occurrences")] = _interval("occurrences", lower, upper)
 
 
-def build_archetype_root(arch: Archetype, spec: dict, language, unit_terms) -> Node:
+def build_archetype_root(arch: Archetype, spec: dict, language, unit_terms,
+                         archetype_dir=ARCHETYPE_DIR) -> Node:
     d = copy.deepcopy(arch.definition)
     expand_internal_refs(d)
-    if spec.get("keep") is not None:
-        prune(d, spec["keep"])
-    for path, c in sorted((spec.get("constrain") or {}).items()):
-        if "units" in c:
-            constrain_units(d, path, c["units"])
+    slots = spec.get("slots") or {}
+    keep = spec.get("keep")
+    if keep is not None:
+        missing = [p for p in slots if p not in keep]
+        if missing:
+            raise BuildError("%s: filled slots must be in keep: %s" % (arch.archetype_id, missing))
+        prune(d, keep)
+    apply_constraints(d, spec.get("constrain"))
     normalise(d)
+    # fill slots: each ARCHETYPE_SLOT is replaced by the C_ARCHETYPE_ROOT(s) filling it
+    for path in sorted(slots):
+        slot = resolve(d, path)
+        if slot.get("xsi:type") != "ARCHETYPE_SLOT":
+            raise BuildError("%s %s is not an ARCHETYPE_SLOT" % (arch.archetype_id, path))
+        pats = slot_include_patterns(slot)
+        parent_attr = next(n for n in d.iter_nodes()
+                           if n.tag == "attributes" and any(c is slot for c in n.children))
+        filled = []
+        for sub in slots[path]:
+            if not any(re.fullmatch(p, sub["archetype_id"]) for p in pats):
+                raise BuildError("%s does not match the slot %s includes %s"
+                                 % (sub["archetype_id"], path, pats))
+            sarch = load_archetype(sub["archetype_id"], archetype_dir)
+            if sarch.definition.findtext("rm_type_name") != slot.findtext("rm_type_name"):
+                raise BuildError("%s is not a %s" % (sub["archetype_id"], slot.findtext("rm_type_name")))
+            sub = dict(sub)
+            if "occurrences" not in sub:      # default: the slot's own occurrences
+                o = slot.find("occurrences")
+                sub["occurrences"] = [int(o.findtext("lower")),
+                                      None if o.findtext("upper_unbounded") == "true"
+                                      else int(o.findtext("upper"))]
+            filled.append(build_archetype_root(sarch, sub, language, unit_terms, archetype_dir))
+        i = next(k for k, c in enumerate(parent_attr.children) if c is slot)
+        parent_attr.children[i:i + 1] = filled
     lo, up = spec.get("occurrences", [0, 1])
     _set_occurrences(d, lo, up)
     root = Node("children", [("xsi:type", "C_ARCHETYPE_ROOT")], children=d.children)
     root.children.append(Node("archetype_id", children=[leaf("value", arch.archetype_id)]))
+    own = Node("x", children=[c for c in d.children if c.tag == "attributes"])
     root.children += term_definition_nodes(arch, language, spec.get("term_overrides"),
-                                           unit_terms=unit_terms, units_present=quantity_units(d))
+                                           unit_terms=unit_terms,
+                                           units_present=quantity_units(own, skip_roots=True))
     root.children += term_binding_nodes(arch)
     return root
 
 
 def build(source: dict, archetype_dir=ARCHETYPE_DIR) -> bytes:
+    return serialise(build_tree(source, archetype_dir))
+
+
+def build_tree(source: dict, archetype_dir=ARCHETYPE_DIR) -> Node:
     lang = source["language"]
     desc = source["description"]
     comp = source["composition"]
@@ -537,7 +676,7 @@ def build(source: dict, archetype_dir=ARCHETYPE_DIR) -> bytes:
         arch = load_archetype(spec["archetype_id"], archetype_dir)
         if arch.definition.findtext("rm_type_name") != spec.get("rm_type", "OBSERVATION"):
             raise BuildError("%s is not an %s" % (spec["archetype_id"], spec.get("rm_type")))
-        content.children.append(build_archetype_root(arch, spec, lang, unit_terms))
+        content.children.append(build_archetype_root(arch, spec, lang, unit_terms, archetype_dir))
     card = comp["content_cardinality"]
     ci = _interval("interval", card["lower"], card.get("upper"))
     content.children.append(Node("cardinality", children=[
@@ -558,7 +697,7 @@ def build(source: dict, archetype_dir=ARCHETYPE_DIR) -> bytes:
         leaf("concept", source["concept"]),
         definition,
     ])
-    return serialise(template)
+    return template
 
 
 # ---------------------------------------------------------------------------
@@ -605,6 +744,98 @@ def predict_flat_paths(source: dict, archetype_dir=ARCHETYPE_DIR) -> dict:
                 "time_path": "/".join([flat_root, obs_id, ev_id, "time"]),
             })
     return out
+
+
+_STRUCTURAL = {"HISTORY", "ITEM_TREE", "ITEM_LIST", "ITEM_SINGLE", "ITEM_TABLE"}
+_EVENTS = {"EVENT", "POINT_EVENT", "INTERVAL_EVENT"}
+
+
+def _occ(node):
+    o = node.find("occurrences")
+    lo = int(o.findtext("lower", "0"))
+    up = -1 if o.findtext("upper_unbounded") == "true" else int(o.findtext("upper"))
+    return lo, up
+
+
+def _name_variants(node, terms):
+    """[(name, aql name predicate)] for a node. A ``name`` constrained to local
+    codes makes one web-template node PER code, named by that code's text, as
+    EHRbase does (captured vitals: pulse.v2 at1023, name in {at1057, at1058} ->
+    'clinical_interpretation' and 'rhythm', aqlPath [at1023 and name/value='..']).
+    So a spirometry Volume cluster narrowed to the single code FEV1 is 'fev1'."""
+    nid = node.findtext("node_id")
+    for a in node.findall("attributes"):
+        if a.findtext("rm_attribute_name") == "name":
+            codes = [n.text for n in a.iter_nodes() if n.tag == "code_list"]
+            if codes and all(c in terms for c in codes):
+                return [(terms[c], " and name/value='%s'" % terms[c]) for c in codes]
+    return [(terms[nid], "")]
+
+
+def predict_web_template(source: dict, archetype_dir=ARCHETYPE_DIR) -> dict:
+    """Walk the BUILT template the way EHRbase builds a web template and list its
+    data leaves (every ELEMENT plus each event's ``time``) with predicted FLAT
+    paths. Structural nodes (HISTORY, ITEM_TREE, ...) take no path segment; an
+    archetype root is named by its at0000 text; a node whose max occurrences is
+    not 1 is ``repeating`` and takes ``:N`` in the indexed path (``:0`` may be
+    omitted, as the proven vitals/anthropometry FLAT samples do for any_event)."""
+    tree = build_tree(source, archetype_dir)
+    definition = tree.find("definition")
+    flat_root = web_template_id(source["composition"]["name"])
+    leaves = []
+
+    def terms_of(root):
+        return {t.get("code"): next((i.text for i in t.children if i.get("id") == "text"), None)
+                for t in root.findall("term_definitions")}
+
+    def walk(node, terms, segs, apath):
+        rm = node.findtext("rm_type_name")
+        if node.get("xsi:type") == "ARCHETYPE_SLOT":
+            return
+        if node.get("xsi:type") == "C_ARCHETYPE_ROOT":
+            terms = terms_of(node)
+            variants = [(terms["at0000"], "")]
+            pred = node.find("archetype_id").findtext("value")
+        elif not node.findtext("node_id"):
+            return      # non-archetyped RM attribute value (INTERVAL_EVENT width, math_function)
+        else:
+            variants = _name_variants(node, terms)
+            pred = node.findtext("node_id")
+        for name, name_pred in variants:
+            vsegs, vpath = segs, apath + "[%s%s]" % (pred, name_pred)
+            if rm not in _STRUCTURAL:
+                lo, up = _occ(node)
+                vsegs = segs + [(web_template_id(name), lo, up)]
+            if rm == "ELEMENT":
+                va = next((a for a in node.findall("attributes")
+                           if a.findtext("rm_attribute_name") == "value"), None)
+                kids = va.findall("children") if va is not None else []
+                leaves.append(_leaf(flat_root, vsegs, vpath, [k.findtext("rm_type_name") for k in kids],
+                                    [l.findtext("units") for k in kids for l in k.findall("list")]))
+                continue
+            if rm in _EVENTS:
+                leaves.append(_leaf(flat_root, vsegs + [("time", 1, 1)], vpath + "/time",
+                                    ["DV_DATE_TIME"], []))
+            for a in node.findall("attributes"):
+                aname = a.findtext("rm_attribute_name")
+                if aname == "name":
+                    continue
+                for c in a.findall("children"):
+                    walk(c, terms, vsegs, vpath + "/" + aname)
+
+    content = next(a for a in definition.findall("attributes")
+                   if a.findtext("rm_attribute_name") == "content")
+    for c in content.findall("children"):
+        walk(c, None, [], "/content")
+    return {"template_id": source["template_id"], "flat_root": flat_root, "leaves": leaves}
+
+
+def _leaf(flat_root, segs, apath, rm_types, units):
+    plain = "/".join([flat_root] + [s for s, _, _ in segs])
+    indexed = "/".join([flat_root] + [s + (":N" if up != 1 else "") for s, _, up in segs])
+    return {"flat_path": plain, "flat_path_indexed": indexed, "aql_path": apath,
+            "rm_types": rm_types, "units": units or None,
+            "min": segs[-1][1], "max": segs[-1][2]}
 
 
 # ---------------------------------------------------------------------------

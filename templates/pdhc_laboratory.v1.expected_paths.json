@@ -1,0 +1,292 @@
+{
+  "_status": "DRAFT — predicted, NOT captured. Compare with ASHA Explore after upload; the captured paths win.",
+  "_how": "scripts/build_opt.py predict_web_template() over the built template (see the lung/anthropometry files).",
+  "template_id": "pdhc_laboratory.v1",
+  "flat_root": "pdhc_laboratory",
+  "_flat_root_derivation": "web-template id of the composition root name 'PDHC Laboratory' (encounter.v1 at0000 overridden), as for vitals/anthropometry; not the template_id.",
+  "archetypes": [
+    "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+    "openEHR-EHR-CLUSTER.laboratory_test_analyte.v1 (fills slot at0097 'Test result', 0..*)"
+  ],
+  "composition_keys": [
+    "pdhc_laboratory/language|code",
+    "pdhc_laboratory/language|terminology",
+    "pdhc_laboratory/territory|code",
+    "pdhc_laboratory/territory|terminology",
+    "pdhc_laboratory/category|code",
+    "pdhc_laboratory/category|value",
+    "pdhc_laboratory/category|terminology",
+    "pdhc_laboratory/context/start_time",
+    "pdhc_laboratory/context/setting|code",
+    "pdhc_laboratory/context/setting|value",
+    "pdhc_laboratory/context/setting|terminology",
+    "pdhc_laboratory/composer|name"
+  ],
+  "panel": {
+    "time_path": "pdhc_laboratory/laboratory_test_result/any_event/time",
+    "test_name": "pdhc_laboratory/laboratory_test_result/any_event/test_name",
+    "test_name_value": "PDHC laboratory panel"
+  },
+  "repeating_analyte": {
+    "cluster": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result:N",
+    "index": "N = 0,1,... per composition, assigned by the emitter in a stable order (field map §2b)",
+    "analyte_name|code": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result:N/analyte_name|code",
+    "analyte_name|value": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result:N/analyte_name|value",
+    "analyte_name|terminology": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result:N/analyte_name|terminology",
+    "analyte_result|magnitude": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result:N/analyte_result|magnitude",
+    "analyte_result|unit": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result:N/analyte_result|unit",
+    "allowed_units": [
+      "mmol/L",
+      "mmol/mol",
+      "%",
+      "1",
+      "umol/L",
+      "mL/min/{1.73_m2}",
+      "mg/mmol",
+      "[IU]/L",
+      "m[IU]/L",
+      "pmol/L",
+      "g/L",
+      "10*9/L"
+    ],
+    "terminologies": {
+      "LOINC": "where verified (concept map 'loinc')",
+      "urn:pdhc:concept": "fallback, code = the plan concept guid (D-L1)"
+    }
+  },
+  "web_template_leaves": [
+    {
+      "flat_path": "pdhc_laboratory/laboratory_test_result/any_event/time",
+      "flat_path_indexed": "pdhc_laboratory/laboratory_test_result/any_event:N/time",
+      "aql_path": "/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/data[at0001]/events[at0002]/time",
+      "rm_types": [
+        "DV_DATE_TIME"
+      ],
+      "units": null,
+      "min": 1,
+      "max": 1
+    },
+    {
+      "flat_path": "pdhc_laboratory/laboratory_test_result/any_event/test_name",
+      "flat_path_indexed": "pdhc_laboratory/laboratory_test_result/any_event:N/test_name",
+      "aql_path": "/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/data[at0001]/events[at0002]/data[at0003]/items[at0005]",
+      "rm_types": [
+        "DV_TEXT"
+      ],
+      "units": null,
+      "min": 1,
+      "max": 1
+    },
+    {
+      "flat_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result/analyte_name",
+      "flat_path_indexed": "pdhc_laboratory/laboratory_test_result/any_event:N/laboratory_analyte_result:N/analyte_name",
+      "aql_path": "/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1]/items[at0024]",
+      "rm_types": [
+        "DV_CODED_TEXT",
+        "DV_TEXT"
+      ],
+      "units": null,
+      "min": 0,
+      "max": 1
+    },
+    {
+      "flat_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result/analyte_result",
+      "flat_path_indexed": "pdhc_laboratory/laboratory_test_result/any_event:N/laboratory_analyte_result:N/analyte_result",
+      "aql_path": "/content[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1]/items[at0001]",
+      "rm_types": [
+        "DV_QUANTITY"
+      ],
+      "units": [
+        "mmol/L",
+        "mmol/mol",
+        "%",
+        "1",
+        "umol/L",
+        "mL/min/{1.73_m2}",
+        "mg/mmol",
+        "[IU]/L",
+        "m[IU]/L",
+        "pmol/L",
+        "g/L",
+        "10*9/L"
+      ],
+      "min": 0,
+      "max": 1
+    }
+  ],
+  "mandatory": [
+    "any_event/time (RM)",
+    "test_name (ELEMENT 1..1 in laboratory_test_result.v1) -- send a value, e.g. 'PDHC laboratory panel'",
+    "per analyte cluster: at least one item (CLUSTER.items cardinality 1..*); in practice analyte_name + analyte_result. Both are 0..1 in the archetype, so the template does not force them"
+  ],
+  "units_not_expressible": [],
+  "concepts": [
+    {
+      "concept_guid": "d45d6952-50d2-4ee8-98cd-321c357dc566",
+      "concept_name": "alt",
+      "ucum": "[IU]/L",
+      "loinc": "1742-6"
+    },
+    {
+      "concept_guid": "218929d1-e08e-44fe-b5d1-40bc1e7180a2",
+      "concept_name": "ast",
+      "ucum": "[IU]/L",
+      "loinc": "1920-8"
+    },
+    {
+      "concept_guid": "6780955a-f910-42c3-a3ac-d49daa1d878f",
+      "concept_name": "ggt",
+      "ucum": "[IU]/L",
+      "loinc": "2324-2"
+    },
+    {
+      "concept_guid": "1c34a590-fc2d-430c-92e6-d123b95fe392",
+      "concept_name": "B-glucos",
+      "ucum": "mmol/L",
+      "loinc": null
+    },
+    {
+      "concept_guid": "1316d00e-caca-4352-8075-8c370fded3fc",
+      "concept_name": "fasting_plasma_glucose",
+      "ucum": "mmol/L",
+      "loinc": null
+    },
+    {
+      "concept_guid": "51a86a41-9ac9-4f2c-a162-3469da4f08af",
+      "concept_name": "random_plasma_glucose",
+      "ucum": "mmol/L",
+      "loinc": null
+    },
+    {
+      "concept_guid": "d54e01a9-0b29-4d47-b91b-2133c8be21a4",
+      "concept_name": "cgm_raw",
+      "ucum": "mmol/L",
+      "loinc": null
+    },
+    {
+      "concept_guid": "d83a8dac-523f-4d51-a602-654430dc7604",
+      "concept_name": "cgm_mean_glucose",
+      "ucum": "mmol/L",
+      "loinc": null
+    },
+    {
+      "concept_guid": "c7bca77b-fc1a-48c6-84e9-8dc209e0a058",
+      "concept_name": "hba1c",
+      "ucum": "mmol/mol",
+      "loinc": null
+    },
+    {
+      "concept_guid": "a4cca2f9-a7b3-49c6-ac8f-ae7ce858940b",
+      "concept_name": "cgm_cv",
+      "ucum": "%",
+      "loinc": null
+    },
+    {
+      "concept_guid": "dbd21700-6e27-4483-bfeb-6a4b22f2298e",
+      "concept_name": "cgm_tir",
+      "ucum": "%",
+      "loinc": null
+    },
+    {
+      "concept_guid": "d9ad988b-4319-44af-a719-995cfb901109",
+      "concept_name": "cgm_tar",
+      "ucum": "%",
+      "loinc": null
+    },
+    {
+      "concept_guid": "aa7786e8-84c5-4c8b-8a5e-210e3c5b4400",
+      "concept_name": "cgm_tbr",
+      "ucum": "%",
+      "loinc": null
+    },
+    {
+      "concept_guid": "d368dd8e-706f-48fc-9689-2060bd3979f1",
+      "concept_name": "cgm_hypo_count",
+      "ucum": "1",
+      "loinc": null
+    },
+    {
+      "concept_guid": "60a404c8-9854-4d93-9566-9c2616df442b",
+      "concept_name": "total_cholesterol",
+      "ucum": "mmol/L",
+      "loinc": null
+    },
+    {
+      "concept_guid": "c21c1ad8-65b5-4d2e-876a-1c7432a82403",
+      "concept_name": "ldl_cholesterol",
+      "ucum": "mmol/L",
+      "loinc": null
+    },
+    {
+      "concept_guid": "5b38a9af-5d7a-4638-84e8-eaeb8e5556e0",
+      "concept_name": "hdl_cholesterol",
+      "ucum": "mmol/L",
+      "loinc": null
+    },
+    {
+      "concept_guid": "3cd06c8b-56fe-4f58-8886-5e491e8b08b1",
+      "concept_name": "non_hdl_cholesterol",
+      "ucum": "mmol/L",
+      "loinc": null
+    },
+    {
+      "concept_guid": "8884f452-e4b2-4733-9ab9-4e0c7ae11b3b",
+      "concept_name": "triglycerides",
+      "ucum": "mmol/L",
+      "loinc": null
+    },
+    {
+      "concept_guid": "76a3d5fa-cef2-4d53-955a-74f0dfe84ab9",
+      "concept_name": "creatinine",
+      "ucum": "umol/L",
+      "loinc": "14682-9"
+    },
+    {
+      "concept_guid": "60ee70da-97f4-44ac-a8c5-f6dbc16a6796",
+      "concept_name": "egfr",
+      "ucum": "mL/min/{1.73_m2}",
+      "loinc": null
+    },
+    {
+      "concept_guid": "59473d63-0a66-4398-b5db-55f1787097fc",
+      "concept_name": "urine_acr",
+      "ucum": "mg/mmol",
+      "loinc": null
+    },
+    {
+      "concept_guid": "4cd003ed-a220-4efd-9bf1-c0a10151df6f",
+      "concept_name": "tsh",
+      "ucum": "m[IU]/L",
+      "loinc": "3016-3"
+    },
+    {
+      "concept_guid": "dbfcf14f-8e12-473f-b528-39ef6c559c80",
+      "concept_name": "free_t4",
+      "ucum": "pmol/L",
+      "loinc": null
+    },
+    {
+      "concept_guid": "46763489-be47-4ab0-91b3-d14292dd0582",
+      "concept_name": "hemoglobin",
+      "ucum": "g/L",
+      "loinc": "718-7"
+    },
+    {
+      "concept_guid": "ff07c0fd-d4e2-49aa-b32b-cda5d24559a6",
+      "concept_name": "leukocytes",
+      "ucum": "10*9/L",
+      "loinc": "6690-2"
+    },
+    {
+      "concept_guid": "81ac94e8-7720-414e-91f1-c2e11986f4f1",
+      "concept_name": "platelets",
+      "ucum": "10*9/L",
+      "loinc": "777-3"
+    }
+  ],
+  "uncertain": [
+    "analyte_name offers DV_CODED_TEXT (open, any terminology) + DV_TEXT. EHRbase merges a coded+text choice into one DV_CODED_TEXT node (captured vitals: location_of_measurement has inputs code + other), so |code/|value/|terminology is predicted; free text would go to |other. Confirm on Explore.",
+    "analyte_result has no property (the 12 units span several properties); the unit list is the constraint. Confirm Verify accepts '1' and 'mL/min/{1.73_m2}'.",
+    "any_event is written without an index (:0 implied), as in the proven vitals/anthropometry samples; any_event:0/ is equivalent."
+  ]
+}

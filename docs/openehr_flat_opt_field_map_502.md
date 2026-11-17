@@ -61,15 +61,29 @@ concept map was built to kill.
 
 ## 2. Code changes the three templates require (rosetta)
 
-> **Status 2026-11-17 (#728):** 2a is built: the concept map has a `templates`
-> table (vitals, anthropometry) and each concept names its `template_id`. The
-> grouping half of 2b is also built: the key is `(patient, time, template_id,
-> provenance)`, and a self-reported weight (D-A1) gets its own composition with
-> composer "patient (self-reported)". The emitter's output for both templates is
-> accepted by ASHA's validator. **`repeating_analyte` is NOT built yet**; it
-> follows the laboratory `.opt` capture. Confirmed leaf names differ from §3's
-> draft: `height_length/any_event/height_length` and
-> `body_mass_index_bmi/any_event/body_mass_index`.
+> **Status 2026-11-17 (#728): milestone 1 is DONE.** All three templates are
+> generated (`scripts/build_opt.py`, which regenerates the vitals `.opt`
+> byte-for-byte), uploaded to ASHA cdr1, and their Explore paths captured
+> (`templates/*.sandbox_paths.txt`). 2a and 2b are built: a `templates` table,
+> grouping by (patient, time, template, provenance), self-reported weight as its
+> own composition (D-A1), and `repeating_analyte` for laboratory (one panel,
+> analytes indexed in concept-name order, D-L3). Accepted by ASHA's validator:
+> anthropometry, a full 27-analyte lab panel (22 LOINC, 5 `urn:pdhc:concept`,
+> D-L1), FEV1, and SpO2. Refused as controls: wrong units (lb, mg/dL, mL), an
+> unknown path, SpO2 150%.
+>
+> Confirmed paths differ from the drafts below: `height_length/any_event/height_length`,
+> `body_mass_index_bmi/any_event/body_mass_index`; lung function is
+> `spirometry_result.v2` (`lung_function.v1` does not exist on CKM), leaf
+> `spirometry_result/any_event/fev1/result`; lab analytes are
+> `laboratory_test_result/any_event/laboratory_analyte_result:N/analyte_name|code`
+> and `.../analyte_result|magnitude|unit`, with the mandatory `test_name`.
+>
+> Found on the way: (1) SpO2 sent as numerator only was REFUSED by EHRbase; the
+> emitter now sends denominator 100 and type percent. (2) 19 of plan.pdhc's 27
+> lab LOINC codes named the wrong concept or the mass form of a molar one; plan
+> was corrected the same day (plan.pdhc `planp/scripts/fix_lab_loinc_728.py`).
+> Milestone 2 (diagnoses, medications, care events: 28 concepts) stays pending.
 
 Today the registry and emitter are **single-template**:
 `concept_map._TEMPLATE` is one object, `template_id()` / `flat_root()` /

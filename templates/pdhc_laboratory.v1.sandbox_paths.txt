@@ -1,0 +1,6 @@
+# FLAT paths ASHA cdr1 reports for pdhc_laboratory.v1 (Explore view), captured 2026-11-17 after upload. Data leaves only.
+pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result/analyte_name
+pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result/analyte_name|code
+pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result/analyte_result
+pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result/analyte_result|magnitude
+pdhc_laboratory/laboratory_test_result/any_event/test_name

@@ -1,0 +1,17 @@
+{
+ "pdhc_lung_function/category|code": "433",
+ "pdhc_lung_function/category|value": "event",
+ "pdhc_lung_function/category|terminology": "openehr",
+ "pdhc_lung_function/language|code": "en",
+ "pdhc_lung_function/language|terminology": "ISO_639-1",
+ "pdhc_lung_function/territory|code": "SE",
+ "pdhc_lung_function/territory|terminology": "ISO_3166-1",
+ "pdhc_lung_function/context/setting|code": "238",
+ "pdhc_lung_function/context/setting|value": "other care",
+ "pdhc_lung_function/context/setting|terminology": "openehr",
+ "pdhc_lung_function/context/start_time": "2026-11-17T08:00:00Z",
+ "pdhc_lung_function/composer|name": "rosetta.pdhc",
+ "pdhc_lung_function/spirometry_result/any_event/fev1/result|magnitude": 3.42,
+ "pdhc_lung_function/spirometry_result/any_event/fev1/result|unit": "L",
+ "pdhc_lung_function/spirometry_result/any_event/time": "2026-11-17T08:00:00Z"
+}

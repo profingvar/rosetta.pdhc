@@ -5,7 +5,7 @@ from app.services import realisability as r
 BP_SYSTOLIC = "64928bff-9a46-472a-bbf1-dcfc694f945b"
 BP_DIASTOLIC = "fb6487d7-b473-4ace-bb39-6352d4497009"
 TEMPERATURE = "d7d81372-1c61-4459-88fe-5878d6586e64"
-FEV1_PENDING = "6521528c-db59-45c5-a492-003c28f27623"    # gaps.pending_template_extension (lung_function)
+PENDING = "aecd1a50-fd77-46ae-826b-1f05266f90c3"    # ckd_diagnosis: gaps.pending_template_extension (milestone 2, #728)
 WEIGHT = "465e9554-8be6-48f2-9e1a-154d4e1f911e"          # bound to pdhc_anthropometry.v1 (#728)
 UNMAPPED = "00000000-0000-0000-0000-000000000000"
 
@@ -21,10 +21,10 @@ def test_mapped_concept_is_realisable():
 
 
 def test_pending_concept_reports_pending_not_unmapped():
-    c = r.check_concept(FEV1_PENDING)
+    c = r.check_concept(PENDING)
     assert c["status"] == "pending"
     assert c["realisable"] is False
-    assert "lung_function" in (c.get("target_archetype") or "")
+    assert c.get("target_archetype")
     assert c["blockers"]
 
 
@@ -36,12 +36,12 @@ def test_unmapped_concept_is_flagged():
 
 
 def test_plandef_rollup_mixes_states():
-    res = r.check_plandef([BP_SYSTOLIC, BP_DIASTOLIC, FEV1_PENDING, UNMAPPED, BP_SYSTOLIC])
+    res = r.check_plandef([BP_SYSTOLIC, BP_DIASTOLIC, PENDING, UNMAPPED, BP_SYSTOLIC])
     assert res["total"] == 4                       # dedup dropped the repeat
     assert res["realisable_count"] == 2
     assert res["all_realisable"] is False
     assert res["templates"] == ["pdhc_vitals.v1"]
-    assert FEV1_PENDING in res["pending"]
+    assert PENDING in res["pending"]
     assert UNMAPPED in res["unmapped"]
 
 
@@ -90,3 +90,10 @@ def test_weight_is_realisable_in_anthropometry_728():
     assert c["template_id"] == "pdhc_anthropometry.v1"
     assert c["flat_path"] == "pdhc_anthropometry/body_weight/any_event/weight"
     assert c["ucum"] == "kg"
+
+
+def test_lab_and_fev1_are_realisable_728():
+    for g, tid in (("ff07c0fd-d4e2-49aa-b32b-cda5d24559a6", "pdhc_laboratory.v1"),
+                   ("6521528c-db59-45c5-a492-003c28f27623", "pdhc_lung_function.v1")):
+        c = r.check_concept(g)
+        assert c["status"] == "realisable" and c["template_id"] == tid

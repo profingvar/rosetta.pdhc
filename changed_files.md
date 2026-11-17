@@ -136,3 +136,12 @@ app/tests/test_converters.py (edit — openEHR tests updated to FLAT + mapped co
 - templates/pdhc_anthropometry.v1.opt                   (NEW, GENERATED — not yet uploaded)
 - templates/pdhc_anthropometry.v1.expected_paths.json   (NEW, DRAFT predicted FLAT paths)
 - app/tests/test_build_opt.py                           (NEW: 21 tests)
+
+## 2026-11-17 — #728 follow-up: pdhc_lung_function.v1 + pdhc_laboratory.v1 generated (uncommitted)
+- scripts/build_opt.py                                   (codes/occurrences/allow_coded_text constraints, slot filling, units on an unconstrained ELEMENT, predict_web_template())
+- templates/src/pdhc_lung_function.v1.json, templates/src/pdhc_laboratory.v1.json (NEW sources)
+- templates/src/archetypes/: spirometry_result.v2, laboratory_test_result.v1, laboratory_test_analyte.v1 (.xml/.adl) + PROVENANCE.json (3 entries, selection_notes)
+- templates/pdhc_lung_function.v1.opt, templates/pdhc_laboratory.v1.opt (NEW, GENERATED — not uploaded)
+- templates/pdhc_lung_function.v1.expected_paths.json, templates/pdhc_laboratory.v1.expected_paths.json (NEW, DRAFT)
+- templates/samples/pdhc_lung_function.v1_candidate.flat.json, templates/samples/pdhc_laboratory.v1_candidate.flat.json (NEW, for ASHA Verify)
+- app/tests/test_build_opt.py                            (+20 tests; nested-root-aware at-code check)

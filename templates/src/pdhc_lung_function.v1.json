@@ -1,0 +1,93 @@
+{
+  "_comment": "#728 / #502 §4, D-LF1: source of pdhc_lung_function.v1 for scripts/build_opt.py. CKM has no public OBSERVATION.lung_function.v1 (citeable-identifier lookup 404) and no CLUSTER.spirometry_result; the published archetype is OBSERVATION.spirometry_result.v2 (v1 is DEPRECATED). Its results are repeating CLUSTERs named by a local code: 'Volume' (at0052, FEV1 = at0067, FVC = at0065, ...), 'Ratio' (at0055: FEV1/FVC ...), 'Flow rate' (at0057: PEFR ...). FEV1 is a FIXED leaf here by narrowing one Volume cluster to name FEV1 (at0067), occurrences 0..1, keeping only its Result (at0053) in L. FVC, FEV1/FVC and PEF are later added as sibling clusters in the same archetype -- no template rename. uid/build_uid: uuid5(NAMESPACE_URL, 'urn:pdhc:template:pdhc_lung_function.v1[:build:0.1.0]').",
+  "template_id": "pdhc_lung_function.v1",
+  "uid": "03acfaf1-ab2b-5797-9ad0-f4440a8a7012",
+  "concept": "PDHC Lung Function",
+  "language": "en",
+  "description": {
+    "original_author": [
+      [
+        "date",
+        "2026-11-17"
+      ]
+    ],
+    "lifecycle_state": "unmanaged",
+    "other_details": [
+      [
+        "licence",
+        ""
+      ],
+      [
+        "custodian_organisation",
+        ""
+      ],
+      [
+        "original_namespace",
+        ""
+      ],
+      [
+        "original_publisher",
+        ""
+      ],
+      [
+        "custodian_namespace",
+        ""
+      ],
+      [
+        "sem_ver",
+        "0.1.0"
+      ],
+      [
+        "build_uid",
+        "e6624168-8cec-5b3e-8332-de7b1a8a66c5"
+      ]
+    ],
+    "purpose": "Not Specified"
+  },
+  "composition": {
+    "archetype_id": "openEHR-EHR-COMPOSITION.encounter.v1",
+    "name": "PDHC Lung Function",
+    "content_existence": [
+      0,
+      1
+    ],
+    "content_cardinality": {
+      "lower": 1,
+      "upper": null,
+      "ordered": false,
+      "unique": false
+    }
+  },
+  "content": [
+    {
+      "archetype_id": "openEHR-EHR-OBSERVATION.spirometry_result.v2",
+      "occurrences": [
+        0,
+        1
+      ],
+      "_concepts": "FEV1 6521528c-db59-45c5-a492-003c28f27623 (UCUM L)",
+      "keep": [
+        "/data[at0001]/events[at0002]/data[at0003]/items[at0052]/items[at0053]"
+      ],
+      "constrain": {
+        "/data[at0001]/events[at0002]/data[at0003]/items[at0052]": {
+          "occurrences": [
+            0,
+            1
+          ]
+        },
+        "/data[at0001]/events[at0002]/data[at0003]/items[at0052]/name": {
+          "codes": [
+            "at0067"
+          ]
+        },
+        "/data[at0001]/events[at0002]/data[at0003]/items[at0052]/items[at0053]": {
+          "units": [
+            "L"
+          ]
+        }
+      }
+    }
+  ],
+  "unit_terms": {}
+}

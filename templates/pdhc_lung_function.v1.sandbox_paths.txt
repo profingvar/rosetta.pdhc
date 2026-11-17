@@ -1,0 +1,3 @@
+# FLAT paths ASHA cdr1 reports for pdhc_lung_function.v1 (Explore view), captured 2026-11-17 after upload. Data leaves only.
+pdhc_lung_function/spirometry_result/any_event/fev1/result
+pdhc_lung_function/spirometry_result/any_event/fev1/result|magnitude

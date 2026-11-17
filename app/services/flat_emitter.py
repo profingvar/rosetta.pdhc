@@ -102,14 +102,42 @@ def emit_flat_compositions(rows, *, composer: str = "rosetta.pdhc", strict: bool
         flat[f"{root}/context/start_time"] = when
         flat[f"{root}/composer|name"] = (
             "patient (self-reported)" if provenance == "self_reported" else composer)
+        for k, v in cm.event_defaults(tid).items():
+            flat[f"{root}/{k}"] = v
+        # #728 repeating_analyte (laboratory, D-L3): every analyte of the
+        # instant is one indexed cluster in ONE panel, indexed in a stable
+        # order (concept name) so the output is deterministic.
+        analytes = sorted(((cm.resolve(o.concept_guid), o) for o in obss
+                           if cm.resolve(o.concept_guid).binding_kind == "repeating_analyte"),
+                          key=lambda bo: (bo[0].concept_name, bo[0].concept_guid))
+        for i, (b, o) in enumerate(analytes):
+            base = f"{b.flat_path}:{i}"
+            if b.loinc:   # D-L1: LOINC only where verified ...
+                code, term = b.loinc, "LOINC"
+            else:         # ... else the platform's own concept code
+                code, term = b.concept_guid, "urn:pdhc:concept"
+            flat[f"{base}/analyte_name|code"] = code
+            flat[f"{base}/analyte_name|value"] = b.concept_name
+            flat[f"{base}/analyte_name|terminology"] = term
+            flat[f"{base}/analyte_result|magnitude"] = o.value
+            flat[f"{base}/analyte_result|unit"] = b.ucum
+            flat[b.time_path] = when
         for o in obss:
             b = cm.resolve(o.concept_guid)
+            if b.binding_kind == "repeating_analyte":
+                continue
             if b.value_kind == "DV_QUANTITY":
                 flat[b.magnitude_key] = o.value
                 flat[b.unit_key] = b.ucum
             elif b.value_kind == "DV_PROPORTION":
-                # e.g. SpO2 as a percent proportion; unit is implicit
+                # SpO2 as a PERCENT proportion. #728: the numerator alone was
+                # refused by EHRbase ("Attribute denominator ... required",
+                # ASHA 2026-11-17); the template fixes denominator 100 and type
+                # percent (2), so both are sent. Every DV_PROPORTION bound today
+                # is a percent; a non-percent one would need its own binding.
                 flat[f"{b.flat_path}|numerator"] = o.value
+                flat[f"{b.flat_path}|denominator"] = 100.0
+                flat[f"{b.flat_path}|type"] = 2
             else:  # pragma: no cover - guarded by the map's known value_kinds
                 raise ValueError(f"unhandled value_kind {b.value_kind!r} for {b.concept_name}")
             flat[b.time_path] = when

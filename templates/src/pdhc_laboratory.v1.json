@@ -1,0 +1,111 @@
+{
+  "_comment": "#728 / #502 §5, D-L1/D-L2/D-L3: source of pdhc_laboratory.v1 for scripts/build_opt.py. One laboratory_test_result.v1 panel per (patient, time) (D-L3); its 'Test result' slot (at0097) is filled with CLUSTER.laboratory_test_analyte.v1, repeating 0..*. The OBSERVATION keeps only the mandatory 'Test name' (at0005, 1..1) and the slot. The analyte keeps 'Analyte name' (at0024: DV_TEXT, plus an open DV_CODED_TEXT alternative so the emitter can send LOINC or urn:pdhc:concept codes -- D-L1; no fixed code list in the template) and 'Analyte result' (at0001), narrowed from 0..* to 0..1 (one result per analyte cluster), which the archetype leaves as ANY data type and the template narrows to DV_QUANTITY with exactly the 12 UCUM units of §5.2 (incl. '1' for cgm_hypo_count, D-L2). No property: the units span several properties. uid/build_uid: uuid5(NAMESPACE_URL, 'urn:pdhc:template:pdhc_laboratory.v1[:build:0.1.0]').",
+  "template_id": "pdhc_laboratory.v1",
+  "uid": "9c7eb268-940c-5990-bbd2-f4f58f9afd8d",
+  "concept": "PDHC Laboratory",
+  "language": "en",
+  "description": {
+    "original_author": [
+      [
+        "date",
+        "2026-11-17"
+      ]
+    ],
+    "lifecycle_state": "unmanaged",
+    "other_details": [
+      [
+        "licence",
+        ""
+      ],
+      [
+        "custodian_organisation",
+        ""
+      ],
+      [
+        "original_namespace",
+        ""
+      ],
+      [
+        "original_publisher",
+        ""
+      ],
+      [
+        "custodian_namespace",
+        ""
+      ],
+      [
+        "sem_ver",
+        "0.1.0"
+      ],
+      [
+        "build_uid",
+        "0c40c850-dbbf-5db7-a0e0-ef9eab67dad3"
+      ]
+    ],
+    "purpose": "Not Specified"
+  },
+  "composition": {
+    "archetype_id": "openEHR-EHR-COMPOSITION.encounter.v1",
+    "name": "PDHC Laboratory",
+    "content_existence": [
+      0,
+      1
+    ],
+    "content_cardinality": {
+      "lower": 1,
+      "upper": null,
+      "ordered": false,
+      "unique": false
+    }
+  },
+  "content": [
+    {
+      "archetype_id": "openEHR-EHR-OBSERVATION.laboratory_test_result.v1",
+      "occurrences": [
+        0,
+        1
+      ],
+      "keep": [
+        "/data[at0001]/events[at0002]/data[at0003]/items[at0005]",
+        "/data[at0001]/events[at0002]/data[at0003]/items[at0097]"
+      ],
+      "slots": {
+        "/data[at0001]/events[at0002]/data[at0003]/items[at0097]": [
+          {
+            "archetype_id": "openEHR-EHR-CLUSTER.laboratory_test_analyte.v1",
+            "keep": [
+              "/items[at0024]",
+              "/items[at0001]"
+            ],
+            "constrain": {
+              "/items[at0024]": {
+                "allow_coded_text": true
+              },
+              "/items[at0001]": {
+                "units": [
+                  "mmol/L",
+                  "mmol/mol",
+                  "%",
+                  "1",
+                  "umol/L",
+                  "mL/min/{1.73_m2}",
+                  "mg/mmol",
+                  "[IU]/L",
+                  "m[IU]/L",
+                  "pmol/L",
+                  "g/L",
+                  "10*9/L"
+                ],
+                "occurrences": [
+                  0,
+                  1
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "unit_terms": {}
+}
