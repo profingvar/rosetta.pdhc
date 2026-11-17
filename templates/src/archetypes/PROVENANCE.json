@@ -1,0 +1,222 @@
+{
+  "_comment": "#728: CKM provenance of the vendored archetypes used by scripts/build_opt.py. Fetched read-only (anonymous, public REST API) on 2026-11-17: GET /ckm/rest/v1/archetypes/citeable-identifier/{archetype_id} -> cid; GET .../archetypes/{cid} (metadata: revision, asset version), .../{cid}/xml and .../{cid}/adl (latest published). The pinned_url with ?asset-version=N re-fetches exactly this revision. sha256 is of the file as vendored (unchanged bytes). The CKM XML supplies definition+ontology structure; the ADL supplies term texts and term-binding code strings (see build_opt.py).",
+  "fetched": "2026-11-17",
+  "archetypes": [
+    {
+      "archetype_id": "openEHR-EHR-COMPOSITION.encounter.v1",
+      "ckm_cid": "1013.1.120",
+      "ckm_revision": "1.0.12",
+      "ckm_asset_version": 23,
+      "ckm_status": "PUBLISHED",
+      "ckm_modification_time": "2025-11-21T10:23:03+01:00",
+      "ckm_build_uid": "820ff293-1e51-478b-9694-a8fb43480cfe",
+      "ckm_page": "https://ckm.openehr.org/ckm/archetypes/1013.1.120",
+      "downloads": {
+        "xml": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.120/xml",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.120/xml?asset-version=23",
+          "file": "openEHR-EHR-COMPOSITION.encounter.v1.xml",
+          "sha256": "f6491971ae9c094b19b997744950bf88afefb0b591f964689867b08283bf0790"
+        },
+        "adl": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.120/adl",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.120/adl?asset-version=23",
+          "file": "openEHR-EHR-COMPOSITION.encounter.v1.adl",
+          "sha256": "5657e3e15539e0c92eb443c016542eaa77ad9c1e60724f214a0184005b5d7f22"
+        }
+      }
+    },
+    {
+      "archetype_id": "openEHR-EHR-OBSERVATION.blood_pressure.v2",
+      "ckm_cid": "1013.1.3574",
+      "ckm_revision": "2.0.17",
+      "ckm_asset_version": 18,
+      "ckm_status": "PUBLISHED",
+      "ckm_modification_time": "2026-11-04T21:43:38+01:00",
+      "ckm_build_uid": "ac39a1a0-a269-4816-9391-7f475515f04e",
+      "ckm_page": "https://ckm.openehr.org/ckm/archetypes/1013.1.3574",
+      "downloads": {
+        "xml": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.3574/xml",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.3574/xml?asset-version=18",
+          "file": "openEHR-EHR-OBSERVATION.blood_pressure.v2.xml",
+          "sha256": "a943498ae97a9db9996790d244b8000cecc4294f1ee87858a7225cbb52d74e30"
+        },
+        "adl": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.3574/adl",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.3574/adl?asset-version=18",
+          "file": "openEHR-EHR-OBSERVATION.blood_pressure.v2.adl",
+          "sha256": "80ed44f77cbd94e2e1f96e4d91b973a4c7af9c3bc4b3ff86f63211dbd4f49705"
+        }
+      }
+    },
+    {
+      "archetype_id": "openEHR-EHR-OBSERVATION.body_mass_index.v2",
+      "ckm_cid": "1013.1.2893",
+      "ckm_revision": "2.1.0",
+      "ckm_asset_version": 10,
+      "ckm_status": "PUBLISHED",
+      "ckm_modification_time": "2025-08-20T09:08:32+02:00",
+      "ckm_build_uid": "0d49cfb2-355d-426b-a928-c3af4b6ce084",
+      "ckm_page": "https://ckm.openehr.org/ckm/archetypes/1013.1.2893",
+      "downloads": {
+        "xml": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2893/xml",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2893/xml?asset-version=10",
+          "file": "openEHR-EHR-OBSERVATION.body_mass_index.v2.xml",
+          "sha256": "7dba3b1738fa2af036dbed1b925d6679887950a8c9d100fe1a86bd247d05ad22"
+        },
+        "adl": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2893/adl",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2893/adl?asset-version=10",
+          "file": "openEHR-EHR-OBSERVATION.body_mass_index.v2.adl",
+          "sha256": "631a22a6e793856f4c1f03a53b3561fe91a8cfb8bd92be0c57aeb1fe7f1b3188"
+        }
+      }
+    },
+    {
+      "archetype_id": "openEHR-EHR-OBSERVATION.body_temperature.v2",
+      "ckm_cid": "1013.1.2796",
+      "ckm_revision": "2.1.11",
+      "ckm_asset_version": 17,
+      "ckm_status": "PUBLISHED",
+      "ckm_modification_time": "2026-11-04T21:59:50+01:00",
+      "ckm_build_uid": "9f3cec55-e68d-4c7f-8b64-131b7d79254f",
+      "ckm_page": "https://ckm.openehr.org/ckm/archetypes/1013.1.2796",
+      "downloads": {
+        "xml": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2796/xml",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2796/xml?asset-version=17",
+          "file": "openEHR-EHR-OBSERVATION.body_temperature.v2.xml",
+          "sha256": "a36568653e35041358df53bde7cc3a7ec1ea18642390ff1383bf1b9bf62c04c6"
+        },
+        "adl": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2796/adl",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2796/adl?asset-version=17",
+          "file": "openEHR-EHR-OBSERVATION.body_temperature.v2.adl",
+          "sha256": "b43152ab15262bf0681adf1b742bed5972a5ac2fa1fd8f1a1f7b40936fca8e8c"
+        }
+      }
+    },
+    {
+      "archetype_id": "openEHR-EHR-OBSERVATION.body_weight.v2",
+      "ckm_cid": "1013.1.2960",
+      "ckm_revision": "2.1.12",
+      "ckm_asset_version": 18,
+      "ckm_status": "PUBLISHED",
+      "ckm_modification_time": "2026-02-09T14:54:57+01:00",
+      "ckm_build_uid": "c47acf10-0ff0-4ff6-a943-9e6a69303dc0",
+      "ckm_page": "https://ckm.openehr.org/ckm/archetypes/1013.1.2960",
+      "downloads": {
+        "xml": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2960/xml",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2960/xml?asset-version=18",
+          "file": "openEHR-EHR-OBSERVATION.body_weight.v2.xml",
+          "sha256": "894abf389649ef4c9c76cbd73d67b7f709694220b9111253a7b4369b9b1c671f"
+        },
+        "adl": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2960/adl",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2960/adl?asset-version=18",
+          "file": "openEHR-EHR-OBSERVATION.body_weight.v2.adl",
+          "sha256": "4f1c131c12c303690b4b20afa4fb4e8493b9c8b9939633abcb0fffd2b2426a2e"
+        }
+      }
+    },
+    {
+      "archetype_id": "openEHR-EHR-OBSERVATION.height.v2",
+      "ckm_cid": "1013.1.3210",
+      "ckm_revision": "2.1.1",
+      "ckm_asset_version": 15,
+      "ckm_status": "PUBLISHED",
+      "ckm_modification_time": "2026-02-09T15:47:16+01:00",
+      "ckm_build_uid": "c75e24ce-cc7e-4459-9540-353dc5681baf",
+      "ckm_page": "https://ckm.openehr.org/ckm/archetypes/1013.1.3210",
+      "downloads": {
+        "xml": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.3210/xml",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.3210/xml?asset-version=15",
+          "file": "openEHR-EHR-OBSERVATION.height.v2.xml",
+          "sha256": "edbf85cfbedc0cacbbc6fb70d8d2e16cc1481cfa1230501d022906aaa3e00f80"
+        },
+        "adl": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.3210/adl",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.3210/adl?asset-version=15",
+          "file": "openEHR-EHR-OBSERVATION.height.v2.adl",
+          "sha256": "818f5e7399ca1fbff32265ebff003eb0bd826bf39cc6fc57a17bec5b4863e171"
+        }
+      }
+    },
+    {
+      "archetype_id": "openEHR-EHR-OBSERVATION.pulse.v2",
+      "ckm_cid": "1013.1.4295",
+      "ckm_revision": "2.0.9",
+      "ckm_asset_version": 10,
+      "ckm_status": "PUBLISHED",
+      "ckm_modification_time": "2026-04-27T14:21:15+02:00",
+      "ckm_build_uid": "6133c0b3-a7bf-41f1-a422-453bf385cea9",
+      "ckm_page": "https://ckm.openehr.org/ckm/archetypes/1013.1.4295",
+      "downloads": {
+        "xml": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.4295/xml",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.4295/xml?asset-version=10",
+          "file": "openEHR-EHR-OBSERVATION.pulse.v2.xml",
+          "sha256": "2dfa53ff76267cb3753af0d527fbff4099d69443f7d3863248672795057be76b"
+        },
+        "adl": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.4295/adl",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.4295/adl?asset-version=10",
+          "file": "openEHR-EHR-OBSERVATION.pulse.v2.adl",
+          "sha256": "26bd0784b6680d643b966058c4976ce59eec5a99db86508a41fac4a22468a001"
+        }
+      }
+    },
+    {
+      "archetype_id": "openEHR-EHR-OBSERVATION.pulse_oximetry.v1",
+      "ckm_cid": "1013.1.3084",
+      "ckm_revision": "1.1.6",
+      "ckm_asset_version": 17,
+      "ckm_status": "PUBLISHED",
+      "ckm_modification_time": "2026-04-29T15:31:53+02:00",
+      "ckm_build_uid": "6a327952-a4ed-45ff-9f60-de4576929bf3",
+      "ckm_page": "https://ckm.openehr.org/ckm/archetypes/1013.1.3084",
+      "downloads": {
+        "xml": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.3084/xml",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.3084/xml?asset-version=17",
+          "file": "openEHR-EHR-OBSERVATION.pulse_oximetry.v1.xml",
+          "sha256": "b12fecbce768abee03862e739d2ad48f705474ec582acc6045eac03ccc28a472"
+        },
+        "adl": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.3084/adl",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.3084/adl?asset-version=17",
+          "file": "openEHR-EHR-OBSERVATION.pulse_oximetry.v1.adl",
+          "sha256": "094999b4df63d7e22d8087a68caf062dd4020d090040a237473488b0020db185"
+        }
+      }
+    },
+    {
+      "archetype_id": "openEHR-EHR-OBSERVATION.waist_circumference.v1",
+      "ckm_cid": "1013.1.2814",
+      "ckm_revision": "1.0.5",
+      "ckm_asset_version": 13,
+      "ckm_status": "PUBLISHED",
+      "ckm_modification_time": "2025-10-08T02:40:07+02:00",
+      "ckm_build_uid": "398ca131-91f6-499d-aa69-9a50b013a0f1",
+      "ckm_page": "https://ckm.openehr.org/ckm/archetypes/1013.1.2814",
+      "downloads": {
+        "xml": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2814/xml",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2814/xml?asset-version=13",
+          "file": "openEHR-EHR-OBSERVATION.waist_circumference.v1.xml",
+          "sha256": "77f03b79a983aa9a17f3b758bb7fe066f3d736b81c82ad6aab90714e7949b080"
+        },
+        "adl": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2814/adl",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2814/adl?asset-version=13",
+          "file": "openEHR-EHR-OBSERVATION.waist_circumference.v1.adl",
+          "sha256": "c15adce92d5ac6206ef845b28968ee2dc7b0ec5f0e018d7691dbedce04c18605"
+        }
+      }
+    }
+  ]
+}

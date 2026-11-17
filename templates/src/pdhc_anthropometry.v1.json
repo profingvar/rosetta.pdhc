@@ -1,0 +1,58 @@
+{
+  "_comment": "#728 / #502 §3: source definition of pdhc_anthropometry.v1 for scripts/build_opt.py. Same skeleton as pdhc_vitals.v1 (encounter.v1, en, content 0..1 per OBSERVATION); each OBSERVATION is pruned to its 'Any event' and the one ELEMENT the concept map binds, with the unit narrowed to the plan.pdhc UCUM. D-A1: self-reported weight uses the same body_weight path; no extra node. uid/build_uid are uuid5(NAMESPACE_URL, 'urn:pdhc:template:pdhc_anthropometry.v1[:build:0.1.0]') so the build is deterministic. Regenerate: python scripts/build_opt.py templates/src/pdhc_anthropometry.v1.json -o templates/pdhc_anthropometry.v1.opt",
+  "template_id": "pdhc_anthropometry.v1",
+  "uid": "b09b370a-7486-592e-ad23-aa587cd59491",
+  "concept": "PDHC Anthropometry",
+  "language": "en",
+  "description": {
+    "original_author": [["date", "2026-11-17"]],
+    "lifecycle_state": "unmanaged",
+    "other_details": [
+      ["licence", ""],
+      ["custodian_organisation", ""],
+      ["original_namespace", ""],
+      ["original_publisher", ""],
+      ["custodian_namespace", ""],
+      ["sem_ver", "0.1.0"],
+      ["build_uid", "673ddc7f-f778-5c98-8915-b67f3bef9e14"]
+    ],
+    "purpose": "Not Specified"
+  },
+  "composition": {
+    "archetype_id": "openEHR-EHR-COMPOSITION.encounter.v1",
+    "name": "PDHC Anthropometry",
+    "content_existence": [0, 1],
+    "content_cardinality": {"lower": 1, "upper": null, "ordered": false, "unique": false}
+  },
+  "content": [
+    {
+      "archetype_id": "openEHR-EHR-OBSERVATION.body_weight.v2",
+      "occurrences": [0, 1],
+      "_concepts": "weight 465e9554-8be6-48f2-9e1a-154d4e1f911e; Self reported body Weight 79dfe9ce-6f99-4808-8751-b501f30fda67 (D-A1: same path)",
+      "keep": ["/data[at0002]/events[at0003]/data[at0001]/items[at0004]"],
+      "constrain": {"/data[at0002]/events[at0003]/data[at0001]/items[at0004]": {"units": ["kg"]}}
+    },
+    {
+      "archetype_id": "openEHR-EHR-OBSERVATION.height.v2",
+      "occurrences": [0, 1],
+      "_concepts": "height d5b0a33a-e620-4be3-ba41-8cbbdf4aed17",
+      "keep": ["/data[at0001]/events[at0002]/data[at0003]/items[at0004]"],
+      "constrain": {"/data[at0001]/events[at0002]/data[at0003]/items[at0004]": {"units": ["cm"]}}
+    },
+    {
+      "archetype_id": "openEHR-EHR-OBSERVATION.body_mass_index.v2",
+      "occurrences": [0, 1],
+      "_concepts": "bmi 7c54ef40-1327-46e1-991f-8ec53837b75b",
+      "keep": ["/data[at0001]/events[at0002]/data[at0003]/items[at0004]"],
+      "constrain": {"/data[at0001]/events[at0002]/data[at0003]/items[at0004]": {"units": ["kg/m2"]}}
+    },
+    {
+      "archetype_id": "openEHR-EHR-OBSERVATION.waist_circumference.v1",
+      "occurrences": [0, 1],
+      "_concepts": "waist_circumference 598d2c39-f712-4fac-8169-9ee0d47732b7",
+      "keep": ["/data[at0001]/events[at0010]/data[at0003]/items[at0004]"],
+      "constrain": {"/data[at0001]/events[at0010]/data[at0003]/items[at0004]": {"units": ["cm"]}}
+    }
+  ],
+  "unit_terms": {}
+}

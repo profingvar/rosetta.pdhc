@@ -1,0 +1,113 @@
+{
+  "_status": "DRAFT — predicted, NOT captured. Compare with the web template the sandbox returns after the lead uploads templates/pdhc_anthropometry.v1.opt; the captured web template wins (field map §7 step 2).",
+  "_how": "Generated from templates/src/pdhc_anthropometry.v1.json by scripts/build_opt.py predict_flat_paths(): node ids are the EHRbase web-template ids of the archetype term texts (rule checked against all 74 archetyped nodes of templates/pdhc_vitals.v1.webtemplate.json). app/tests/test_build_opt.py keeps this file in step with the generator.",
+  "template_id": "pdhc_anthropometry.v1",
+  "flat_root": "pdhc_anthropometry",
+  "_flat_root_derivation": "Same as the vitals skeleton: the FLAT root is the web-template id of the COMPOSITION root node's name, i.e. the encounter.v1 at0000 text the template overrides ('PDHC Vital Signs' -> pdhc_vital_signs, measured on the sandbox; here 'PDHC Anthropometry' -> pdhc_anthropometry). It is NOT the template_id (pdhc_anthropometry.v1). The .opt's <concept> is also 'PDHC Anthropometry'.",
+  "composition_keys": [
+    "pdhc_anthropometry/language|code",
+    "pdhc_anthropometry/language|terminology",
+    "pdhc_anthropometry/territory|code",
+    "pdhc_anthropometry/territory|terminology",
+    "pdhc_anthropometry/category|code",
+    "pdhc_anthropometry/category|value",
+    "pdhc_anthropometry/category|terminology",
+    "pdhc_anthropometry/context/start_time",
+    "pdhc_anthropometry/context/setting|code",
+    "pdhc_anthropometry/context/setting|value",
+    "pdhc_anthropometry/context/setting|terminology",
+    "pdhc_anthropometry/composer|name"
+  ],
+  "leaves": [
+    {
+      "archetype_id": "openEHR-EHR-OBSERVATION.body_weight.v2",
+      "archetype_path": "/data[at0002]/events[at0003]/data[at0001]/items[at0004]",
+      "flat_path": "pdhc_anthropometry/body_weight/any_event/weight",
+      "magnitude": "pdhc_anthropometry/body_weight/any_event/weight|magnitude",
+      "unit": "pdhc_anthropometry/body_weight/any_event/weight|unit",
+      "allowed_units": [
+        "kg"
+      ],
+      "time_path": "pdhc_anthropometry/body_weight/any_event/time",
+      "value_kind": "DV_QUANTITY",
+      "concepts": [
+        {
+          "concept_guid": "465e9554-8be6-48f2-9e1a-154d4e1f911e",
+          "concept_name": "weight",
+          "concept_map_draft_flat_path": "pdhc_anthropometry/body_weight/any_event/weight",
+          "agrees_with_prediction": true
+        },
+        {
+          "concept_guid": "79dfe9ce-6f99-4808-8751-b501f30fda67",
+          "concept_name": "Self reported body Weight",
+          "concept_map_draft_flat_path": "pdhc_anthropometry/body_weight/any_event/weight",
+          "agrees_with_prediction": true
+        }
+      ]
+    },
+    {
+      "archetype_id": "openEHR-EHR-OBSERVATION.height.v2",
+      "archetype_path": "/data[at0001]/events[at0002]/data[at0003]/items[at0004]",
+      "flat_path": "pdhc_anthropometry/height_length/any_event/height_length",
+      "magnitude": "pdhc_anthropometry/height_length/any_event/height_length|magnitude",
+      "unit": "pdhc_anthropometry/height_length/any_event/height_length|unit",
+      "allowed_units": [
+        "cm"
+      ],
+      "time_path": "pdhc_anthropometry/height_length/any_event/time",
+      "value_kind": "DV_QUANTITY",
+      "concepts": [
+        {
+          "concept_guid": "d5b0a33a-e620-4be3-ba41-8cbbdf4aed17",
+          "concept_name": "height",
+          "concept_map_draft_flat_path": "pdhc_anthropometry/height_length/any_event/height",
+          "agrees_with_prediction": false
+        }
+      ]
+    },
+    {
+      "archetype_id": "openEHR-EHR-OBSERVATION.body_mass_index.v2",
+      "archetype_path": "/data[at0001]/events[at0002]/data[at0003]/items[at0004]",
+      "flat_path": "pdhc_anthropometry/body_mass_index_bmi/any_event/body_mass_index",
+      "magnitude": "pdhc_anthropometry/body_mass_index_bmi/any_event/body_mass_index|magnitude",
+      "unit": "pdhc_anthropometry/body_mass_index_bmi/any_event/body_mass_index|unit",
+      "allowed_units": [
+        "kg/m2"
+      ],
+      "time_path": "pdhc_anthropometry/body_mass_index_bmi/any_event/time",
+      "value_kind": "DV_QUANTITY",
+      "concepts": [
+        {
+          "concept_guid": "7c54ef40-1327-46e1-991f-8ec53837b75b",
+          "concept_name": "bmi",
+          "concept_map_draft_flat_path": "pdhc_anthropometry/body_mass_index/any_event/body_mass_index",
+          "agrees_with_prediction": false
+        }
+      ]
+    },
+    {
+      "archetype_id": "openEHR-EHR-OBSERVATION.waist_circumference.v1",
+      "archetype_path": "/data[at0001]/events[at0010]/data[at0003]/items[at0004]",
+      "flat_path": "pdhc_anthropometry/waist_circumference/any_event/waist_circumference",
+      "magnitude": "pdhc_anthropometry/waist_circumference/any_event/waist_circumference|magnitude",
+      "unit": "pdhc_anthropometry/waist_circumference/any_event/waist_circumference|unit",
+      "allowed_units": [
+        "cm"
+      ],
+      "time_path": "pdhc_anthropometry/waist_circumference/any_event/time",
+      "value_kind": "DV_QUANTITY",
+      "concepts": [
+        {
+          "concept_guid": "598d2c39-f712-4fac-8169-9ee0d47732b7",
+          "concept_name": "waist_circumference",
+          "concept_map_draft_flat_path": "pdhc_anthropometry/waist_circumference/any_event/waist_circumference",
+          "agrees_with_prediction": true
+        }
+      ]
+    }
+  ],
+  "differences_from_concept_map_draft": [
+    "height: archetype height.v2 names BOTH the OBSERVATION (at0000) and the ELEMENT (at0004) 'Height/Length', so the leaf is predicted .../height_length/any_event/height_length, not .../height (field map §3 / concept map draft); the build recipe (templates/pdhc_anthropometry.v1.spec.md) already predicted height_length.",
+    "bmi: body_mass_index.v2's at0000 text is 'Body Mass Index (BMI)', so the OBSERVATION id is predicted body_mass_index_bmi, not body_mass_index (element at0004 'Body mass index' -> body_mass_index)."
+  ]
+}

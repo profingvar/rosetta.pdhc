@@ -1,0 +1,46 @@
+{
+  "_comment": "#728: source definition of pdhc_vitals.v1 for scripts/build_opt.py. pdhc_vitals.v1.opt itself was exported from Archetype Designer (2026-05-24) and is sandbox-accepted; this file exists so the generator can REGENERATE it as the control that the generator is right (app/tests/test_build_opt.py). Vitals inlines its four archetypes whole: no keep/constrain.",
+  "template_id": "pdhc_vitals.v1",
+  "uid": "641d0e23-aa73-47e4-8e44-e12f16ca9fb4",
+  "concept": "PDHC Vital Signs",
+  "language": "en",
+  "description": {
+    "original_author": [["date", "2026-05-24"]],
+    "lifecycle_state": "unmanaged",
+    "other_details": [
+      ["licence", ""],
+      ["custodian_organisation", ""],
+      ["original_namespace", ""],
+      ["original_publisher", ""],
+      ["custodian_namespace", ""],
+      ["sem_ver", "0.1.0"],
+      ["build_uid", "ed2cc0eb-c508-3e66-a7bc-0e3f3e3f196f"]
+    ],
+    "purpose": "Not Specified"
+  },
+  "composition": {
+    "archetype_id": "openEHR-EHR-COMPOSITION.encounter.v1",
+    "name": "PDHC Vital Signs",
+    "content_existence": [0, 1],
+    "content_cardinality": {"lower": 1, "upper": null, "ordered": false, "unique": false}
+  },
+  "content": [
+    {"archetype_id": "openEHR-EHR-OBSERVATION.blood_pressure.v2", "occurrences": [0, 1]},
+    {"archetype_id": "openEHR-EHR-OBSERVATION.pulse.v2", "occurrences": [0, 1]},
+    {"archetype_id": "openEHR-EHR-OBSERVATION.body_temperature.v2", "occurrences": [0, 1]},
+    {"archetype_id": "openEHR-EHR-OBSERVATION.pulse_oximetry.v1", "occurrences": [0, 1],
+     "_term_overrides": "Template-level text override carried by the accepted OPT (inherited from vital_signs_poc): CKM has said 'SpO\u2082' (subscript two) in every revision since 1.1.3 (2020); the OPT spells 'SpO2'. Web-template id is 'spo2' either way.",
+     "term_overrides": {
+       "at0006": {
+         "text": "SpO2",
+         "comment": "SpO2 is defined as the percentage of oxyhaemoglobin (HbO₂) to the total concentration of haemoglobin (HbO₂ + deoxyhaemoglobin) in peripheral blood."
+       }
+     }}
+  ],
+  "unit_terms": {
+    "Cel": {"text": "°C", "description": "degrees Celsius"},
+    "[degF]": {"text": "°F", "description": "degrees Fahrenheit"},
+    "deg": {"text": "°", "description": "degree"},
+    "mm[Hg]": {"text": "mmHg", "description": "millimeters of mercury"}
+  }
+}

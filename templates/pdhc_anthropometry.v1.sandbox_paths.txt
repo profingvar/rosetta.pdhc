@@ -1,0 +1,10 @@
+# FLAT paths ASHA cdr1 reports for pdhc_anthropometry.v1 (Explore view), captured 2026-11-17 after upload.
+# Data leaves only; |unit, time and context are not listed by Explore but were accepted by Verify (samples/pdhc_anthropometry_valid.flat.json).
+pdhc_anthropometry/body_mass_index_bmi/any_event/body_mass_index
+pdhc_anthropometry/body_mass_index_bmi/any_event/body_mass_index|magnitude
+pdhc_anthropometry/body_weight/any_event/weight
+pdhc_anthropometry/body_weight/any_event/weight|magnitude
+pdhc_anthropometry/height_length/any_event/height_length
+pdhc_anthropometry/height_length/any_event/height_length|magnitude
+pdhc_anthropometry/waist_circumference/any_event/waist_circumference
+pdhc_anthropometry/waist_circumference/any_event/waist_circumference|magnitude

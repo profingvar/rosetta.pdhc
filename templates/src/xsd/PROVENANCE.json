@@ -1,0 +1,48 @@
+{
+  "_comment": "#728: openEHR ITS-XML schemas for validating generated OPTs offline (app/tests/test_build_opt.py). Unmodified copies from github.com/openEHR/specifications-ITS-XML at the commit below, components/<path>. These schemas declare targetNamespace http://schemas.openehr.org/v2, while every OPT 1.4 in use (Archetype Designer, EHRbase, our sandbox-accepted pdhc_vitals.v1.opt) is in http://schemas.openehr.org/v1; the test rewrites v2->v1 when loading. With that one rewrite the accepted vitals OPT validates, which is the control that the schema set is the right one.",
+  "repository": "https://github.com/openEHR/specifications-ITS-XML",
+  "commit": "2ecff13aa3b62fd9f47758d47b6293ddf45ea65a",
+  "fetched": "2026-11-17",
+  "files": [
+    {
+      "file": "AM/Release-1.4/Archetype.xsd",
+      "url": "https://raw.githubusercontent.com/openEHR/specifications-ITS-XML/2ecff13aa3b62fd9f47758d47b6293ddf45ea65a/components/AM/Release-1.4/Archetype.xsd",
+      "sha256": "2c05b219ad62f3fba889d84692a0844cf115c2a2613ad7dfdef4b09b2ba88090"
+    },
+    {
+      "file": "AM/Release-1.4/OpenehrProfile.xsd",
+      "url": "https://raw.githubusercontent.com/openEHR/specifications-ITS-XML/2ecff13aa3b62fd9f47758d47b6293ddf45ea65a/components/AM/Release-1.4/OpenehrProfile.xsd",
+      "sha256": "2d41fe6f66433c1fbaff66e0627ec6243f2f29aa7ad93501242611db29b0c8f6"
+    },
+    {
+      "file": "AM/Release-1.4/Resource.xsd",
+      "url": "https://raw.githubusercontent.com/openEHR/specifications-ITS-XML/2ecff13aa3b62fd9f47758d47b6293ddf45ea65a/components/AM/Release-1.4/Resource.xsd",
+      "sha256": "494d5bc43bfc81466c6acb65d0477c561be136a3a4c0205aa7778bfd31709ccd"
+    },
+    {
+      "file": "AM/Release-1.4/Template.xsd",
+      "url": "https://raw.githubusercontent.com/openEHR/specifications-ITS-XML/2ecff13aa3b62fd9f47758d47b6293ddf45ea65a/components/AM/Release-1.4/Template.xsd",
+      "sha256": "348d4e8fb368f97d028284bb87888bd8b9bcba0e2839b4405fe23f145849eff1"
+    },
+    {
+      "file": "BASE/Release-1.2.0/BaseTypes.xsd",
+      "url": "https://raw.githubusercontent.com/openEHR/specifications-ITS-XML/2ecff13aa3b62fd9f47758d47b6293ddf45ea65a/components/BASE/Release-1.2.0/BaseTypes.xsd",
+      "sha256": "b1af9db5ab01865087cb7783f349de9cbacf9c045ccd785132483bec99e89a67"
+    },
+    {
+      "file": "RM/Release-1.1.0/Common.xsd",
+      "url": "https://raw.githubusercontent.com/openEHR/specifications-ITS-XML/2ecff13aa3b62fd9f47758d47b6293ddf45ea65a/components/RM/Release-1.1.0/Common.xsd",
+      "sha256": "795a655416465797aca258d53c65a0ae0248dc79adb1ac18e67ee4a78e07cd01"
+    },
+    {
+      "file": "RM/Release-1.1.0/DataStructures.xsd",
+      "url": "https://raw.githubusercontent.com/openEHR/specifications-ITS-XML/2ecff13aa3b62fd9f47758d47b6293ddf45ea65a/components/RM/Release-1.1.0/DataStructures.xsd",
+      "sha256": "267ba156088a72065314eb70e572952a6529a0d64670548a21a812ca25400a0d"
+    },
+    {
+      "file": "RM/Release-1.1.0/DataTypes.xsd",
+      "url": "https://raw.githubusercontent.com/openEHR/specifications-ITS-XML/2ecff13aa3b62fd9f47758d47b6293ddf45ea65a/components/RM/Release-1.1.0/DataTypes.xsd",
+      "sha256": "c950a7102d5c50e828c357a0ffee314f7ac1ef4bca86e310ad105339dbb085c0"
+    }
+  ]
+}

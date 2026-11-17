@@ -126,3 +126,13 @@ app/tests/test_converters.py (edit — openEHR tests updated to FLAT + mapped co
 - deploy/smoke_siblings.py                      (NEW: 10 read-only checks against sso, ips, gateway)
 - app/routes/views.py                           (a refresh where EVERY org failed no longer flashes "Refresh ok")
 - app/tests/test_refresh_reports_failure.py     (NEW)
+
+## 2026-11-17 — #728 generated OPT: pdhc_anthropometry.v1 + the generator (uncommitted)
+- scripts/build_opt.py                                  (NEW: OPT 1.4 generator from vendored CKM archetypes; regenerates pdhc_vitals.v1.opt byte-for-byte)
+- templates/src/pdhc_vitals.v1.json                     (NEW: vitals source definition — the regeneration control)
+- templates/src/pdhc_anthropometry.v1.json              (NEW: anthropometry source definition)
+- templates/src/archetypes/*.xml, *.adl, PROVENANCE.json (NEW: 9 CKM archetypes, cid/revision/asset-version/sha256)
+- templates/src/xsd/**/*.xsd, PROVENANCE.json           (NEW: openEHR ITS-XML OPT 1.4 schemas, unmodified)
+- templates/pdhc_anthropometry.v1.opt                   (NEW, GENERATED — not yet uploaded)
+- templates/pdhc_anthropometry.v1.expected_paths.json   (NEW, DRAFT predicted FLAT paths)
+- app/tests/test_build_opt.py                           (NEW: 21 tests)
