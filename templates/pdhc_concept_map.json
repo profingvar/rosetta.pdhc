@@ -1,21 +1,5 @@
 {
   "_comment": "Ticket #503 — maps plan.pdhc concept_guid -> pdhc_vitals.v1 FLAT binding. GUIDs are the REAL plan.pdhc concepts (pdhc_gateway.concepts, verified 2026-07-23). An unmapped concept must be a LOUD FAILURE in the emitter (#504), never a silent fallback — the silent fallback is what mislabelled all 7065 rows in cdr.",
-  "template": {
-    "template_id": "pdhc_vitals.v1",
-    "flat_root": "pdhc_vital_signs",
-    "composition_defaults": {
-      "category|code": "433",
-      "category|value": "event",
-      "category|terminology": "openehr",
-      "language|code": "en",
-      "language|terminology": "ISO_639-1",
-      "territory|code": "SE",
-      "territory|terminology": "ISO_3166-1",
-      "context/setting|code": "238",
-      "context/setting|value": "other care",
-      "context/setting|terminology": "openehr"
-    }
-  },
   "unit_ucum_bridge": {
     "_comment": "plan.pdhc units.unit_name -> archetype UCUM. plan.pdhc stores display-ish strings; the archetype constrains UCUM, so the emitter MUST translate or the CDR rejects the unit.",
     "mmHg": "mm[Hg]",
@@ -37,6 +21,41 @@
     "mg/mmol": "mg/mmol",
     "L": "L"
   },
+  "templates": {
+    "pdhc_vitals.v1": {
+      "template_id": "pdhc_vitals.v1",
+      "flat_root": "pdhc_vital_signs",
+      "composition_defaults": {
+        "category|code": "433",
+        "category|value": "event",
+        "category|terminology": "openehr",
+        "language|code": "en",
+        "language|terminology": "ISO_639-1",
+        "territory|code": "SE",
+        "territory|terminology": "ISO_3166-1",
+        "context/setting|code": "238",
+        "context/setting|value": "other care",
+        "context/setting|terminology": "openehr"
+      }
+    },
+    "pdhc_anthropometry.v1": {
+      "template_id": "pdhc_anthropometry.v1",
+      "flat_root": "pdhc_anthropometry",
+      "composition_defaults": {
+        "category|code": "433",
+        "category|value": "event",
+        "category|terminology": "openehr",
+        "language|code": "en",
+        "language|terminology": "ISO_639-1",
+        "territory|code": "SE",
+        "territory|terminology": "ISO_3166-1",
+        "context/setting|code": "238",
+        "context/setting|value": "other care",
+        "context/setting|terminology": "openehr"
+      },
+      "_source": "templates/pdhc_anthropometry.v1.opt (generated, #728); accepted by ASHA cdr1 2026-11-17"
+    }
+  },
   "concepts": {
     "64928bff-9a46-472a-bbf1-dcfc694f945b": {
       "concept_name": "bp_systolic",
@@ -44,7 +63,8 @@
       "time_path": "pdhc_vital_signs/blood_pressure/any_event/time",
       "value_kind": "DV_QUANTITY",
       "pdhc_unit": "mmHg",
-      "ucum": "mm[Hg]"
+      "ucum": "mm[Hg]",
+      "template_id": "pdhc_vitals.v1"
     },
     "fb6487d7-b473-4ace-bb39-6352d4497009": {
       "concept_name": "bp_diastolic",
@@ -52,7 +72,8 @@
       "time_path": "pdhc_vital_signs/blood_pressure/any_event/time",
       "value_kind": "DV_QUANTITY",
       "pdhc_unit": "mmHg",
-      "ucum": "mm[Hg]"
+      "ucum": "mm[Hg]",
+      "template_id": "pdhc_vitals.v1"
     },
     "f94be41a-1443-462f-9ca1-2bfe0bd6572a": {
       "concept_name": "heart_rate",
@@ -60,7 +81,8 @@
       "time_path": "pdhc_vital_signs/pulse_heart_beat/any_event/time",
       "value_kind": "DV_QUANTITY",
       "pdhc_unit": "bpm",
-      "ucum": "/min"
+      "ucum": "/min",
+      "template_id": "pdhc_vitals.v1"
     },
     "d7d81372-1c61-4459-88fe-5878d6586e64": {
       "concept_name": "temperature",
@@ -68,7 +90,8 @@
       "time_path": "pdhc_vital_signs/body_temperature/any_event/time",
       "value_kind": "DV_QUANTITY",
       "pdhc_unit": "°C",
-      "ucum": "Cel"
+      "ucum": "Cel",
+      "template_id": "pdhc_vitals.v1"
     },
     "2f15ae94-209e-4b0c-81bd-c91d76e74475": {
       "concept_name": "spo2",
@@ -76,7 +99,64 @@
       "time_path": "pdhc_vital_signs/pulse_oximetry/any_event/time",
       "value_kind": "DV_PROPORTION",
       "pdhc_unit": "%",
-      "ucum": "%"
+      "ucum": "%",
+      "template_id": "pdhc_vitals.v1"
+    },
+    "465e9554-8be6-48f2-9e1a-154d4e1f911e": {
+      "concept_name": "weight",
+      "template_id": "pdhc_anthropometry.v1",
+      "flat_path": "pdhc_anthropometry/body_weight/any_event/weight",
+      "time_path": "pdhc_anthropometry/body_weight/any_event/time",
+      "value_kind": "DV_QUANTITY",
+      "binding_kind": "fixed_quantity",
+      "pdhc_unit": "kg",
+      "ucum": "kg",
+      "archetype": "openEHR-EHR-OBSERVATION.body_weight.v2"
+    },
+    "79dfe9ce-6f99-4808-8751-b501f30fda67": {
+      "concept_name": "Self reported body Weight",
+      "template_id": "pdhc_anthropometry.v1",
+      "flat_path": "pdhc_anthropometry/body_weight/any_event/weight",
+      "time_path": "pdhc_anthropometry/body_weight/any_event/time",
+      "value_kind": "DV_QUANTITY",
+      "binding_kind": "fixed_quantity",
+      "pdhc_unit": "kg",
+      "ucum": "kg",
+      "provenance": "self_reported",
+      "archetype": "openEHR-EHR-OBSERVATION.body_weight.v2"
+    },
+    "d5b0a33a-e620-4be3-ba41-8cbbdf4aed17": {
+      "concept_name": "height",
+      "template_id": "pdhc_anthropometry.v1",
+      "flat_path": "pdhc_anthropometry/height_length/any_event/height_length",
+      "time_path": "pdhc_anthropometry/height_length/any_event/time",
+      "value_kind": "DV_QUANTITY",
+      "binding_kind": "fixed_quantity",
+      "pdhc_unit": "cm",
+      "ucum": "cm",
+      "archetype": "openEHR-EHR-OBSERVATION.height.v2"
+    },
+    "7c54ef40-1327-46e1-991f-8ec53837b75b": {
+      "concept_name": "bmi",
+      "template_id": "pdhc_anthropometry.v1",
+      "flat_path": "pdhc_anthropometry/body_mass_index_bmi/any_event/body_mass_index",
+      "time_path": "pdhc_anthropometry/body_mass_index_bmi/any_event/time",
+      "value_kind": "DV_QUANTITY",
+      "binding_kind": "fixed_quantity",
+      "pdhc_unit": "kg/m²",
+      "ucum": "kg/m2",
+      "archetype": "openEHR-EHR-OBSERVATION.body_mass_index.v2"
+    },
+    "598d2c39-f712-4fac-8169-9ee0d47732b7": {
+      "concept_name": "waist_circumference",
+      "template_id": "pdhc_anthropometry.v1",
+      "flat_path": "pdhc_anthropometry/waist_circumference/any_event/waist_circumference",
+      "time_path": "pdhc_anthropometry/waist_circumference/any_event/time",
+      "value_kind": "DV_QUANTITY",
+      "binding_kind": "fixed_quantity",
+      "pdhc_unit": "cm",
+      "ucum": "cm",
+      "archetype": "openEHR-EHR-OBSERVATION.waist_circumference.v1"
     }
   },
   "gaps": {
@@ -84,66 +164,6 @@
     "spo2_RESOLVED_2026-08-11": "plan.pdhc now HAS an oxygen-saturation concept (spo2 = 2f15ae94-209e-4b0c-81bd-c91d76e74475, created during the asthma home-monitoring build), so spo2 is now bound above to the pdhc_vitals.v1 pulse_oximetry observation (DV_PROPORTION, |numerator). NOTE: the DV_PROPORTION FLAT emission (numerator only; denominator/type assumed template-fixed at 100/percent) has NOT been round-trip-validated on the sandbox yet — #507 proved DV_QUANTITY (temp/BP) only. Validate spo2 on openehr.phanera.se before enabling delivery.",
     "pending_template_extension": {
       "_comment": "#502 (2026-08-01): per-template PENDING archetype bindings. As of 2026-08-22 the anthropometry (5), lung_function (1) and laboratory (24) entries carry DRAFT binding_kind + target_flat_path (fixed_quantity) or analyte_cluster_path (repeating_analyte) per docs/openehr_flat_opt_field_map_502.md. These are NOT read by resolve() — promote into the live per-template registry after the .opt web template is captured (see that doc's coder checklist). Diagnoses/medications/care_events remain name+archetype only (later tickets, need clinical-modelling judgement).",
-      "465e9554-8be6-48f2-9e1a-154d4e1f911e": {
-        "concept_name": "weight",
-        "target_template": "pdhc_anthropometry.v1",
-        "target_archetype": "openEHR-EHR-OBSERVATION.body_weight.v2",
-        "pdhc_unit": "kg",
-        "ucum": "kg",
-        "value_kind": "DV_QUANTITY",
-        "binding_kind": "fixed_quantity",
-        "target_flat_path": "pdhc_anthropometry/body_weight/any_event/weight",
-        "target_time_path": "pdhc_anthropometry/body_weight/any_event/time",
-        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
-      },
-      "79dfe9ce-6f99-4808-8751-b501f30fda67": {
-        "concept_name": "Self reported body Weight",
-        "target_template": "pdhc_anthropometry.v1",
-        "target_archetype": "openEHR-EHR-OBSERVATION.body_weight.v2",
-        "pdhc_unit": "kg",
-        "ucum": "kg",
-        "value_kind": "DV_QUANTITY",
-        "binding_kind": "fixed_quantity",
-        "target_flat_path": "pdhc_anthropometry/body_weight/any_event/weight",
-        "target_time_path": "pdhc_anthropometry/body_weight/any_event/time",
-        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
-      },
-      "d5b0a33a-e620-4be3-ba41-8cbbdf4aed17": {
-        "concept_name": "height",
-        "target_template": "pdhc_anthropometry.v1",
-        "target_archetype": "openEHR-EHR-OBSERVATION.height.v2",
-        "pdhc_unit": "cm",
-        "ucum": "cm",
-        "value_kind": "DV_QUANTITY",
-        "binding_kind": "fixed_quantity",
-        "target_flat_path": "pdhc_anthropometry/height_length/any_event/height",
-        "target_time_path": "pdhc_anthropometry/height_length/any_event/time",
-        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
-      },
-      "7c54ef40-1327-46e1-991f-8ec53837b75b": {
-        "concept_name": "bmi",
-        "target_template": "pdhc_anthropometry.v1",
-        "target_archetype": "openEHR-EHR-OBSERVATION.body_mass_index.v2",
-        "pdhc_unit": "kg/m²",
-        "ucum": "kg/m2",
-        "value_kind": "DV_QUANTITY",
-        "binding_kind": "fixed_quantity",
-        "target_flat_path": "pdhc_anthropometry/body_mass_index/any_event/body_mass_index",
-        "target_time_path": "pdhc_anthropometry/body_mass_index/any_event/time",
-        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
-      },
-      "598d2c39-f712-4fac-8169-9ee0d47732b7": {
-        "concept_name": "waist_circumference",
-        "target_template": "pdhc_anthropometry.v1",
-        "target_archetype": "openEHR-EHR-OBSERVATION.waist_circumference.v1",
-        "pdhc_unit": "cm",
-        "ucum": "cm",
-        "value_kind": "DV_QUANTITY",
-        "binding_kind": "fixed_quantity",
-        "target_flat_path": "pdhc_anthropometry/waist_circumference/any_event/waist_circumference",
-        "target_time_path": "pdhc_anthropometry/waist_circumference/any_event/time",
-        "_draft": "#502 field map 2026-08-22 (docs/openehr_flat_opt_field_map_502.md); target — confirm leaf ids from captured web template"
-      },
       "6521528c-db59-45c5-a492-003c28f27623": {
         "concept_name": "FEV1",
         "target_template": "pdhc_lung_function.v1",

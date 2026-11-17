@@ -98,3 +98,59 @@ def test_accepts_duck_typed_cache_rows():
         concept_guid = TEMPERATURE; value = 36.8; patient_guid = "p1"; observed_at = T; unit = "°C"
     res = fe.emit_flat_compositions([Row()])
     assert res.compositions[0]["flat"]["pdhc_vital_signs/body_temperature/any_event/temperature|magnitude"] == 36.8
+
+
+# --- #728: more than one template --------------------------------------------
+import json as _json
+import os as _os
+
+_WEIGHT = "465e9554-8be6-48f2-9e1a-154d4e1f911e"
+_SELF_WEIGHT = "79dfe9ce-6f99-4808-8751-b501f30fda67"
+_HEIGHT = "d5b0a33a-e620-4be3-ba41-8cbbdf4aed17"
+_BMI = "7c54ef40-1327-46e1-991f-8ec53837b75b"
+_WAIST = "598d2c39-f712-4fac-8169-9ee0d47732b7"
+_SYS = "64928bff-9a46-472a-bbf1-dcfc694f945b"
+_T = "2026-07-23T10:00:00Z"
+_ANTHRO_SAMPLE = _os.path.join(_os.path.dirname(__file__), "..", "..", "templates", "samples",
+                        "pdhc_anthropometry_valid.flat.json")
+
+
+def _obs(g, v, p="p1"):
+    from app.services.flat_emitter import Observation
+    return Observation(concept_guid=g, value=v, effective_at=_T, patient_guid=p)
+
+
+def test_same_instant_two_templates_two_compositions_728():
+    from app.services.flat_emitter import emit_flat_compositions
+    res = emit_flat_compositions([_obs(_SYS, 120), _obs(_WEIGHT, 72.5)])
+    assert sorted(c["template_id"] for c in res.compositions) == ["pdhc_anthropometry.v1", "pdhc_vitals.v1"]
+    for c in res.compositions:
+        root = "pdhc_vital_signs" if c["template_id"] == "pdhc_vitals.v1" else "pdhc_anthropometry"
+        assert all(k.startswith(root + "/") for k in c["flat"]), c["template_id"]
+
+
+def test_anthropometry_emits_the_sandbox_accepted_composition_728():
+    """Byte-level control: the emitter reproduces the FLAT composition that ASHA
+    validated on 2026-11-17 (templates/samples/pdhc_anthropometry_valid.flat.json)."""
+    from app.services.flat_emitter import emit_flat_compositions
+    res = emit_flat_compositions([_obs(_WEIGHT, 72.5), _obs(_HEIGHT, 178), _obs(_BMI, 22.9), _obs(_WAIST, 88)])
+    assert len(res.compositions) == 1 and not res.unmapped
+    assert res.compositions[0]["flat"] == _json.load(open(_ANTHRO_SAMPLE))
+
+
+def test_self_reported_weight_is_its_own_composition_728():
+    from app.services.flat_emitter import emit_flat_compositions
+    res = emit_flat_compositions([_obs(_WEIGHT, 72.5), _obs(_SELF_WEIGHT, 71.0)])
+    assert len(res.compositions) == 2
+    by = {c["flat"]["pdhc_anthropometry/composer|name"]: c["flat"] for c in res.compositions}
+    assert by["patient (self-reported)"]["pdhc_anthropometry/body_weight/any_event/weight|magnitude"] == 71.0
+    assert by["rosetta.pdhc"]["pdhc_anthropometry/body_weight/any_event/weight|magnitude"] == 72.5
+
+
+def test_concept_naming_an_unknown_template_fails_loud_728(monkeypatch):
+    import pytest
+    from app.services import concept_map as cm
+    monkeypatch.setitem(cm._CONCEPTS, "x-bad", {"concept_name": "x", "template_id": "nope.v1",
+        "flat_path": "a", "time_path": "b", "value_kind": "DV_QUANTITY", "pdhc_unit": "kg", "ucum": "kg"})
+    with pytest.raises(cm.UnmappedConceptError, match="nope.v1"):
+        cm.resolve("x-bad")

@@ -71,7 +71,8 @@ def _adapt(row) -> Observation:
 def emit_flat_compositions(rows, *, composer: str = "rosetta.pdhc", strict: bool = False) -> EmitResult:
     """Build FLAT compositions from an iterable of observations.
 
-    Groups by ``(patient_guid, effective_at)`` — one composition per group.
+    Groups by ``(patient_guid, effective_at, template_id, provenance)`` — one
+    composition per group.
     Returns an :class:`EmitResult`; unmapped concepts are reported, not dropped
     silently, and (with ``strict=True``) raise :class:`concept_map.UnmappedConceptError`.
     """
@@ -87,13 +88,20 @@ def emit_flat_compositions(rows, *, composer: str = "rosetta.pdhc", strict: bool
             if strict:
                 raise cm.UnmappedConceptError(o.concept_guid)
             continue
-        groups.setdefault((o.patient_guid, _iso(o.effective_at)), []).append(o)
+        b = cm.resolve(o.concept_guid)
+        # #728: a group is one composition of ONE template; a weight and a
+        # blood pressure at the same instant go to different compositions.
+        # A self-reported value (D-A1) gets its own composition too, since
+        # its provenance is stated at composition level.
+        key = (o.patient_guid, _iso(o.effective_at), b.template_id, b.provenance)
+        groups.setdefault(key, []).append(o)
 
-    root = cm.flat_root()
-    for (patient, when), obss in groups.items():
-        flat: dict = {f"{root}/{k}": v for k, v in cm.composition_defaults().items()}
+    for (patient, when, tid, provenance), obss in groups.items():
+        root = cm.flat_root(tid)
+        flat: dict = {f"{root}/{k}": v for k, v in cm.composition_defaults(tid).items()}
         flat[f"{root}/context/start_time"] = when
-        flat[f"{root}/composer|name"] = composer
+        flat[f"{root}/composer|name"] = (
+            "patient (self-reported)" if provenance == "self_reported" else composer)
         for o in obss:
             b = cm.resolve(o.concept_guid)
             if b.value_kind == "DV_QUANTITY":
@@ -106,6 +114,6 @@ def emit_flat_compositions(rows, *, composer: str = "rosetta.pdhc", strict: bool
                 raise ValueError(f"unhandled value_kind {b.value_kind!r} for {b.concept_name}")
             flat[b.time_path] = when
         res.compositions.append(
-            {"template_id": cm.template_id(), "patient_guid": patient, "time": when, "flat": flat}
+            {"template_id": tid, "patient_guid": patient, "time": when, "flat": flat}
         )
     return res

@@ -74,10 +74,10 @@ def synthesise(concept_guids, names=None) -> dict:
             "concept_count": len(t["concepts"]),
             "concepts": t["concepts"],
         }
-        if status in ("ready", "partial") and tid == cm.template_id():
-            # the one authored template exposes its FLAT contract
-            entry["flat_root"] = cm.flat_root()
-            entry["composition_defaults"] = cm.composition_defaults()
+        if status in ("ready", "partial") and tid in cm.template_ids():
+            # an authored template exposes its FLAT contract (#728: any of them)
+            entry["flat_root"] = cm.flat_root(tid)
+            entry["composition_defaults"] = cm.composition_defaults(tid)
         out.append(entry)
     out.sort(key=lambda x: x["template_id"])
 

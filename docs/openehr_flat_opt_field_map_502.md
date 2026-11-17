@@ -61,6 +61,16 @@ concept map was built to kill.
 
 ## 2. Code changes the three templates require (rosetta)
 
+> **Status 2026-11-17 (#728):** 2a is built: the concept map has a `templates`
+> table (vitals, anthropometry) and each concept names its `template_id`. The
+> grouping half of 2b is also built: the key is `(patient, time, template_id,
+> provenance)`, and a self-reported weight (D-A1) gets its own composition with
+> composer "patient (self-reported)". The emitter's output for both templates is
+> accepted by ASHA's validator. **`repeating_analyte` is NOT built yet**; it
+> follows the laboratory `.opt` capture. Confirmed leaf names differ from §3's
+> draft: `height_length/any_event/height_length` and
+> `body_mass_index_bmi/any_event/body_mass_index`.
+
 Today the registry and emitter are **single-template**:
 `concept_map._TEMPLATE` is one object, `template_id()` / `flat_root()` /
 `composition_defaults()` are singular, and `emit_flat_compositions` groups rows

@@ -42,6 +42,8 @@ class Binding:
     value_kind: str         # "DV_QUANTITY" | "DV_PROPORTION"
     pdhc_unit: str          # plan.pdhc unit_name, e.g. "mmHg"
     ucum: str               # archetype UCUM code, e.g. "mm[Hg]"
+    binding_kind: str = "fixed_quantity"
+    provenance: str | None = None   # "self_reported" (D-A1): own composition, patient as composer
 
     @property
     def magnitude_key(self) -> str:
@@ -62,7 +64,12 @@ def _load(path: str = _MAP_PATH) -> dict:
 
 
 _RAW = _load()
-_TEMPLATE = _RAW["template"]
+# #728: one entry per operational template, keyed by template_id. A concept
+# names its template; a map still in the old single-`template` shape loads as
+# a one-entry table, and its concepts default to that template.
+_TEMPLATES = _strip_comments(_RAW["templates"]) if "templates" in _RAW else {
+    _RAW["template"]["template_id"]: _RAW["template"]}
+_DEFAULT_TEMPLATE_ID = next(iter(_TEMPLATES))
 _CONCEPTS = _strip_comments(_RAW["concepts"])
 _BRIDGE = _strip_comments(_RAW["unit_ucum_bridge"])
 # Concepts whose archetype is drafted but not yet in the template (#502) — a
@@ -80,15 +87,21 @@ def resolve(concept_guid: str) -> Binding:
             f"concept_guid {concept_guid!r} has no openEHR binding in "
             f"{os.path.basename(_MAP_PATH)} — add it or fix the concept, do not guess"
         )
+    tid = d.get("template_id", _DEFAULT_TEMPLATE_ID)
+    if tid not in _TEMPLATES:
+        raise UnmappedConceptError(
+            f"concept_guid {concept_guid!r} names template {tid!r}, which the map does not define")
     return Binding(
         concept_guid=key,
         concept_name=d["concept_name"],
-        template_id=_TEMPLATE["template_id"],
+        template_id=tid,
         flat_path=d["flat_path"],
         time_path=d["time_path"],
         value_kind=d["value_kind"],
         pdhc_unit=d["pdhc_unit"],
         ucum=d["ucum"],
+        binding_kind=d.get("binding_kind", "fixed_quantity"),
+        provenance=d.get("provenance"),
     )
 
 
@@ -101,17 +114,29 @@ def ucum_for(pdhc_unit: str):
     return _BRIDGE.get(pdhc_unit)
 
 
+def template_ids() -> list:
+    return list(_TEMPLATES)
+
+
+def _tpl(tid):
+    t = _TEMPLATES.get(tid or _DEFAULT_TEMPLATE_ID)
+    if t is None:
+        raise KeyError(f"unknown template {tid!r}")
+    return t
+
+
 def template_id() -> str:
-    return _TEMPLATE["template_id"]
+    """The default (first) template -- pdhc_vitals.v1. Kept for older callers."""
+    return _DEFAULT_TEMPLATE_ID
 
 
-def flat_root() -> str:
-    return _TEMPLATE["flat_root"]
+def flat_root(tid: str | None = None) -> str:
+    return _tpl(tid)["flat_root"]
 
 
-def composition_defaults() -> dict:
+def composition_defaults(tid: str | None = None) -> dict:
     """Template-level FLAT keys (category, language, territory, setting)."""
-    return dict(_TEMPLATE["composition_defaults"])
+    return dict(_tpl(tid)["composition_defaults"])
 
 
 def mapped_guids() -> list:

@@ -5,7 +5,8 @@ from app.services import template_synthesiser as ts
 BP_SYSTOLIC = "64928bff-9a46-472a-bbf1-dcfc694f945b"   # realisable -> pdhc_vitals.v1
 TEMPERATURE = "d7d81372-1c61-4459-88fe-5878d6586e64"   # realisable -> pdhc_vitals.v1
 LEUKOCYTES = "ff07c0fd-d4e2-49aa-b32b-cda5d24559a6"    # pending  -> pdhc_laboratory.v1
-WEIGHT = "465e9554-8be6-48f2-9e1a-154d4e1f911e"        # pending  -> pdhc_anthropometry.v1
+WEIGHT = "465e9554-8be6-48f2-9e1a-154d4e1f911e"        # realisable -> pdhc_anthropometry.v1 (#728)
+FEV1 = "6521528c-db59-45c5-a492-003c28f27623"          # pending  -> pdhc_lung_function.v1
 UNMAPPED = "00000000-0000-0000-0000-000000000000"
 
 
@@ -23,9 +24,12 @@ def test_vitals_only_is_ready_and_fully_synthesisable():
 
 
 def test_mixed_groups_by_template_and_flags_to_author():
-    res = ts.synthesise([BP_SYSTOLIC, LEUKOCYTES, WEIGHT, UNMAPPED])
-    assert "pdhc_vitals.v1" in res["templates_ready"]
-    assert set(res["templates_to_author"]) == {"pdhc_laboratory.v1", "pdhc_anthropometry.v1"}
+    res = ts.synthesise([BP_SYSTOLIC, LEUKOCYTES, WEIGHT, FEV1, UNMAPPED])
+    assert set(res["templates_ready"]) == {"pdhc_vitals.v1", "pdhc_anthropometry.v1"}
+    assert set(res["templates_to_author"]) == {"pdhc_laboratory.v1", "pdhc_lung_function.v1"}
+    a = _tmpl(res, "pdhc_anthropometry.v1")
+    assert a["flat_root"] == "pdhc_anthropometry"   # its own FLAT contract, not vitals'
+
     assert res["summary"]["fully_synthesisable"] is False
     assert any(u["concept_guid"] == UNMAPPED for u in res["unmapped"])
 

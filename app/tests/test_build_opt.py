@@ -115,14 +115,15 @@ def test_each_observation_has_exactly_its_unit(anthro_root):
 
 
 def test_units_match_the_concept_map_ucum():
-    pending = json.load(open(os.path.join(T, "pdhc_concept_map.json")))["gaps"]["pending_template_extension"]
+    # #728: the five are bound live now, each naming its archetype
+    concepts = json.load(open(os.path.join(T, "pdhc_concept_map.json")))["concepts"]
     src = bo.load_source(ANTHRO_SRC)
     by_arch = {i["archetype_id"]: list(i["constrain"].values())[0]["units"] for i in src["content"]}
-    anthro = [v for v in pending.values()
-              if isinstance(v, dict) and v.get("target_template") == "pdhc_anthropometry.v1"]
+    anthro = [v for v in concepts.values()
+              if isinstance(v, dict) and v.get("template_id") == "pdhc_anthropometry.v1"]
     assert len(anthro) == 5
     for v in anthro:
-        assert by_arch[v["target_archetype"]] == [v["ucum"]]
+        assert by_arch[v["archetype"]] == [v["ucum"]]
 
 
 def test_a_unit_the_archetype_does_not_allow_is_refused():
