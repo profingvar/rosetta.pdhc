@@ -1,0 +1,100 @@
+{
+  "_comment": "#728 milestone 2: source of pdhc_care_events.v1. encounter.v1 + procedure.v1 (completed) + service.v1 (activity complete), both 0..*, names coded with the platform concept code. service.v1 (PUBLISHED 1.0.4) carries the consultations and the admission because ADMIN_ENTRY.admission.v0 is REJECTED on CKM. Regenerate: python scripts/build_opt.py templates/src/pdhc_care_events.v1.json -o templates/pdhc_care_events.v1.opt",
+  "template_id": "pdhc_care_events.v1",
+  "uid": "6b5bbc4d-2eab-5f98-9ad8-863587639bd3",
+  "concept": "PDHC Care Events",
+  "language": "en",
+  "description": {
+    "original_author": [
+      [
+        "date",
+        "2026-11-19"
+      ]
+    ],
+    "lifecycle_state": "unmanaged",
+    "other_details": [
+      [
+        "licence",
+        ""
+      ],
+      [
+        "custodian_organisation",
+        ""
+      ],
+      [
+        "original_namespace",
+        ""
+      ],
+      [
+        "original_publisher",
+        ""
+      ],
+      [
+        "custodian_namespace",
+        ""
+      ],
+      [
+        "sem_ver",
+        "0.1.0"
+      ],
+      [
+        "build_uid",
+        "833f17db-b0d1-5f92-a60c-f47a53f67891"
+      ]
+    ],
+    "purpose": "Not Specified"
+  },
+  "composition": {
+    "archetype_id": "openEHR-EHR-COMPOSITION.encounter.v1",
+    "name": "PDHC Care Events",
+    "content_existence": [
+      0,
+      1
+    ],
+    "content_cardinality": {
+      "lower": 1,
+      "upper": null,
+      "ordered": false,
+      "unique": false
+    }
+  },
+  "content": [
+    {
+      "archetype_id": "openEHR-EHR-ACTION.procedure.v1",
+      "rm_type": "ACTION",
+      "occurrences": [
+        0,
+        null
+      ],
+      "_concepts": "#728 M2 decision 3: foot examination, retinal screening, HbA1c sample collection -- performed only",
+      "keep": [
+        "/ism_transition[at0043]",
+        "/description[at0001]/items[at0002]"
+      ],
+      "constrain": {
+        "/description[at0001]/items[at0002]": {
+          "allow_coded_text": true
+        }
+      }
+    },
+    {
+      "archetype_id": "openEHR-EHR-ACTION.service.v1",
+      "rm_type": "ACTION",
+      "occurrences": [
+        0,
+        null
+      ],
+      "_concepts": "#728 M2 decision 3: diabetes nurse consultation, primary care consultation, hospital admission -- carried out only",
+      "keep": [
+        "/ism_transition[at0005]",
+        "/description[at0001]/items[at0011]"
+      ],
+      "constrain": {
+        "/description[at0001]/items[at0011]": {
+          "allow_coded_text": true
+        }
+      }
+    }
+  ],
+  "unit_terms": {}
+}

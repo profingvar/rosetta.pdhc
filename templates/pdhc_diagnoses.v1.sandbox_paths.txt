@@ -1,0 +1,5 @@
+# FLAT paths ASHA cdr1 reports for pdhc_diagnoses.v1 (Explore view), captured 2026-11-19 after upload. Data leaves only.
+pdhc_diagnoses/problem_diagnosis/date_time_clinically_recognised
+pdhc_diagnoses/problem_diagnosis/date_time_of_onset
+pdhc_diagnoses/problem_diagnosis/problem_diagnosis_name
+pdhc_diagnoses/problem_diagnosis/problem_diagnosis_name|code

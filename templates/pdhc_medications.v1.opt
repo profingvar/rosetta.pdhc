@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?> 
+<template xmlns="http://schemas.openehr.org/v1">
+    <language>
+        <terminology_id>
+            <value>ISO_639-1</value>
+        </terminology_id>
+        <code_string>en</code_string>
+    </language>
+    <description>
+        <original_author id="date">2026-11-19</original_author>
+        <lifecycle_state>unmanaged</lifecycle_state>
+        <other_details id="licence"></other_details>
+        <other_details id="custodian_organisation"></other_details>
+        <other_details id="original_namespace"></other_details>
+        <other_details id="original_publisher"></other_details>
+        <other_details id="custodian_namespace"></other_details>
+        <other_details id="sem_ver">0.1.0</other_details>
+        <other_details id="build_uid">982ce1e2-b2d1-5cfd-a44d-41f946e8588e</other_details>
+        <details>
+            <language>
+                <terminology_id>
+                    <value>ISO_639-1</value>
+                </terminology_id>
+                <code_string>en</code_string>
+            </language>
+            <purpose>Not Specified</purpose>
+        </details>
+    </description>
+    <uid>
+        <value>99665de4-d70b-5407-bd78-7c26f92b41ff</value>
+    </uid>
+    <template_id>
+        <value>pdhc_medications.v1</value>
+    </template_id>
+    <concept>PDHC Medications</concept>
+    <definition>
+        <rm_type_name>COMPOSITION</rm_type_name>
+        <occurrences>
+            <lower_included>true</lower_included>
+            <upper_included>true</upper_included>
+            <lower_unbounded>false</lower_unbounded>
+            <upper_unbounded>false</upper_unbounded>
+            <lower>1</lower>
+            <upper>1</upper>
+        </occurrences>
+        <node_id>at0000</node_id>
+        <attributes xsi:type="C_SINGLE_ATTRIBUTE" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <rm_attribute_name>category</rm_attribute_name>
+            <existence>
+                <lower_included>true</lower_included>
+                <upper_included>true</upper_included>
+                <lower_unbounded>false</lower_unbounded>
+                <upper_unbounded>false</upper_unbounded>
+                <lower>1</lower>
+                <upper>1</upper>
+            </existence>
+            <match_negated>false</match_negated>
+            <children xsi:type="C_COMPLEX_OBJECT">
+                <rm_type_name>DV_CODED_TEXT</rm_type_name>
+                <occurrences>
+                    <lower_included>true</lower_included>
+                    <upper_included>true</upper_included>
+                    <lower_unbounded>false</lower_unbounded>
+                    <upper_unbounded>false</upper_unbounded>
+                    <lower>1</lower>
+                    <upper>1</upper>
+                </occurrences>
+                <node_id></node_id>
+                <attributes xsi:type="C_SINGLE_ATTRIBUTE">
+                    <rm_attribute_name>defining_code</rm_attribute_name>
+                    <existence>
+                        <lower_included>true</lower_included>
+                        <upper_included>true</upper_included>
+                        <lower_unbounded>false</lower_unbounded>
+                        <upper_unbounded>false</upper_unbounded>
+                        <lower>1</lower>
+                        <upper>1</upper>
+                    </existence>
+                    <match_negated>false</match_negated>
+                    <children xsi:type="C_CODE_PHRASE">
+                        <rm_type_name>CODE_PHRASE</rm_type_name>
+                        <occurrences>
+                            <lower_included>true</lower_included>
+                            <upper_included>true</upper_included>
+                            <lower_unbounded>false</lower_unbounded>
+                            <upper_unbounded>false</upper_unbounded>
+                            <lower>1</lower>
+                            <upper>1</upper>
+                        </occurrences>
+                        <node_id></node_id>
+                        <terminology_id>
+                            <value>openehr</value>
+                        </terminology_id>
+                        <code_list>433</code_list>
+                    </children>
+                </attributes>
+            </children>
+        </attributes>
+        <attributes xsi:type="C_SINGLE_ATTRIBUTE" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <rm_attribute_name>context</rm_attribute_name>
+            <existence>
+                <lower_included>true</lower_included>
+                <upper_included>true</upper_included>
+                <lower_unbounded>false</lower_unbounded>
+                <upper_unbounded>false</upper_unbounded>
+                <lower>0</lower>
+                <upper>1</upper>
+            </existence>
+            <match_negated>false</match_negated>
+            <children xsi:type="C_COMPLEX_OBJECT">
+                <rm_type_name>EVENT_CONTEXT</rm_type_name>
+                <occurrences>
+                    <lower_included>true</lower_included>
+                    <upper_included>true</upper_included>
+                    <lower_unbounded>false</lower_unbounded>
+                    <upper_unbounded>false</upper_unbounded>
+                    <lower>1</lower>
+                    <upper>1</upper>
+                </occurrences>
+                <node_id></node_id>
+                <attributes xsi:type="C_SINGLE_ATTRIBUTE">
+                    <rm_attribute_name>other_context</rm_attribute_name>
+                    <existence>
+                        <lower_included>true</lower_included>
+                        <upper_included>true</upper_included>
+                        <lower_unbounded>false</lower_unbounded>
+                        <upper_unbounded>false</upper_unbounded>
+                        <lower>0</lower>
+                        <upper>1</upper>
+                    </existence>
+                    <match_negated>false</match_negated>
+                    <children xsi:type="C_COMPLEX_OBJECT">
+                        <rm_type_name>ITEM_TREE</rm_type_name>
+                        <occurrences>
+                            <lower_included>true</lower_included>
+                            <upper_included>true</upper_included>
+                            <lower_unbounded>false</lower_unbounded>
+                            <upper_unbounded>false</upper_unbounded>
+                            <lower>1</lower>
+                            <upper>1</upper>
+                        </occurrences>
+                        <node_id>at0001</node_id>
+                        <attributes xsi:type="C_MULTIPLE_ATTRIBUTE">
+                            <rm_attribute_name>items</rm_attribute_name>
+                            <existence>
+                                <lower_included>true</lower_included>
+                                <upper_included>true</upper_included>
+                                <lower_unbounded>false</lower_unbounded>
+                                <upper_unbounded>false</upper_unbounded>
+                                <lower>0</lower>
+                                <upper>1</upper>
+                            </existence>
+                            <match_negated>false</match_negated>
+                            <children xsi:type="ARCHETYPE_SLOT">
+                                <rm_type_name>CLUSTER</rm_type_name>
+                                <occurrences>
+                                    <lower_included>true</lower_included>
+                                    <upper_included>false</upper_included>
+                                    <lower_unbounded>false</lower_unbounded>
+                                    <upper_unbounded>true</upper_unbounded>
+                                    <lower>0</lower>
+                                </occurrences>
+                                <node_id>at0002</node_id>
+                                <includes>
+                                    <string_expression>archetype_id/value matches {/.*/}</string_expression>
+                                    <expression xsi:type="EXPR_BINARY_OPERATOR">
+                                        <type>Boolean</type>
+                                        <operator>2007</operator>
+                                        <precedence_overridden>false</precedence_overridden>
+                                        <left_operand xsi:type="EXPR_LEAF">
+                                            <type>String</type>
+                                            <item xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">archetype_id/value</item>
+                                            <reference_type>attribute</reference_type>
+                                        </left_operand>
+                                        <right_operand xsi:type="EXPR_LEAF">
+                                            <type>String</type>
+                                            <item xsi:type="C_STRING">
+                                                <pattern>.*</pattern>
+                                            </item>
+                                            <reference_type>constraint</reference_type>
+                                        </right_operand>
+                                    </expression>
+                                </includes>
+                            </children>
+                            <cardinality>
+                                <is_ordered>false</is_ordered>
+                                <is_unique>false</is_unique>
+                                <interval>
+                                    <lower_included>true</lower_included>
+                                    <upper_included>false</upper_included>
+                                    <lower_unbounded>false</lower_unbounded>
+                                    <upper_unbounded>true</upper_unbounded>
+                                    <lower>0</lower>
+                                </interval>
+                            </cardinality>
+                        </attributes>
+                    </children>
+                </attributes>
+            </children>
+        </attributes>
+        <attributes xsi:type="C_MULTIPLE_ATTRIBUTE" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <rm_attribute_name>content</rm_attribute_name>
+            <existence>
+                <lower_included>true</lower_included>
+                <upper_included>true</upper_included>
+                <lower_unbounded>false</lower_unbounded>
+                <upper_unbounded>false</upper_unbounded>
+                <lower>0</lower>
+                <upper>1</upper>
+            </existence>
+            <match_negated>false</match_negated>
+            <children xsi:type="C_ARCHETYPE_ROOT">
+                <rm_type_name>EVALUATION</rm_type_name>
+                <occurrences>
+                    <lower_included>true</lower_included>
+                    <upper_included>false</upper_included>
+                    <lower_unbounded>false</lower_unbounded>
+                    <upper_unbounded>true</upper_unbounded>
+                    <lower>0</lower>
+                </occurrences>
+                <node_id>at0000</node_id>
+                <attributes xsi:type="C_SINGLE_ATTRIBUTE">
+                    <rm_attribute_name>data</rm_attribute_name>
+                    <existence>
+                        <lower_included>true</lower_included>
+                        <upper_included>true</upper_included>
+                        <lower_unbounded>false</lower_unbounded>
+                        <upper_unbounded>false</upper_unbounded>
+                        <lower>1</lower>
+                        <upper>1</upper>
+                    </existence>
+                    <match_negated>false</match_negated>
+                    <children xsi:type="C_COMPLEX_OBJECT">
+                        <rm_type_name>ITEM_TREE</rm_type_name>
+                        <occurrences>
+                            <lower_included>true</lower_included>
+                            <upper_included>true</upper_included>
+                            <lower_unbounded>false</lower_unbounded>
+                            <upper_unbounded>false</upper_unbounded>
+                            <lower>1</lower>
+                            <upper>1</upper>
+                        </occurrences>
+                        <node_id>at0001</node_id>
+                        <attributes xsi:type="C_MULTIPLE_ATTRIBUTE">
+                            <rm_attribute_name>items</rm_attribute_name>
+                            <existence>
+                                <lower_included>true</lower_included>
+                                <upper_included>true</upper_included>
+                                <lower_unbounded>false</lower_unbounded>
+                                <upper_unbounded>false</upper_unbounded>
+                                <lower>0</lower>
+                                <upper>1</upper>
+                            </existence>
+                            <match_negated>false</match_negated>
+                            <children xsi:type="C_COMPLEX_OBJECT">
+                                <rm_type_name>ELEMENT</rm_type_name>
+                                <occurrences>
+                                    <lower_included>true</lower_included>
+                                    <upper_included>true</upper_included>
+                                    <lower_unbounded>false</lower_unbounded>
+                                    <upper_unbounded>false</upper_unbounded>
+                                    <lower>1</lower>
+                                    <upper>1</upper>
+                                </occurrences>
+                                <node_id>at0002</node_id>
+                                <attributes xsi:type="C_SINGLE_ATTRIBUTE">
+                                    <rm_attribute_name>value</rm_attribute_name>
+                                    <existence>
+                                        <lower_included>true</lower_included>
+                                        <upper_included>true</upper_included>
+                                        <lower_unbounded>false</lower_unbounded>
+                                        <upper_unbounded>false</upper_unbounded>
+                                        <lower>0</lower>
+                                        <upper>1</upper>
+                                    </existence>
+                                    <match_negated>false</match_negated>
+                                    <children xsi:type="C_COMPLEX_OBJECT">
+                                        <rm_type_name>DV_CODED_TEXT</rm_type_name>
+                                        <occurrences>
+                                            <lower_included>true</lower_included>
+                                            <upper_included>true</upper_included>
+                                            <lower_unbounded>false</lower_unbounded>
+                                            <upper_unbounded>false</upper_unbounded>
+                                            <lower>1</lower>
+                                            <upper>1</upper>
+                                        </occurrences>
+                                        <node_id></node_id>
+                                    </children>
+                                    <children xsi:type="C_COMPLEX_OBJECT">
+                                        <rm_type_name>DV_TEXT</rm_type_name>
+                                        <occurrences>
+                                            <lower_included>true</lower_included>
+                                            <upper_included>true</upper_included>
+                                            <lower_unbounded>false</lower_unbounded>
+                                            <upper_unbounded>false</upper_unbounded>
+                                            <lower>1</lower>
+                                            <upper>1</upper>
+                                        </occurrences>
+                                        <node_id></node_id>
+                                    </children>
+                                </attributes>
+                            </children>
+                            <cardinality>
+                                <is_ordered>false</is_ordered>
+                                <is_unique>false</is_unique>
+                                <interval>
+                                    <lower_included>true</lower_included>
+                                    <upper_included>false</upper_included>
+                                    <lower_unbounded>false</lower_unbounded>
+                                    <upper_unbounded>true</upper_unbounded>
+                                    <lower>0</lower>
+                                </interval>
+                            </cardinality>
+                        </attributes>
+                    </children>
+                </attributes>
+                <archetype_id>
+                    <value>openEHR-EHR-EVALUATION.medication_summary.v1</value>
+                </archetype_id>
+                <term_definitions code="at0001">
+                    <items id="text">Tree</items>
+                    <items id="description">@ internal @</items>
+                </term_definitions>
+                <term_definitions code="at0002">
+                    <items id="text">Medication name</items>
+                    <items id="description">Name of medication or group of medications.</items>
+                    <items id="comment">The medication name can be represented as a generic substance, trade name or a group or class of medications. Coding of 'Medication name' with a terminology capable of triggering decision support is strongly recommended where possible. Free text entry should only be used if there is no appropriate terminology available. For example: 'Adriamycin'; 'doxorubicin' or 'anthracyclines'; 'Fosamax', 'alendronate' or 'bisphosphanates'.</items>
+                </term_definitions>
+                <term_definitions code="at0005">
+                    <items id="text">Tree</items>
+                    <items id="description">@ internal @</items>
+                </term_definitions>
+                <term_definitions code="at0006">
+                    <items id="text">Last updated</items>
+                    <items id="description">The date this medication summary was last updated.</items>
+                </term_definitions>
+                <term_definitions code="at0007">
+                    <items id="text">Clinical description</items>
+                    <items id="description">Narrative description about the overall use of the medication.</items>
+                    <items id="comment">For example: "Used between 1996 and 2001 against osteoporosis. Ceased after five years of use to minimise risk of adverse effects."</items>
+                </term_definitions>
+                <term_definitions code="at0008">
+                    <items id="text">Episode</items>
+                    <items id="description">Details about use of the medication during a specified period of time.</items>
+                    <items id="comment">Triggers for closing one episode and commencing a new one can include: 
+- a change in dose; 
+- or a significant change in the pattern of use</items>
+                </term_definitions>
+                <term_definitions code="at0009">
+                    <items id="text">Onset of use</items>
+                    <items id="description">The date when the medication was first administered.</items>
+                    <items id="comment">Can be a partial date, for example, only a year.</items>
+                </term_definitions>
+                <term_definitions code="at0010">
+                    <items id="text">Cessation of use</items>
+                    <items id="description">The date when the medication was last administered.</items>
+                    <items id="comment">Can be a partial date, for example, only a year.</items>
+                </term_definitions>
+                <term_definitions code="at0011">
+                    <items id="text">Episode onset</items>
+                    <items id="description">The date of the first administration of the medication for this episode.</items>
+                    <items id="comment">Can be a partial date, for example, only a year.</items>
+                </term_definitions>
+                <term_definitions code="at0012">
+                    <items id="text">Episode cessation</items>
+                    <items id="description">The date of the last administration of the medication for this episode.</items>
+                    <items id="comment">Can be a partial date, for example, only a year.</items>
+                </term_definitions>
+                <term_definitions code="at0013">
+                    <items id="text">Episode reason for cessation</items>
+                    <items id="description">The reason why use of the medication was stopped.</items>
+                    <items id="comment">Coding with an external terminology is preferred, where possible. For example: sub-optimal control of diabetes; adverse reaction; or high cost.</items>
+                </term_definitions>
+                <term_definitions code="at0014">
+                    <items id="text">Description</items>
+                    <items id="description">Narrative description about the use of the medication during this episode.</items>
+                </term_definitions>
+                <term_definitions code="at0015">
+                    <items id="text">Cumulative dose</items>
+                    <items id="description">Total amount of the medication used over the lifetime of the individual.</items>
+                    <items id="comment">For example: monitoring of the cumulative dose of doxorubicin.
+May be manually calculated or derived via the EHR from multiple sources.
+
+</items>
+                </term_definitions>
+                <term_definitions code="at0016">
+                    <items id="text">Episode amount</items>
+                    <items id="description">Cumulative dose of the medication used in this episode.</items>
+                </term_definitions>
+                <term_definitions code="at0018">
+                    <items id="text">Episode indication</items>
+                    <items id="description">The clinical indication for the use of the medication during this episode, particularly if this is more specific or differs from the 'Clinical indication', or there is no clinical indication that applies for all episodes.</items>
+                    <items id="comment">This element and the root level 'Clinical indication' element can potentially be in conflict with each other. In those situations, this element takes precedence over 'Clinical indication' for this episode.
+Coding with an external terminology is preferred, where possible. 
+For example: 'Cancer therapy' or 'rheumatoid arthritis for osteoporosis'.</items>
+                </term_definitions>
+                <term_definitions code="at0019">
+                    <items id="text">Extension</items>
+                    <items id="description">Additional information required to extend the model with local content or to align with other reference models or formalisms.</items>
+                    <items id="comment">For example: local information requirements; or additional metadata to align with FHIR.</items>
+                </term_definitions>
+                <term_definitions code="at0020">
+                    <items id="text">Therapeutic intent</items>
+                    <items id="description">The therapeutic intent for use of the medication during this episode.</items>
+                    <items id="comment">Coding with an external terminology, where possible. For example: pain relief; palliative or curative; short term course or life-long antibiotics.</items>
+                </term_definitions>
+                <term_definitions code="at0022">
+                    <items id="text">Therapeutic response</items>
+                    <items id="description">The observed response to the treatment with this medication during this episode.</items>
+                    <items id="comment">Coding with an external terminology is preferred, where possible. For example: UTI resolved</items>
+                </term_definitions>
+                <term_definitions code="at0027">
+                    <items id="text">Cumulative duration</items>
+                    <items id="description">The sum of the duration of all episodes.</items>
+                    <items id="comment">May be manually calculated or derived via the EHR from multiple sources.</items>
+                </term_definitions>
+                <term_definitions code="at0028">
+                    <items id="text">Clinical indication</items>
+                    <items id="description">The overall clinical indication for the use of the medication.</items>
+                    <items id="comment">Coding with an external terminology is preferred, where possible. For example: 'Osteoporosis'.</items>
+                </term_definitions>
+                <term_definitions code="at0029">
+                    <items id="text">Additional details</items>
+                    <items id="description">Additional details about medication use during this episode.</items>
+                </term_definitions>
+                <term_definitions code="at0030">
+                    <items id="text">Reason for cessation</items>
+                    <items id="description">The reason why all use of the medication was stopped.</items>
+                    <items id="comment">Coding with an external terminology is preferred, where possible. For example: sub-optimal control of diabetes; adverse reaction; or high cost.</items>
+                </term_definitions>
+                <term_definitions code="at0031">
+                    <items id="text">Episode duration</items>
+                    <items id="description">The duration of the use of the medication in this episode.</items>
+                    <items id="comment">If 'Episode onset' and 'Episode cessation' are used in systems, this data element may be calculated, or alternatively, be considered redundant in this scenario.</items>
+                </term_definitions>
+                <term_definitions code="at0032">
+                    <items id="text">Route</items>
+                    <items id="description">The route by which the ordered item was, administed during this episode.</items>
+                    <items id="comment">For example: 'oral', 'intravenous', or 'topical'. Coding of the route with a terminology is preferred, where possible.</items>
+                </term_definitions>
+                <term_definitions code="at0000">
+                    <items id="text">Medication summary</items>
+                    <items id="description">Summary or persistent information about the use of a single medication or group of medications, especially where the pattern of use or cumulative dosage needs to be monitored.</items>
+                </term_definitions>
+            </children>
+            <cardinality>
+                <is_ordered>false</is_ordered>
+                <is_unique>false</is_unique>
+                <interval>
+                    <lower_included>true</lower_included>
+                    <upper_included>false</upper_included>
+                    <lower_unbounded>false</lower_unbounded>
+                    <upper_unbounded>true</upper_unbounded>
+                    <lower>1</lower>
+                </interval>
+            </cardinality>
+        </attributes>
+        <archetype_id>
+            <value>openEHR-EHR-COMPOSITION.encounter.v1</value>
+        </archetype_id>
+        <template_id>
+            <value>pdhc_medications.v1</value>
+        </template_id>
+        <term_definitions code="at0001">
+            <items id="text">Tree</items>
+            <items id="description">@ internal @</items>
+        </term_definitions>
+        <term_definitions code="at0002">
+            <items id="text">Extension</items>
+            <items id="description">Additional information required to extend the model with local content or to align with other reference models or formalisms.</items>
+            <items id="comment">For example: local information requirements; or additional metadata to align with FHIR.</items>
+        </term_definitions>
+        <term_definitions code="at0000">
+            <items id="text">PDHC Medications</items>
+            <items id="description">Interaction, contact or care event between a subject of care and healthcare provider(s).</items>
+        </term_definitions>
+    </definition>
+</template>

@@ -12,6 +12,10 @@ Status per concept:
   * ``realisable``  — mapped, UCUM present (for quantities), DV type known.
   * ``pending``     — archetype drafted but the template isn't extended yet (#502).
   * ``unmapped``    — no binding at all; bind it once in the registry.
+
+#728 M2: a diagnosis concept is ``realisable`` with ``source="cdr_condition"``:
+it is rendered into pdhc_diagnoses.v1 from the CDR's Condition records (the
+register, #984), not from the plan answer.
 """
 from __future__ import annotations
 
@@ -33,10 +37,15 @@ def check_concept(concept_guid: str, concept_name: str | None = None) -> dict:
         return dict(base, status="unmapped", realisable=False,
                     blockers=["missing concept_guid"])
 
+    if cm.is_condition_sourced(guid):
+        return dict(base, status="realisable", realisable=True,
+                    template_id="pdhc_diagnoses.v1", source="cdr_condition",
+                    value_kind="DV_CODED_TEXT", dv_type_ok=True, blockers=[])
+
     if cm.is_mapped(guid):
         b = cm.resolve(guid)
         blockers = []
-        ucum_ok = bool(b.ucum)
+        ucum_ok = bool(b.ucum) or b.value_kind != "DV_QUANTITY"
         if b.value_kind == "DV_QUANTITY" and not ucum_ok:
             blockers.append(
                 f"no UCUM unit for {b.pdhc_unit!r} — add it to the unit→UCUM bridge")

@@ -1,0 +1,81 @@
+{
+  "_comment": "#728 milestone 2: source of pdhc_medications.v1. encounter.v1 + medication_summary.v1 (0..*), medication name coded ATC. medication_summary (EVALUATION, PUBLISHED 1.0.1) chosen over medication_order.v3: a 'does the patient take X' answer is a statement of current use, not an order (no dose, timing or narrative to state). Regenerate: python scripts/build_opt.py templates/src/pdhc_medications.v1.json -o templates/pdhc_medications.v1.opt",
+  "template_id": "pdhc_medications.v1",
+  "uid": "99665de4-d70b-5407-bd78-7c26f92b41ff",
+  "concept": "PDHC Medications",
+  "language": "en",
+  "description": {
+    "original_author": [
+      [
+        "date",
+        "2026-11-19"
+      ]
+    ],
+    "lifecycle_state": "unmanaged",
+    "other_details": [
+      [
+        "licence",
+        ""
+      ],
+      [
+        "custodian_organisation",
+        ""
+      ],
+      [
+        "original_namespace",
+        ""
+      ],
+      [
+        "original_publisher",
+        ""
+      ],
+      [
+        "custodian_namespace",
+        ""
+      ],
+      [
+        "sem_ver",
+        "0.1.0"
+      ],
+      [
+        "build_uid",
+        "982ce1e2-b2d1-5cfd-a44d-41f946e8588e"
+      ]
+    ],
+    "purpose": "Not Specified"
+  },
+  "composition": {
+    "archetype_id": "openEHR-EHR-COMPOSITION.encounter.v1",
+    "name": "PDHC Medications",
+    "content_existence": [
+      0,
+      1
+    ],
+    "content_cardinality": {
+      "lower": 1,
+      "upper": null,
+      "ordered": false,
+      "unique": false
+    }
+  },
+  "content": [
+    {
+      "archetype_id": "openEHR-EHR-EVALUATION.medication_summary.v1",
+      "rm_type": "EVALUATION",
+      "occurrences": [
+        0,
+        null
+      ],
+      "_concepts": "#728 M2 decision 2: one entry per medication class the patient answered 'yes' to, coded ATC.",
+      "keep": [
+        "/data[at0001]/items[at0002]"
+      ],
+      "constrain": {
+        "/data[at0001]/items[at0002]": {
+          "allow_coded_text": true
+        }
+      }
+    }
+  ],
+  "unit_terms": {}
+}

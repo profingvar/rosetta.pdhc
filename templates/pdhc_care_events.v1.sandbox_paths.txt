@@ -1,0 +1,5 @@
+# FLAT paths ASHA cdr1 reports for pdhc_care_events.v1 (Explore view), captured 2026-11-19 after upload. Data leaves only.
+pdhc_care_events/procedure/procedure_name
+pdhc_care_events/procedure/procedure_name|code
+pdhc_care_events/service/service_name
+pdhc_care_events/service/service_name|code

@@ -175,8 +175,9 @@ def _samples(name):
 
 
 def test_full_lab_panel_and_fev1_match_the_asha_accepted_samples_728():
-    """Both samples were accepted by ASHA's validator on 2026-11-17: 27 analytes
-    in ONE panel (22 LOINC, 5 urn:pdhc:concept) and FEV1 in L."""
+    """Both samples were accepted by ASHA's validator (2026-11-17; the lab panel
+    re-verified with CGM on 2026-11-19): 28 analytes in ONE panel (23 LOINC-coded,
+    22 distinct codes -- CGM shares cgm_raw's -- and 5 urn:pdhc:concept) and FEV1 in L."""
     from app.services.flat_emitter import emit_flat_compositions
     for order in (1, -1):   # input order must not change the output (stable :N)
         res = emit_flat_compositions(_lab_lung_rows(order), strict=True)

@@ -45,6 +45,13 @@ class Binding:
     binding_kind: str = "fixed_quantity"
     provenance: str | None = None   # "self_reported" (D-A1): own composition, patient as composer
     loinc: str | None = None        # verified LOINC (D-L1); None -> the concept's own urn:pdhc:concept code
+    # #728 M2 presence entries (binding_kind "presence_entry"): a yes/no answer
+    # that, when yes, becomes ONE coded ENTRY (medication_summary, procedure,
+    # service). "No" is never emitted.
+    code: str | None = None
+    terminology: str | None = None
+    code_display: str | None = None
+    ism: dict | None = None         # ACTION only: current_state + careflow_step
 
     @property
     def magnitude_key(self) -> str:
@@ -77,6 +84,14 @@ _BRIDGE = _strip_comments(_RAW["unit_ucum_bridge"])
 # distinct status from "never bound at all". Used by the realisability check
 # (#523) to turn a coverage gap into a precise worklist.
 _PENDING = _strip_comments(_RAW.get("gaps", {}).get("pending_template_extension", {}))
+# #728 M2 decision 1: diagnoses come from the CDR's Condition records, not from
+# plan.pdhc yes/no answers. A plan answer for one of these is not an error and
+# not unmapped -- it is sourced elsewhere.
+_CONDITION_SOURCED = _strip_comments(_RAW.get("condition_sourced", {}))
+
+
+def is_condition_sourced(concept_guid: str) -> bool:
+    return (concept_guid or "").strip() in _CONDITION_SOURCED
 
 
 def resolve(concept_guid: str) -> Binding:
@@ -97,13 +112,17 @@ def resolve(concept_guid: str) -> Binding:
         concept_name=d["concept_name"],
         template_id=tid,
         flat_path=d["flat_path"],
-        time_path=d["time_path"],
+        time_path=d.get("time_path", ""),
         value_kind=d["value_kind"],
-        pdhc_unit=d["pdhc_unit"],
-        ucum=d["ucum"],
+        pdhc_unit=d.get("pdhc_unit", ""),
+        ucum=d.get("ucum", ""),
         binding_kind=d.get("binding_kind", "fixed_quantity"),
         provenance=d.get("provenance"),
         loinc=d.get("loinc"),
+        code=d.get("code"),
+        terminology=d.get("terminology"),
+        code_display=d.get("code_display"),
+        ism=d.get("ism"),
     )
 
 

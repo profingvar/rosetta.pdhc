@@ -83,7 +83,7 @@ concept map was built to kill.
 > emitter now sends denominator 100 and type percent. (2) 19 of plan.pdhc's 27
 > lab LOINC codes named the wrong concept or the mass form of a molar one; plan
 > was corrected the same day (plan.pdhc `planp/scripts/fix_lab_loinc_728.py`).
-> Milestone 2 (diagnoses, medications, care events: 28 concepts) stays pending.
+> Milestone 2 (diagnoses, medications, care events) was done 2026-11-19 -- see progress.md: diagnoses from CDR Conditions, medications ATC-coded, care events as procedure/service ACTIONs, CGM moved to the lab panel; one unnamed plan concept remains a gap.
 
 Today the registry and emitter are **single-template**:
 `concept_map._TEMPLATE` is one object, `template_id()` / `flat_root()` /

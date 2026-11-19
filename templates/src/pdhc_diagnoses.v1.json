@@ -1,0 +1,83 @@
+{
+  "_comment": "#728 milestone 2: source of pdhc_diagnoses.v1 for scripts/build_opt.py. encounter.v1 + problem_diagnosis.v1 (0..*): name (coded ICD-11 via allow_coded_text), onset, date clinically recognised. Regenerate: python scripts/build_opt.py templates/src/pdhc_diagnoses.v1.json -o templates/pdhc_diagnoses.v1.opt",
+  "template_id": "pdhc_diagnoses.v1",
+  "uid": "65ce49c8-040c-5a2b-b5a5-5be607ff04f4",
+  "concept": "PDHC Diagnoses",
+  "language": "en",
+  "description": {
+    "original_author": [
+      [
+        "date",
+        "2026-11-19"
+      ]
+    ],
+    "lifecycle_state": "unmanaged",
+    "other_details": [
+      [
+        "licence",
+        ""
+      ],
+      [
+        "custodian_organisation",
+        ""
+      ],
+      [
+        "original_namespace",
+        ""
+      ],
+      [
+        "original_publisher",
+        ""
+      ],
+      [
+        "custodian_namespace",
+        ""
+      ],
+      [
+        "sem_ver",
+        "0.1.0"
+      ],
+      [
+        "build_uid",
+        "495b746d-4699-5eed-9fac-d1dbe9907622"
+      ]
+    ],
+    "purpose": "Not Specified"
+  },
+  "composition": {
+    "archetype_id": "openEHR-EHR-COMPOSITION.encounter.v1",
+    "name": "PDHC Diagnoses",
+    "content_existence": [
+      0,
+      1
+    ],
+    "content_cardinality": {
+      "lower": 1,
+      "upper": null,
+      "ordered": false,
+      "unique": false
+    }
+  },
+  "content": [
+    {
+      "archetype_id": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
+      "rm_type": "EVALUATION",
+      "occurrences": [
+        0,
+        null
+      ],
+      "_concepts": "#728 M2 decision 1: sourced from the CDR's Condition records (ICD-11, #984), one entry per present diagnosis; absence is never asserted.",
+      "keep": [
+        "/data[at0001]/items[at0002]",
+        "/data[at0001]/items[at0077]",
+        "/data[at0001]/items[at0003]"
+      ],
+      "constrain": {
+        "/data[at0001]/items[at0002]": {
+          "allow_coded_text": true
+        }
+      }
+    }
+  ],
+  "unit_terms": {}
+}

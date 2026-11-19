@@ -5,7 +5,8 @@ from app.services import realisability as r
 BP_SYSTOLIC = "64928bff-9a46-472a-bbf1-dcfc694f945b"
 BP_DIASTOLIC = "fb6487d7-b473-4ace-bb39-6352d4497009"
 TEMPERATURE = "d7d81372-1c61-4459-88fe-5878d6586e64"
-PENDING = "aecd1a50-fd77-46ae-826b-1f05266f90c3"    # ckd_diagnosis: gaps.pending_template_extension (milestone 2, #728)
+PENDING = "79a6cd4b-1af4-4c05-8f08-e5487a262237"    # the unnamed plan concept: the one gap left after #728 M2
+CKD = "aecd1a50-fd77-46ae-826b-1f05266f90c3"        # #728 M2: rendered from CDR Conditions
 WEIGHT = "465e9554-8be6-48f2-9e1a-154d4e1f911e"          # bound to pdhc_anthropometry.v1 (#728)
 UNMAPPED = "00000000-0000-0000-0000-000000000000"
 
@@ -97,3 +98,14 @@ def test_lab_and_fev1_are_realisable_728():
                    ("6521528c-db59-45c5-a492-003c28f27623", "pdhc_lung_function.v1")):
         c = r.check_concept(g)
         assert c["status"] == "realisable" and c["template_id"] == tid
+
+
+def test_diagnosis_concept_is_realisable_from_cdr_conditions_728():
+    c = r.check_concept(CKD)
+    assert c["status"] == "realisable" and c["realisable"] is True
+    assert c["source"] == "cdr_condition" and c["template_id"] == "pdhc_diagnoses.v1"
+
+
+def test_medication_presence_concept_is_realisable_without_a_unit_728():
+    c = r.check_concept("53e3dfea-0023-4ab5-95a5-62b4c4c7f717")   # metformin
+    assert c["realisable"] is True and c["template_id"] == "pdhc_medications.v1"

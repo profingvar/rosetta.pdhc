@@ -289,11 +289,111 @@
           "sha256": "c15adce92d5ac6206ef845b28968ee2dc7b0ec5f0e018d7691dbedce04c18605"
         }
       }
+    },
+    {
+      "archetype_id": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
+      "ckm_cid": "1013.1.169",
+      "ckm_revision": "1.7.4",
+      "ckm_asset_version": 53,
+      "ckm_status": "PUBLISHED",
+      "ckm_modification_time": "2026-07-16T11:11:28+02:00",
+      "ckm_build_uid": "f19a7678-9018-4081-ad5e-51935bd99fa9",
+      "ckm_page": "https://ckm.openehr.org/ckm/archetypes/1013.1.169",
+      "downloads": {
+        "xml": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.169/xml",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.169/xml?asset-version=53",
+          "file": "openEHR-EHR-EVALUATION.problem_diagnosis.v1.xml",
+          "sha256": "bd5beca6cad766a8920bd1238f896684a69ae2be6f1740fc3c8bfed48054cc7e"
+        },
+        "adl": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.169/adl",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.169/adl?asset-version=53",
+          "file": "openEHR-EHR-EVALUATION.problem_diagnosis.v1.adl",
+          "sha256": "765f8900d5843fefc3ef918e183cc13a47826a639d69a8be39c87b4155282ce1"
+        }
+      }
+    },
+    {
+      "archetype_id": "openEHR-EHR-EVALUATION.medication_summary.v1",
+      "ckm_cid": "1013.1.2825",
+      "ckm_revision": "1.0.1",
+      "ckm_asset_version": 14,
+      "ckm_status": "PUBLISHED",
+      "ckm_modification_time": "2023-03-20T19:49:59+01:00",
+      "ckm_build_uid": "0c00cb63-d882-4789-83b5-9e27946b84d8",
+      "ckm_page": "https://ckm.openehr.org/ckm/archetypes/1013.1.2825",
+      "downloads": {
+        "xml": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2825/xml",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2825/xml?asset-version=14",
+          "file": "openEHR-EHR-EVALUATION.medication_summary.v1.xml",
+          "sha256": "9013a0e1540d33d2d06bdb0e4728b1bc0883306bc387faf36f1ab32d33a63d45"
+        },
+        "adl": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2825/adl",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2825/adl?asset-version=14",
+          "file": "openEHR-EHR-EVALUATION.medication_summary.v1.adl",
+          "sha256": "a7b3bb95f7eccbe2e17a29d17e821a7285cff1c5ae7f99952469b240f3a183d5"
+        }
+      }
+    },
+    {
+      "archetype_id": "openEHR-EHR-ACTION.procedure.v1",
+      "ckm_cid": "1013.1.204",
+      "ckm_revision": "1.5.3",
+      "ckm_asset_version": 40,
+      "ckm_status": "PUBLISHED",
+      "ckm_modification_time": "2026-09-17T11:56:07+02:00",
+      "ckm_build_uid": "3c27f0de-6c9d-4ce1-9fab-051969ccc6c6",
+      "ckm_page": "https://ckm.openehr.org/ckm/archetypes/1013.1.204",
+      "downloads": {
+        "xml": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.204/xml",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.204/xml?asset-version=40",
+          "file": "openEHR-EHR-ACTION.procedure.v1.xml",
+          "sha256": "71445021b2e8e17e4c6ecc45c2371c2ca9d581d5bb28f60a02cb4897808c4c42"
+        },
+        "adl": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.204/adl",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.204/adl?asset-version=40",
+          "file": "openEHR-EHR-ACTION.procedure.v1.adl",
+          "sha256": "b72bd95dabb9ec4181356f2a812e3849860573227e4a481cf71cd97cc32b9d83"
+        }
+      }
+    },
+    {
+      "archetype_id": "openEHR-EHR-ACTION.service.v1",
+      "ckm_cid": "1013.1.2374",
+      "ckm_revision": "1.0.4",
+      "ckm_asset_version": 21,
+      "ckm_status": "PUBLISHED",
+      "ckm_modification_time": "2026-08-13T18:02:01+02:00",
+      "ckm_build_uid": "fbb3c0cd-10be-443b-a056-2a09b2372f51",
+      "ckm_page": "https://ckm.openehr.org/ckm/archetypes/1013.1.2374",
+      "downloads": {
+        "xml": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2374/xml",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2374/xml?asset-version=21",
+          "file": "openEHR-EHR-ACTION.service.v1.xml",
+          "sha256": "158bf90f9de29f8d4656ee6b05baf271ccb40d07524bd7e1923d7dc961295ed8"
+        },
+        "adl": {
+          "url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2374/adl",
+          "pinned_url": "https://ckm.openehr.org/ckm/rest/v1/archetypes/1013.1.2374/adl?asset-version=21",
+          "file": "openEHR-EHR-ACTION.service.v1.adl",
+          "sha256": "408d3acfa9cc20928780fdd2748657f3dd0ba359d1da55178dd18b637035d582"
+        }
+      }
     }
   ],
   "selection_notes": {
     "openEHR-EHR-OBSERVATION.spirometry_result.v2": "pdhc_lung_function.v1 (D-LF1). The spec's OBSERVATION.lung_function.v1 does not exist on public CKM (citeable-identifier lookup 404), nor does a CLUSTER.spirometry_result. CKM search 'spirometry'/'lung function' returns OBSERVATION.spirometry_result.v2 (PUBLISHED 2.0.1) and .v1 (1013.1.1414, DEPRECATED 2022-12-13). v2 chosen: published, and it already holds FVC/FEV1/FEV6 (Volume), FEV1/FVC (Ratio) and PEFR (Flow rate) as named result clusters, so v1 of the template grows without a rename.",
     "openEHR-EHR-OBSERVATION.laboratory_test_result.v1": "pdhc_laboratory.v1 panel (D-L3); PUBLISHED, named in the spec.",
-    "openEHR-EHR-CLUSTER.laboratory_test_analyte.v1": "pdhc_laboratory.v1 repeating analyte; PUBLISHED, admitted by laboratory_test_result.v1's 'Test result' slot (at0097) include pattern."
+    "openEHR-EHR-CLUSTER.laboratory_test_analyte.v1": "pdhc_laboratory.v1 repeating analyte; PUBLISHED, admitted by laboratory_test_result.v1's 'Test result' slot (at0097) include pattern.",
+    "openEHR-EHR-EVALUATION.problem_diagnosis.v1": "#728 M2 decision 1 (2026-11-19): the CKM problem/diagnosis EVALUATION; one entry per PRESENT ICD-11 diagnosis from the CDR's Condition records (#984). Name narrowed to coded-or-text.",
+    "openEHR-EHR-EVALUATION.medication_summary.v1": "#728 M2 decision 2: chosen over INSTRUCTION.medication_order.v3 because a plan 'does the patient take X' answer states current use, not an order (no dose, timing or narrative exist to state). Medication name coded ATC. To confirm with the ASHA sandbox owner.",
+    "openEHR-EHR-ACTION.procedure.v1": "#728 M2 decision 3: foot examination, retinal screening and HbA1c sample collection as performed procedures; ISM narrowed to 'Procedure completed' (532/at0043).",
+    "openEHR-EHR-ACTION.service.v1": "#728 M2 decision 3: consultations and hospital admission as services carried out; ISM narrowed to 'Service activity complete' (532/at0005). ADMIN_ENTRY.admission.v0 is REJECTED on CKM and episode_institution.v0 is REVIEWSUSPENDED, so neither is used."
   }
 }

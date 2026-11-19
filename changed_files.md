@@ -145,3 +145,12 @@ app/tests/test_converters.py (edit — openEHR tests updated to FLAT + mapped co
 - templates/pdhc_lung_function.v1.expected_paths.json, templates/pdhc_laboratory.v1.expected_paths.json (NEW, DRAFT)
 - templates/samples/pdhc_lung_function.v1_candidate.flat.json, templates/samples/pdhc_laboratory.v1_candidate.flat.json (NEW, for ASHA Verify)
 - app/tests/test_build_opt.py                            (+20 tests; nested-root-aware at-code check)
+
+## 2026-11-19 — #728 milestone 2
+- scripts/build_opt.py (single-attribute alternatives may be narrowed)
+- app/services/concept_map.py, app/services/flat_emitter.py, app/services/realisability.py, app/services/template_synthesiser.py
+- templates/pdhc_concept_map.json; templates/src/pdhc_{diagnoses,medications,care_events}.v1.json
+- templates/pdhc_{diagnoses,medications,care_events}.v1.opt and .sandbox_paths.txt
+- templates/src/archetypes/: problem_diagnosis.v1, medication_summary.v1, procedure.v1, service.v1 (.xml/.adl), PROVENANCE.json
+- templates/samples/: pdhc_{diagnoses,medications,care_events}_valid.flat.json; pdhc_laboratory_full_panel_valid.flat.json (+CGM)
+- app/tests/test_728_milestone2.py (new); test_realisability.py, test_template_synthesiser.py, test_concept_map.py, test_flat_emitter.py

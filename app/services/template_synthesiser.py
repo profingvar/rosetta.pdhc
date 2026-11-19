@@ -30,6 +30,14 @@ def synthesise(concept_guids, names=None) -> dict:
             continue
         seen.add(gg)
 
+        if cm.is_condition_sourced(gg):   # #728 M2: rendered from CDR Conditions
+            t = templates.setdefault("pdhc_diagnoses.v1", {"template_id": "pdhc_diagnoses.v1",
+                                                           "archetypes": set(), "concepts": []})
+            t["archetypes"].add("openEHR-EHR-EVALUATION.problem_diagnosis.v1")
+            t["concepts"].append({"concept_guid": gg, "concept_name": names.get(gg),
+                                  "status": "realisable", "source": "cdr_condition"})
+            continue
+
         if cm.is_mapped(gg):
             b = cm.resolve(gg)
             t = templates.setdefault(b.template_id, {"template_id": b.template_id,

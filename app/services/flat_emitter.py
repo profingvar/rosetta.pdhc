@@ -21,8 +21,10 @@ Flask app context or database.
 """
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 from datetime import datetime
+from typing import Any
 
 from . import concept_map as cm
 
@@ -35,6 +37,7 @@ class Observation:
     effective_at: str | datetime
     patient_guid: str | None = None
     unit: str | None = None          # plan.pdhc unit (informational; UCUM comes from the map)
+    answer: Any = None               # the typed answer (#728 M2: a yes/no lands here, not in value)
 
 
 @dataclass
@@ -42,6 +45,8 @@ class EmitResult:
     compositions: list[dict] = field(default_factory=list)  # {template_id, patient_guid, time, flat}
     unmapped: list[str] = field(default_factory=list)       # concept_guids with no binding (LOUD)
     skipped_no_value: list[str] = field(default_factory=list)
+    not_present: list[str] = field(default_factory=list)       # a "no" to a presence concept: never emitted
+    sourced_elsewhere: list[str] = field(default_factory=list) # diagnoses: rendered from CDR Conditions instead
 
 
 def _iso(t) -> str:
@@ -60,12 +65,69 @@ def _adapt(row) -> Observation:
         return row
     when = getattr(row, "effective_at", None) or getattr(row, "observed_at", None)
     return Observation(
+        answer=_canonical_answer(getattr(row, "raw", None)),
         concept_guid=getattr(row, "concept_guid"),
         value=getattr(row, "value", None),
         effective_at=when,
         patient_guid=getattr(row, "patient_guid", None),
         unit=getattr(row, "unit", None),
     )
+
+
+_CANONICAL_OBS_EXT = "urn:pdhc:fhir:extension:canonical-observation"   # = gateway_client.CANONICAL_OBS_EXT
+
+
+def _canonical_answer(raw):
+    """The typed value of the gateway's canonical block (#501), if any. A
+    yes/no answer is only here: observation_cache.value holds numbers only."""
+    if not isinstance(raw, dict):
+        return None
+    for ext in raw.get("extension") or []:
+        if ext.get("url") == _CANONICAL_OBS_EXT and ext.get("valueString"):
+            try:
+                return (json.loads(ext["valueString"]) or {}).get("value")
+            except (ValueError, TypeError, AttributeError):
+                return None
+    if "valueBoolean" in raw:
+        return raw["valueBoolean"]
+    return None
+
+
+def _is_yes(o: Observation) -> bool:
+    """Strictly yes. Anything else -- no, unknown, missing -- is not emitted:
+    an openEHR entry asserts presence, and absence is never asserted."""
+    a = o.answer if o.answer is not None else o.value
+    if isinstance(a, bool):
+        return a
+    if isinstance(a, (int, float)):
+        return a == 1
+    if isinstance(a, str):
+        return a.strip().lower() in ("true", "yes", "ja")
+    return False
+
+
+def _coded(flat: dict, key: str, code: str, value: str, terminology: str):
+    flat[f"{key}|code"] = code
+    flat[f"{key}|value"] = value
+    flat[f"{key}|terminology"] = terminology
+
+
+def _presence_entries(flat: dict, entries, when: str):
+    """#728 M2: one indexed ENTRY per present concept, per archetype
+    (`.../medication_summary:0/medication_name`), in a stable order."""
+    index: dict[str, int] = {}
+    for b in sorted(entries, key=lambda b: (b.flat_path, b.concept_name, b.concept_guid)):
+        entry, leaf = b.flat_path.rsplit("/", 1)
+        i = index.get(entry, 0)
+        index[entry] = i + 1
+        base = f"{entry}:{i}"
+        _coded(flat, f"{base}/{leaf}", b.code, b.code_display or b.concept_name, b.terminology)
+        if b.ism:   # ACTION: time + the one ISM transition the template keeps
+            flat[f"{base}/time"] = when
+            _coded(flat, f"{base}/ism_transition/current_state",
+                   b.ism["state"], b.ism["state_value"], "openehr")
+            _coded(flat, f"{base}/ism_transition/careflow_step",
+                   b.ism["careflow_step"], b.ism["careflow_value"], "local")
 
 
 def emit_flat_compositions(rows, *, composer: str = "rosetta.pdhc", strict: bool = False) -> EmitResult:
@@ -80,7 +142,16 @@ def emit_flat_compositions(rows, *, composer: str = "rosetta.pdhc", strict: bool
     groups: dict[tuple, list[Observation]] = {}
     for raw in rows:
         o = _adapt(raw)
-        if o.value is None:
+        if cm.is_condition_sourced(o.concept_guid):
+            res.sourced_elsewhere.append(o.concept_guid)
+            continue
+        presence = (cm.is_mapped(o.concept_guid)
+                    and cm.resolve(o.concept_guid).binding_kind == "presence_entry")
+        if presence:
+            if not _is_yes(o):
+                res.not_present.append(o.concept_guid)
+                continue
+        elif o.value is None:
             res.skipped_no_value.append(o.concept_guid)
             continue
         if not cm.is_mapped(o.concept_guid):
@@ -122,9 +193,12 @@ def emit_flat_compositions(rows, *, composer: str = "rosetta.pdhc", strict: bool
             flat[f"{base}/analyte_result|magnitude"] = o.value
             flat[f"{base}/analyte_result|unit"] = b.ucum
             flat[b.time_path] = when
+        present = {cm.resolve(o.concept_guid).concept_guid: cm.resolve(o.concept_guid)
+                   for o in obss if cm.resolve(o.concept_guid).binding_kind == "presence_entry"}
+        _presence_entries(flat, present.values(), when)
         for o in obss:
             b = cm.resolve(o.concept_guid)
-            if b.binding_kind == "repeating_analyte":
+            if b.binding_kind in ("repeating_analyte", "presence_entry"):
                 continue
             if b.value_kind == "DV_QUANTITY":
                 flat[b.magnitude_key] = o.value
@@ -144,4 +218,82 @@ def emit_flat_compositions(rows, *, composer: str = "rosetta.pdhc", strict: bool
         res.compositions.append(
             {"template_id": tid, "patient_guid": patient, "time": when, "flat": flat}
         )
+    return res
+
+
+# ---------------------------------------------------------------------------
+# #728 M2 decision 1: diagnoses from the CDR's Condition records
+# ---------------------------------------------------------------------------
+
+ICD11_MMS = "http://id.who.int/icd/release/11/mms"
+ICD11_TERMINOLOGY = "ICD11"
+_PRESENT = {"active", "recurrence", "relapse"}
+_NOT_A_DIAGNOSIS = {"refuted", "entered-in-error"}
+_SIMPLIFIED_EXT = "simplified"
+
+
+@dataclass
+class ConditionEmitResult:
+    compositions: list[dict] = field(default_factory=list)
+    not_present: list[str] = field(default_factory=list)    # resolved/inactive/remission, refuted, in error
+    not_icd11: list[str] = field(default_factory=list)      # e.g. ICD-10-SE in transition: no ICD-11 code to send
+
+
+def _status(cc) -> str:
+    return (((cc or {}).get("coding") or [{}])[0].get("code") or "").lower()
+
+
+def _icd11(condition: dict):
+    """The authoritative WHO MMS coding: the first one that is not the
+    'simplified to' alternative (icd11.pdhc writes the WHO coding first)."""
+    for c in (condition.get("code") or {}).get("coding") or []:
+        if c.get("system") != ICD11_MMS or not c.get("code"):
+            continue
+        if any(_SIMPLIFIED_EXT in (e.get("url") or "") for e in c.get("extension") or []):
+            continue
+        return c
+    return None
+
+
+def emit_condition_compositions(conditions, *, at, composer: str = "rosetta.pdhc") -> ConditionEmitResult:
+    """One pdhc_diagnoses.v1 composition per patient: the patient's PRESENT
+    ICD-11 diagnoses as of ``at``, one problem_diagnosis entry each.
+
+    Present = clinicalStatus active/recurrence/relapse and not refuted or
+    entered-in-error. Nothing is ever emitted for an absent, resolved or
+    refuted diagnosis -- an openEHR problem_diagnosis asserts presence.
+    """
+    tid = "pdhc_diagnoses.v1"
+    root = cm.flat_root(tid)
+    res = ConditionEmitResult()
+    by_patient: dict[str, dict[str, tuple]] = {}
+    for c in conditions or []:
+        if (c or {}).get("resourceType") != "Condition":
+            continue
+        cid = c.get("id") or ""
+        if (_status(c.get("clinicalStatus")) not in _PRESENT
+                or _status(c.get("verificationStatus")) in _NOT_A_DIAGNOSIS):
+            res.not_present.append(cid)
+            continue
+        coding = _icd11(c)
+        if coding is None:
+            res.not_icd11.append(cid)
+            continue
+        patient = ((c.get("subject") or {}).get("reference") or "").rsplit("/", 1)[-1]
+        by_patient.setdefault(patient, {}).setdefault(coding["code"], (coding, c))
+    when = _iso(at)
+    for patient, dx in by_patient.items():
+        flat = {f"{root}/{k}": v for k, v in cm.composition_defaults(tid).items()}
+        flat[f"{root}/context/start_time"] = when
+        flat[f"{root}/composer|name"] = composer
+        for i, (code, (coding, c)) in enumerate(sorted(dx.items())):
+            base = f"{root}/problem_diagnosis:{i}"
+            _coded(flat, f"{base}/problem_diagnosis_name", code,
+                   coding.get("display") or code, ICD11_TERMINOLOGY)
+            if c.get("onsetDateTime"):
+                flat[f"{base}/date_time_of_onset"] = c["onsetDateTime"]
+            if c.get("recordedDate"):
+                flat[f"{base}/date_time_clinically_recognised"] = c["recordedDate"]
+        res.compositions.append({"template_id": tid, "patient_guid": patient,
+                                 "time": when, "flat": flat})
     return res

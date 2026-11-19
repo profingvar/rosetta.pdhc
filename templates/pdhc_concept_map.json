@@ -92,6 +92,57 @@
         "laboratory_test_result/any_event/test_name": "PDHC laboratory panel"
       },
       "_source": "templates/pdhc_laboratory.v1.opt (generated, #728); accepted by ASHA cdr1 2026-11-17. test_name is mandatory (1..1) in the archetype."
+    },
+    "pdhc_diagnoses.v1": {
+      "template_id": "pdhc_diagnoses.v1",
+      "flat_root": "pdhc_diagnoses",
+      "composition_defaults": {
+        "category|code": "433",
+        "category|value": "event",
+        "category|terminology": "openehr",
+        "language|code": "en",
+        "language|terminology": "ISO_639-1",
+        "territory|code": "SE",
+        "territory|terminology": "ISO_3166-1",
+        "context/setting|code": "238",
+        "context/setting|value": "other care",
+        "context/setting|terminology": "openehr"
+      },
+      "_source": "templates/pdhc_diagnoses.v1.opt (generated, #728 milestone 2); accepted by ASHA cdr1 2026-11-19"
+    },
+    "pdhc_medications.v1": {
+      "template_id": "pdhc_medications.v1",
+      "flat_root": "pdhc_medications",
+      "composition_defaults": {
+        "category|code": "433",
+        "category|value": "event",
+        "category|terminology": "openehr",
+        "language|code": "en",
+        "language|terminology": "ISO_639-1",
+        "territory|code": "SE",
+        "territory|terminology": "ISO_3166-1",
+        "context/setting|code": "238",
+        "context/setting|value": "other care",
+        "context/setting|terminology": "openehr"
+      },
+      "_source": "templates/pdhc_medications.v1.opt (generated, #728 milestone 2); accepted by ASHA cdr1 2026-11-19"
+    },
+    "pdhc_care_events.v1": {
+      "template_id": "pdhc_care_events.v1",
+      "flat_root": "pdhc_care_events",
+      "composition_defaults": {
+        "category|code": "433",
+        "category|value": "event",
+        "category|terminology": "openehr",
+        "language|code": "en",
+        "language|terminology": "ISO_639-1",
+        "territory|code": "SE",
+        "territory|terminology": "ISO_3166-1",
+        "context/setting|code": "238",
+        "context/setting|value": "other care",
+        "context/setting|terminology": "openehr"
+      },
+      "_source": "templates/pdhc_care_events.v1.opt (generated, #728 milestone 2); accepted by ASHA cdr1 2026-11-19"
     }
   },
   "concepts": {
@@ -557,174 +608,274 @@
       "ucum": "10*9/L",
       "loinc": "777-3",
       "loinc_check": "#728 2026-11-17: active in termbank; component, property and sample match the unit sent (plan.pdhc corrected the same day where it differed)"
+    },
+    "22d0f6c6-2438-4637-ad4e-9d85431b8edb": {
+      "template_id": "pdhc_laboratory.v1",
+      "archetype": "openEHR-EHR-CLUSTER.laboratory_test_analyte.v1",
+      "flat_path": "pdhc_laboratory/laboratory_test_result/any_event/laboratory_analyte_result",
+      "time_path": "pdhc_laboratory/laboratory_test_result/any_event/time",
+      "value_kind": "DV_QUANTITY",
+      "binding_kind": "repeating_analyte",
+      "pdhc_unit": "mmol/L",
+      "ucum": "mmol/L",
+      "loinc": "105272-9",
+      "concept_name": "CGM",
+      "loinc_check": "#728 M2 2026-11-19: plan.pdhc made CGM a numerical measure (mmol/L, 2-22) on 2026-11-18; same quantity as cgm_raw, so the same verified LOINC 105272-9 (decision 4: a clearly better binding than a local code)."
+    },
+    "cf727be6-f684-4db4-9b05-ebf588d60ff6": {
+      "concept_name": "ACE inhibitor (plain)",
+      "template_id": "pdhc_medications.v1",
+      "archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
+      "flat_path": "pdhc_medications/medication_summary/medication_name",
+      "value_kind": "DV_CODED_TEXT",
+      "binding_kind": "presence_entry",
+      "code": "C09AA",
+      "terminology": "ATC",
+      "code_display": "ACE inhibitors, plain"
+    },
+    "fc2f9b90-6860-44b5-8acc-ff67fd939af4": {
+      "concept_name": "Acetylsalicylic acid (low-dose)",
+      "template_id": "pdhc_medications.v1",
+      "archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
+      "flat_path": "pdhc_medications/medication_summary/medication_name",
+      "value_kind": "DV_CODED_TEXT",
+      "binding_kind": "presence_entry",
+      "code": "B01AC06",
+      "terminology": "ATC",
+      "code_display": "acetylsalicylic acid"
+    },
+    "b6bca95a-aa29-47c2-a4ec-2106f2557431": {
+      "concept_name": "Angiotensin II receptor blocker (plain)",
+      "template_id": "pdhc_medications.v1",
+      "archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
+      "flat_path": "pdhc_medications/medication_summary/medication_name",
+      "value_kind": "DV_CODED_TEXT",
+      "binding_kind": "presence_entry",
+      "code": "C09CA",
+      "terminology": "ATC",
+      "code_display": "angiotensin II receptor blockers (ARBs), plain"
+    },
+    "476b3f2a-2803-418e-bb41-d7d8b6524388": {
+      "concept_name": "GLP-1 receptor agonist (class)",
+      "template_id": "pdhc_medications.v1",
+      "archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
+      "flat_path": "pdhc_medications/medication_summary/medication_name",
+      "value_kind": "DV_CODED_TEXT",
+      "binding_kind": "presence_entry",
+      "code": "A10BJ",
+      "terminology": "ATC",
+      "code_display": "glucagon-like peptide-1 (GLP-1) analogues"
+    },
+    "f3f9135a-74cb-4e09-825b-63294767c8fe": {
+      "concept_name": "HMG-CoA reductase inhibitor (statin)",
+      "template_id": "pdhc_medications.v1",
+      "archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
+      "flat_path": "pdhc_medications/medication_summary/medication_name",
+      "value_kind": "DV_CODED_TEXT",
+      "binding_kind": "presence_entry",
+      "code": "C10AA",
+      "terminology": "ATC",
+      "code_display": "HMG CoA reductase inhibitors"
+    },
+    "28a10b37-9100-4179-99be-7312e29aad8c": {
+      "concept_name": "Insulin (any)",
+      "template_id": "pdhc_medications.v1",
+      "archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
+      "flat_path": "pdhc_medications/medication_summary/medication_name",
+      "value_kind": "DV_CODED_TEXT",
+      "binding_kind": "presence_entry",
+      "code": "A10A",
+      "terminology": "ATC",
+      "code_display": "insulins and analogues"
+    },
+    "53e3dfea-0023-4ab5-95a5-62b4c4c7f717": {
+      "concept_name": "Metformin",
+      "template_id": "pdhc_medications.v1",
+      "archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
+      "flat_path": "pdhc_medications/medication_summary/medication_name",
+      "value_kind": "DV_CODED_TEXT",
+      "binding_kind": "presence_entry",
+      "code": "A10BA02",
+      "terminology": "ATC",
+      "code_display": "metformin"
+    },
+    "3220b81d-9fc7-4302-8a9e-e0bd41913ce5": {
+      "concept_name": "SGLT2 inhibitor (class)",
+      "template_id": "pdhc_medications.v1",
+      "archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
+      "flat_path": "pdhc_medications/medication_summary/medication_name",
+      "value_kind": "DV_CODED_TEXT",
+      "binding_kind": "presence_entry",
+      "code": "A10BK",
+      "terminology": "ATC",
+      "code_display": "sodium-glucose co-transporter 2 (SGLT2) inhibitors"
+    },
+    "b4ecad4c-6593-4851-9a9d-22ff1c3df33f": {
+      "concept_name": "Thiazide diuretic (plain)",
+      "template_id": "pdhc_medications.v1",
+      "archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
+      "flat_path": "pdhc_medications/medication_summary/medication_name",
+      "value_kind": "DV_CODED_TEXT",
+      "binding_kind": "presence_entry",
+      "code": "C03AA",
+      "terminology": "ATC",
+      "code_display": "thiazides, plain"
+    },
+    "40d98260-4710-4bc1-83d3-9746a893fbb1": {
+      "concept_name": "HbA1c blood sample collection",
+      "template_id": "pdhc_care_events.v1",
+      "archetype": "openEHR-EHR-ACTION.procedure.v1",
+      "flat_path": "pdhc_care_events/procedure/procedure_name",
+      "value_kind": "DV_CODED_TEXT",
+      "binding_kind": "presence_entry",
+      "code": "40d98260-4710-4bc1-83d3-9746a893fbb1",
+      "terminology": "urn:pdhc:concept",
+      "ism": {
+        "state": "532",
+        "state_value": "completed",
+        "careflow_step": "at0043",
+        "careflow_value": "Procedure completed"
+      }
+    },
+    "9c5889a5-d93b-4a8e-bbe5-80547f152361": {
+      "concept_name": "Hospital admission",
+      "template_id": "pdhc_care_events.v1",
+      "archetype": "openEHR-EHR-ACTION.service.v1",
+      "flat_path": "pdhc_care_events/service/service_name",
+      "value_kind": "DV_CODED_TEXT",
+      "binding_kind": "presence_entry",
+      "code": "9c5889a5-d93b-4a8e-bbe5-80547f152361",
+      "terminology": "urn:pdhc:concept",
+      "ism": {
+        "state": "532",
+        "state_value": "completed",
+        "careflow_step": "at0005",
+        "careflow_value": "Service activity complete"
+      }
+    },
+    "8861a054-41d2-4aca-89c5-5c3aed1cbb67": {
+      "concept_name": "Diabetic foot examination",
+      "template_id": "pdhc_care_events.v1",
+      "archetype": "openEHR-EHR-ACTION.procedure.v1",
+      "flat_path": "pdhc_care_events/procedure/procedure_name",
+      "value_kind": "DV_CODED_TEXT",
+      "binding_kind": "presence_entry",
+      "code": "8861a054-41d2-4aca-89c5-5c3aed1cbb67",
+      "terminology": "urn:pdhc:concept",
+      "ism": {
+        "state": "532",
+        "state_value": "completed",
+        "careflow_step": "at0043",
+        "careflow_value": "Procedure completed"
+      }
+    },
+    "997b94bc-6e81-472b-a1b9-abe188001e3e": {
+      "concept_name": "Primary care consultation",
+      "template_id": "pdhc_care_events.v1",
+      "archetype": "openEHR-EHR-ACTION.service.v1",
+      "flat_path": "pdhc_care_events/service/service_name",
+      "value_kind": "DV_CODED_TEXT",
+      "binding_kind": "presence_entry",
+      "code": "997b94bc-6e81-472b-a1b9-abe188001e3e",
+      "terminology": "urn:pdhc:concept",
+      "ism": {
+        "state": "532",
+        "state_value": "completed",
+        "careflow_step": "at0005",
+        "careflow_value": "Service activity complete"
+      }
+    },
+    "28aa90ec-16da-408a-96ae-e50172ad571a": {
+      "concept_name": "Diabetic retinal screening",
+      "template_id": "pdhc_care_events.v1",
+      "archetype": "openEHR-EHR-ACTION.procedure.v1",
+      "flat_path": "pdhc_care_events/procedure/procedure_name",
+      "value_kind": "DV_CODED_TEXT",
+      "binding_kind": "presence_entry",
+      "code": "28aa90ec-16da-408a-96ae-e50172ad571a",
+      "terminology": "urn:pdhc:concept",
+      "ism": {
+        "state": "532",
+        "state_value": "completed",
+        "careflow_step": "at0043",
+        "careflow_value": "Procedure completed"
+      }
+    },
+    "48710ad4-db38-4894-a722-c69cf5fa09ea": {
+      "concept_name": "Diabetes nurse consultation",
+      "template_id": "pdhc_care_events.v1",
+      "archetype": "openEHR-EHR-ACTION.service.v1",
+      "flat_path": "pdhc_care_events/service/service_name",
+      "value_kind": "DV_CODED_TEXT",
+      "binding_kind": "presence_entry",
+      "code": "48710ad4-db38-4894-a722-c69cf5fa09ea",
+      "terminology": "urn:pdhc:concept",
+      "ism": {
+        "state": "532",
+        "state_value": "completed",
+        "careflow_step": "at0005",
+        "careflow_value": "Service activity complete"
+      }
     }
   },
   "gaps": {
     "_comment": "Known holes, tracked so the emitter's loud-fail is expected, not a surprise.",
     "spo2_RESOLVED_2026-08-11": "plan.pdhc now HAS an oxygen-saturation concept (spo2 = 2f15ae94-209e-4b0c-81bd-c91d76e74475, created during the asthma home-monitoring build), so spo2 is now bound above to the pdhc_vitals.v1 pulse_oximetry observation (DV_PROPORTION, |numerator). NOTE: the DV_PROPORTION FLAT emission (numerator only; denominator/type assumed template-fixed at 100/percent) has NOT been round-trip-validated on the sandbox yet — #507 proved DV_QUANTITY (temp/BP) only. Validate spo2 on openehr.phanera.se before enabling delivery.",
     "pending_template_extension": {
-      "_comment": "#502 (2026-08-01): per-template PENDING archetype bindings. As of 2026-08-22 the anthropometry (5), lung_function (1) and laboratory (24) entries carry DRAFT binding_kind + target_flat_path (fixed_quantity) or analyte_cluster_path (repeating_analyte) per docs/openehr_flat_opt_field_map_502.md. These are NOT read by resolve() — promote into the live per-template registry after the .opt web template is captured (see that doc's coder checklist). Diagnoses/medications/care_events remain name+archetype only (later tickets, need clinical-modelling judgement).",
-      "aecd1a50-fd77-46ae-826b-1f05266f90c3": {
-        "concept_name": "ckd_diagnosis",
-        "target_template": "pdhc_diagnoses.v1",
-        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
-        "clinical_review": "boolean present/absent — confirm openEHR representation"
-      },
-      "eb3495c0-5aae-4913-ba7d-96a1fb7f58b8": {
-        "concept_name": "diabetic_foot_ulcer",
-        "target_template": "pdhc_diagnoses.v1",
-        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
-        "clinical_review": "boolean present/absent — confirm openEHR representation"
-      },
-      "da2652f5-3a91-48b2-a366-93bc1bf7ebda": {
-        "concept_name": "diabetic_neuropathy",
-        "target_template": "pdhc_diagnoses.v1",
-        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
-        "clinical_review": "boolean present/absent — confirm openEHR representation"
-      },
-      "2ebfd877-6ce5-4eac-a690-7470d9991f80": {
-        "concept_name": "diabetic_retinopathy",
-        "target_template": "pdhc_diagnoses.v1",
-        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
-        "clinical_review": "boolean present/absent — confirm openEHR representation"
-      },
-      "24400783-2ef6-4b99-ad35-3a5d7e21af70": {
-        "concept_name": "heart_failure",
-        "target_template": "pdhc_diagnoses.v1",
-        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
-        "clinical_review": "boolean present/absent — confirm openEHR representation"
-      },
-      "e48783b8-37e3-4db5-8491-9c4a9364dc75": {
-        "concept_name": "hypertension_diagnosis",
-        "target_template": "pdhc_diagnoses.v1",
-        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
-        "clinical_review": "boolean present/absent — confirm openEHR representation"
-      },
-      "e95245e6-23cc-4ad3-b4f7-0bf44749b55a": {
-        "concept_name": "mi_history",
-        "target_template": "pdhc_diagnoses.v1",
-        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
-        "clinical_review": "boolean present/absent — confirm openEHR representation"
-      },
-      "1ebf5e2f-fa86-42d0-9bad-a790d4dd2d1b": {
-        "concept_name": "stroke_history",
-        "target_template": "pdhc_diagnoses.v1",
-        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
-        "clinical_review": "boolean present/absent — confirm openEHR representation"
-      },
-      "91072e9d-7453-45bc-8e93-27f9da8bd670": {
-        "concept_name": "t1dm_diagnosis",
-        "target_template": "pdhc_diagnoses.v1",
-        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
-        "clinical_review": "boolean present/absent — confirm openEHR representation"
-      },
-      "7fc32f65-508a-4484-8dc3-23368f8e2778": {
-        "concept_name": "t2dm_diagnosis",
-        "target_template": "pdhc_diagnoses.v1",
-        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
-        "clinical_review": "boolean present/absent — confirm openEHR representation"
-      },
+      "_comment": "#502 (2026-08-01): per-template PENDING archetype bindings. As of 2026-08-22 the anthropometry (5), lung_function (1) and laboratory (24) entries carry DRAFT binding_kind + target_flat_path (fixed_quantity) or analyte_cluster_path (repeating_analyte) per docs/openehr_flat_opt_field_map_502.md. These are NOT read by resolve() — promote into the live per-template registry after the .opt web template is captured (see that doc's coder checklist). Diagnoses/medications/care_events remain name+archetype only (later tickets, need clinical-modelling judgement). #728 M2 (2026-11-19): medications, care events and CGM promoted into the live registry; diagnoses moved to condition_sourced; only the unnamed concept remains.",
       "79a6cd4b-1af4-4c05-8f08-e5487a262237": {
         "concept_name": "Asthma finding",
         "target_template": "pdhc_diagnoses.v1",
         "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
-        "clinical_review": "boolean present/absent — confirm openEHR representation"
-      },
-      "3422f34b-b7dc-45ae-8fe6-d3426d6f843a": {
-        "concept_name": "dyslipidemia_diagnosis",
-        "target_template": "pdhc_diagnoses.v1",
-        "target_archetype": "openEHR-EHR-EVALUATION.problem_diagnosis.v1",
-        "clinical_review": "boolean present/absent — confirm openEHR representation"
-      },
-      "cf727be6-f684-4db4-9b05-ebf588d60ff6": {
-        "concept_name": "med_acei",
-        "target_template": "pdhc_medications.v1",
-        "target_archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
-        "clinical_review": "boolean present/absent — confirm openEHR representation"
-      },
-      "b6bca95a-aa29-47c2-a4ec-2106f2557431": {
-        "concept_name": "med_arb",
-        "target_template": "pdhc_medications.v1",
-        "target_archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
-        "clinical_review": "boolean present/absent — confirm openEHR representation"
-      },
-      "fc2f9b90-6860-44b5-8acc-ff67fd939af4": {
-        "concept_name": "med_aspirin",
-        "target_template": "pdhc_medications.v1",
-        "target_archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
-        "clinical_review": "boolean present/absent — confirm openEHR representation"
-      },
-      "476b3f2a-2803-418e-bb41-d7d8b6524388": {
-        "concept_name": "med_glp1",
-        "target_template": "pdhc_medications.v1",
-        "target_archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
-        "clinical_review": "boolean present/absent — confirm openEHR representation"
-      },
-      "28a10b37-9100-4179-99be-7312e29aad8c": {
-        "concept_name": "med_insulin",
-        "target_template": "pdhc_medications.v1",
-        "target_archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
-        "clinical_review": "boolean present/absent — confirm openEHR representation"
-      },
-      "53e3dfea-0023-4ab5-95a5-62b4c4c7f717": {
-        "concept_name": "med_metformin",
-        "target_template": "pdhc_medications.v1",
-        "target_archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
-        "clinical_review": "boolean present/absent — confirm openEHR representation"
-      },
-      "3220b81d-9fc7-4302-8a9e-e0bd41913ce5": {
-        "concept_name": "med_sglt2",
-        "target_template": "pdhc_medications.v1",
-        "target_archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
-        "clinical_review": "boolean present/absent — confirm openEHR representation"
-      },
-      "f3f9135a-74cb-4e09-825b-63294767c8fe": {
-        "concept_name": "med_statin",
-        "target_template": "pdhc_medications.v1",
-        "target_archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
-        "clinical_review": "boolean present/absent — confirm openEHR representation"
-      },
-      "b4ecad4c-6593-4851-9a9d-22ff1c3df33f": {
-        "concept_name": "med_thiazide",
-        "target_template": "pdhc_medications.v1",
-        "target_archetype": "openEHR-EHR-EVALUATION.medication_summary.v1",
-        "clinical_review": "boolean present/absent — confirm openEHR representation"
-      },
-      "8861a054-41d2-4aca-89c5-5c3aed1cbb67": {
-        "concept_name": "proc_foot_screening",
-        "target_template": "pdhc_care_events.v1",
-        "target_archetype": "openEHR-EHR-ACTION.procedure.v1"
-      },
-      "40d98260-4710-4bc1-83d3-9746a893fbb1": {
-        "concept_name": "proc_hba1c_sampling",
-        "target_template": "pdhc_care_events.v1",
-        "target_archetype": "openEHR-EHR-ACTION.procedure.v1"
-      },
-      "28aa90ec-16da-408a-96ae-e50172ad571a": {
-        "concept_name": "proc_retinal_screening",
-        "target_template": "pdhc_care_events.v1",
-        "target_archetype": "openEHR-EHR-ACTION.procedure.v1"
-      },
-      "22d0f6c6-2438-4637-ad4e-9d85431b8edb": {
-        "concept_name": "CGM",
-        "target_template": "pdhc_care_events.v1",
-        "target_archetype": "openEHR-EHR-ACTION.procedure.v1"
-      },
-      "48710ad4-db38-4894-a722-c69cf5fa09ea": {
-        "concept_name": "enc_diabetes_nurse_visit",
-        "target_template": "pdhc_care_events.v1",
-        "target_archetype": "openEHR-EHR-ADMIN_ENTRY.encounter.v1"
-      },
-      "997b94bc-6e81-472b-a1b9-abe188001e3e": {
-        "concept_name": "enc_primary_care_visit",
-        "target_template": "pdhc_care_events.v1",
-        "target_archetype": "openEHR-EHR-ADMIN_ENTRY.encounter.v1"
-      },
-      "9c5889a5-d93b-4a8e-bbe5-80547f152361": {
-        "concept_name": "inpatient_admit",
-        "target_template": "pdhc_care_events.v1",
-        "target_archetype": "openEHR-EHR-ADMIN_ENTRY.admission.v0"
+        "note": "#728 M2 2026-11-19: this plan.pdhc concept has NO display text and no explanation. The operator must name it before it can be modelled; it stays a gap and is NOT treated as a CDR-sourced diagnosis."
       }
+    }
+  },
+  "condition_sourced": {
+    "_comment": "#728 M2 decision 1 (operator 2026-11-19): diagnoses come from the CDR's Condition records (ICD-11, #984: the CDR is the diagnosis register), NOT from these plan.pdhc yes/no answers. A plan answer for one of these concepts is reported as sourced_elsewhere and never emitted; flat_emitter.emit_condition_compositions() renders the Conditions into pdhc_diagnoses.v1. Hyperlipidaemia is covered the same way; its plan response type does not matter.",
+    "aecd1a50-fd77-46ae-826b-1f05266f90c3": {
+      "concept_name": "ckd_diagnosis",
+      "template_id": "pdhc_diagnoses.v1"
+    },
+    "eb3495c0-5aae-4913-ba7d-96a1fb7f58b8": {
+      "concept_name": "diabetic_foot_ulcer",
+      "template_id": "pdhc_diagnoses.v1"
+    },
+    "da2652f5-3a91-48b2-a366-93bc1bf7ebda": {
+      "concept_name": "diabetic_neuropathy",
+      "template_id": "pdhc_diagnoses.v1"
+    },
+    "2ebfd877-6ce5-4eac-a690-7470d9991f80": {
+      "concept_name": "diabetic_retinopathy",
+      "template_id": "pdhc_diagnoses.v1"
+    },
+    "24400783-2ef6-4b99-ad35-3a5d7e21af70": {
+      "concept_name": "heart_failure",
+      "template_id": "pdhc_diagnoses.v1"
+    },
+    "e48783b8-37e3-4db5-8491-9c4a9364dc75": {
+      "concept_name": "hypertension_diagnosis",
+      "template_id": "pdhc_diagnoses.v1"
+    },
+    "e95245e6-23cc-4ad3-b4f7-0bf44749b55a": {
+      "concept_name": "mi_history",
+      "template_id": "pdhc_diagnoses.v1"
+    },
+    "1ebf5e2f-fa86-42d0-9bad-a790d4dd2d1b": {
+      "concept_name": "stroke_history",
+      "template_id": "pdhc_diagnoses.v1"
+    },
+    "91072e9d-7453-45bc-8e93-27f9da8bd670": {
+      "concept_name": "t1dm_diagnosis",
+      "template_id": "pdhc_diagnoses.v1"
+    },
+    "7fc32f65-508a-4484-8dc3-23368f8e2778": {
+      "concept_name": "t2dm_diagnosis",
+      "template_id": "pdhc_diagnoses.v1"
+    },
+    "3422f34b-b7dc-45ae-8fe6-d3426d6f843a": {
+      "concept_name": "dyslipidemia_diagnosis",
+      "template_id": "pdhc_diagnoses.v1"
     }
   }
 }

@@ -402,7 +402,14 @@ def prune(root: Node, keep_paths):
                 nid = c.findtext("node_id") or None
                 matching = [t for t in on_path if t[len(prefix)][1] in (nid, None)]
                 if not matching:
-                    if _occ_lower(c) >= 1:
+                    # #728 M2: the children of a SINGLE attribute are
+                    # alternatives (an ACTION's ism_transition: exactly one of
+                    # them is present), so choosing some of them is a template
+                    # narrowing, not the removal of a mandatory node -- as long
+                    # as at least one alternative stays (it does: it is on a
+                    # keep path).
+                    single = (a.get("xsi:type") or "") == "C_SINGLE_ATTRIBUTE"
+                    if _occ_lower(c) >= 1 and not single:
                         raise BuildError("cannot remove mandatory %s[%s]" % (name, nid))
                     a.children.remove(c)
                     continue

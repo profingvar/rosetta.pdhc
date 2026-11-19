@@ -60,3 +60,21 @@ the spo2 DV_PROPORTION round-trip, still unvalidated on the sandbox.
 - Multi-template registry + emitter; self-reported weight own composition (D-A1); lab panel with 22 verified LOINC + 5 local (D-L1). SpO2 now sends denominator 100 + type percent (numerator alone was refused).
 - Deployed 2026-11-17T22:27Z (overlay on :pre728; also carries the never-deployed #708 views.py banner fix). Dry run new PASS / old FAIL; in-container check PASS; sibling smoke 10/10. Delivery still OFF.
 - Milestone 2 (diagnoses, medications, care events; 28 concepts) not started — needs clinical modelling.
+
+## 2026-11-19 — #728 milestone 2: diagnoses, medications, care events (+ CGM)
+Operator decisions 2026-11-19 ("kör med förslagen"):
+1. **Diagnoses → `pdhc_diagnoses.v1`** (encounter + `EVALUATION.problem_diagnosis.v1`, 0..*): rendered from the CDR's **Condition** records (ICD-11 MMS, #984), not from plan yes/no answers. `flat_emitter.emit_condition_compositions()`: one composition per patient, one entry per PRESENT diagnosis (clinicalStatus active/recurrence/relapse, not refuted/entered-in-error); the WHO coding wins over the "simplified" one; ICD-10-SE codes are reported `not_icd11`, never relabelled. Terminology id `ICD11`. The 11 named diagnosis concepts (incl. hyperlipidaemia) are `condition_sourced` in the map: a plan answer for them is `sourced_elsewhere`, not unmapped.
+2. **Medications → `pdhc_medications.v1`** (encounter + `EVALUATION.medication_summary.v1`, 0..*), 9 concepts coded **ATC** (A10BA02, A10A, A10BK, A10BJ, C10AA, C09AA, C09CA, C03AA, B01AC06). medication_summary chosen over `INSTRUCTION.medication_order.v3`: a "does the patient take X" answer states current use, not an order (no dose/timing/narrative to state). **To confirm with the ASHA sandbox owner.**
+3. **Care events → `pdhc_care_events.v1`**: foot examination, retinal screening, HbA1c sample collection as `ACTION.procedure.v1` (ISM narrowed to *Procedure completed* 532/at0043); diabetes nurse consultation, primary care consultation, hospital admission as `ACTION.service.v1` (*Service activity complete* 532/at0005). `ADMIN_ENTRY.admission.v0` is REJECTED on CKM and `episode_institution.v0` REVIEWSUSPENDED, so neither is used. Names coded with the platform concept code (`urn:pdhc:concept`).
+4. **CGM** (22d0f6c6, numerical mmol/L since 2026-11-18) moved out of care events into the laboratory panel, with cgm_raw's verified LOINC 105272-9 (a clearly better binding than a local code).
+5. **Unnamed concept 79a6cd4b** (no display text, no explanation in plan): stays a gap; the operator must name it.
+
+Presence entries (`binding_kind: presence_entry`, DV_CODED_TEXT): only a strict yes is emitted (True / 1 / "true"/"yes"/"ja"); no, unknown and missing are `not_present`. A yes arrives in the gateway's canonical block (`raw`), since observation_cache.value holds numbers only.
+
+Builder: `prune` may now narrow the alternatives of a C_SINGLE_ATTRIBUTE (an ACTION's ism_transition); a mandatory node in a multiple attribute is still refused (tested). Vendored CKM: problem_diagnosis.v1 1.7.4, medication_summary.v1 1.0.1, procedure.v1 1.5.3, service.v1 1.0.4 (PROVENANCE + selection notes).
+
+ASHA cdr1, 2026-11-19: all three OPTs uploaded and explored (paths in `templates/*.sandbox_paths.txt`); emitter output ACCEPTED for medications, care events, diagnoses and the lab panel re-run with CGM (28 analytes). Controls REFUSED for the right reason: unknown path ("Could not consume Parts"), procedure ISM state 245 ("does not match any option"), diagnosis without name ("0 occurrences, but must be 1..1"). Verify uses ASHA's temporary EHR, deleted afterwards. **Delivery stays OFF.** Not deployed.
+
+Tests: 26 new (`app/tests/test_728_milestone2.py` + realisability/synthesiser/concept-map updates); suite 175 passed / 1 skipped. New tests fail on the old code (import), and on two mutations (_is_yes accepting any truthy value; "resolved" counted as present): 2 failures each.
+
+Not done: nothing yet fetches Conditions from the CDR for `emit_condition_compositions` (delivery is OFF, so no caller exists); `expected_paths.json` were not generated for the new templates because the predictor models OBSERVATION paths only -- the captured sandbox paths are the contract.

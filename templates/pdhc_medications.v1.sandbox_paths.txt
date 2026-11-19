@@ -1,0 +1,3 @@
+# FLAT paths ASHA cdr1 reports for pdhc_medications.v1 (Explore view), captured 2026-11-19 after upload. Data leaves only.
+pdhc_medications/medication_summary/medication_name
+pdhc_medications/medication_summary/medication_name|code
