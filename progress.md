@@ -78,3 +78,13 @@ ASHA cdr1, 2026-11-19: all three OPTs uploaded and explored (paths in `templates
 Tests: 26 new (`app/tests/test_728_milestone2.py` + realisability/synthesiser/concept-map updates); suite 175 passed / 1 skipped. New tests fail on the old code (import), and on two mutations (_is_yes accepting any truthy value; "resolved" counted as present): 2 failures each.
 
 Not done: nothing yet fetches Conditions from the CDR for `emit_condition_compositions` (delivery is OFF, so no caller exists); `expected_paths.json` were not generated for the new templates because the predictor models OBSERVATION paths only -- the captured sandbox paths are the contract.
+
+## 2026-11-19 — #728 milestone 2 deployed (145df61)
+Overlay of the 15 runtime files (app/services ×4, concept map, 3 new .opt + sandbox
+paths, samples); build tooling (scripts/build_opt.py, templates/src/) is not shipped,
+as for milestone 1. Baseline-gated against 145df61^ (a first attempt was REFUSED by
+the gate because the operator's filter wrongly included the two non-shipped files —
+nothing changed). Health 200, hashes match, sibling smoke 10/10. Live in the
+container: 7 templates registered; metformin → pdhc_medications.v1, CGM →
+pdhc_laboratory.v1, type 2 diabetes is condition-sourced, 79a6cd4b unmapped.
+Delivery still OFF. Rollback: image `rosetta_pdhc-app:pre728m2`, files `*.pre728m2`.
