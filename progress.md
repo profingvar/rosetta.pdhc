@@ -99,3 +99,10 @@ old-name tests, an invented default fails the 3 unset tests.
 Baseline: all 6 touched deployed files match git (docs/technical.md is not in
 the image). Operator, at deploy: add EPS_BASE_URL=https://eps.pdhc.se to
 shared/.env (env_file passes it), then docker-compose up -d.
+
+## 2026-11-22 — #1018 eps rename code DEPLOYED
+
+- Overlay image on the running one, baseline-hashed first; rollback tag `:pre_eps`, replaced release files kept as `*.pre_eps.<ts>`.
+- Health 200 and file hashes verified in the container; sibling smoke green before (pre-rename smoke) and after.
+- No behaviour change until `EPS_*` is set in .env: operator script `/tmp/epsdep/eps_env.sh <group>` (refuses until https://eps.pdhc.se answers as eps.pdhc).
+
