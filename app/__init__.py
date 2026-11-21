@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from flask import Flask, jsonify
 from flask_migrate import Migrate
 from app.models import db
+from app.eps_env import eps_env
 
 
 def _results_dir():
@@ -20,8 +21,10 @@ def create_app(config=None):
         DATABASE_URL=os.environ.get("DATABASE_URL", ""),
         AUTH_MODE=os.environ.get("AUTH_MODE", "off"),
         GATEWAY_BASE_URL=os.environ.get("GATEWAY_BASE_URL", ""),
-        # #422 — consent verdicts (analysis-filter) come from ips.pdhc.
-        IPS_BASE_URL=os.environ.get("IPS_BASE_URL", ""),
+        # #422 — consent verdicts (analysis-filter) come from eps.pdhc
+        # (formerly ips.pdhc). #1018: EPS_BASE_URL first, the deprecated
+        # IPS_BASE_URL as fallback; the config key keeps its old name.
+        IPS_BASE_URL=eps_env("BASE_URL", ""),
         DEFAULT_ORG_GUIDS=os.environ.get("DEFAULT_ORG_GUIDS", ""),
         # #523 — inbound service key for the openEHR-realisability endpoint
         # (plan.pdhc proxies to it). Unset = open (dev); set = required.

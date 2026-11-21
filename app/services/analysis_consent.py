@@ -24,9 +24,10 @@ Failure mode is CLOSED: no ips verdict → 503, no patient data.
 """
 from __future__ import annotations
 
-import os
 
 import requests
+
+from app.eps_env import eps_env
 from flask import abort, current_app, g, session
 
 
@@ -66,9 +67,10 @@ def analysis_purpose(blob: dict) -> tuple[str, list]:
 
 def _analysis_filter(patient_guids: list, purpose: str, projects: list) -> dict:
     base = (current_app.config.get("IPS_BASE_URL")
-            or os.environ.get("IPS_BASE_URL", "")).rstrip("/")
+            or eps_env("BASE_URL", "")).rstrip("/")
     if not base:
-        raise IpsUnreachable("IPS_BASE_URL not configured")
+        raise IpsUnreachable(
+            "EPS_BASE_URL not configured (nor the deprecated IPS_BASE_URL)")
     from app.services.session_headers import outbound_session_headers
     headers = {"Accept": "application/json"}
     token = None

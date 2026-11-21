@@ -273,7 +273,8 @@ AUTH_MODE=off|sso
 SSO_BASE_URL=https://sso.pdhc.se   SSO_CLIENT_ID / SSO_CLIENT_SECRET
 SSO_CALLBACK_URL=https://rosetta.pdhc.se/auth/callback
 GATEWAY_BASE_URL=https://gateway.pdhc.se
-IPS_BASE_URL=https://ips.pdhc.se       # #422 consent; fail-closed if unset
+EPS_BASE_URL=https://eps.pdhc.se       # #422 consent; fail-closed if unset
+IPS_BASE_URL                           # DEPRECATED fallback, read only when EPS_BASE_URL is blank (#1018)
 SECRET_KEY / DEFAULT_ORG_GUIDS
 
 # #523/#524 — modelling endpoints: shared secret with plan.pdhc.

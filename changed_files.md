@@ -154,3 +154,11 @@ app/tests/test_converters.py (edit — openEHR tests updated to FLAT + mapped co
 - templates/src/archetypes/: problem_diagnosis.v1, medication_summary.v1, procedure.v1, service.v1 (.xml/.adl), PROVENANCE.json
 - templates/samples/: pdhc_{diagnoses,medications,care_events}_valid.flat.json; pdhc_laboratory_full_panel_valid.flat.json (+CGM)
 - app/tests/test_728_milestone2.py (new); test_realisability.py, test_template_synthesiser.py, test_concept_map.py, test_flat_emitter.py
+
+## 2026-11-21 — #1018 (epic #1015) EPS_* first, IPS_* as deprecated fallback
+- app/eps_env.py (NEW) — the one helper every IPS_* read goes through
+- app/__init__.py — IPS_BASE_URL config key filled by eps_env("BASE_URL")
+- app/services/analysis_consent.py — env fallback via eps_env; error names EPS_BASE_URL
+- app/tests/test_eps_env.py (NEW, 10 tests)
+- .env.example, docs/technical.md — EPS_BASE_URL=https://eps.pdhc.se; IPS_BASE_URL marked deprecated
+- deploy/smoke_siblings.py — messages name EPS_BASE_URL

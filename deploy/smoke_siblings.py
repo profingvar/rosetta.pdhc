@@ -148,7 +148,7 @@ def main(as_json: bool = False) -> int:
         @check("config: every sibling base URL is set")
         def _():
             miss = [n for n, v in (("SSO_BASE_URL", sso),
-                                   ("IPS_BASE_URL", ips),
+                                   ("EPS_BASE_URL (or IPS_BASE_URL)", ips),
                                    ("GATEWAY_BASE_URL", gw)) if not v]
             return (not miss), ("all three set" if not miss
                                 else "MISSING: " + ", ".join(miss))
@@ -183,7 +183,7 @@ def main(as_json: bool = False) -> int:
             # POST-only, so GET is a 405 — which proves it is routed without
             # this smoke sending a patient list to a sibling.
             if not ips:
-                return False, "IPS_BASE_URL not set"
+                return False, "EPS_BASE_URL (or deprecated IPS_BASE_URL) not set"
             code, _b = _probe(f"{ips}/api/v1/patients/analysis-filter")
             if code == 404:
                 return False, ("404 — rosetta would raise IpsUnreachable and "

@@ -88,3 +88,14 @@ nothing changed). Health 200, hashes match, sibling smoke 10/10. Live in the
 container: 7 templates registered; metformin → pdhc_medications.v1, CGM →
 pdhc_laboratory.v1, type 2 diabetes is condition-sourced, 79a6cd4b unmapped.
 Delivery still OFF. Rollback: image `rosetta_pdhc-app:pre728m2`, files `*.pre728m2`.
+
+## #1018 — EPS rename phase 3 (2026-11-21, local commit, NOT deployed)
+rosetta reads EPS_BASE_URL first and IPS_BASE_URL only when EPS_BASE_URL is
+blank (app/eps_env.py). Both unset = "" as before; consent reads still fail
+closed by name. The only IPS_* this service reads is IPS_BASE_URL (no key).
+pytest: 169 passed / 7 skipped before -> 179 / 7 after (+10). Mutation proof:
+reverted helper fails the 3 new-name tests, EPS-only helper fails the 4
+old-name tests, an invented default fails the 3 unset tests.
+Baseline: all 6 touched deployed files match git (docs/technical.md is not in
+the image). Operator, at deploy: add EPS_BASE_URL=https://eps.pdhc.se to
+shared/.env (env_file passes it), then docker-compose up -d.
