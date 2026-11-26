@@ -24,7 +24,8 @@ from datetime import timedelta, timezone
 
 from flask import current_app
 
-from app.models import db, OpenEhrDelivery, _now
+from app.models import db, OpenEhrDelivery, _now, _uuid
+from app.services import disclosure
 from app.services import openehr_identity as ident
 from app.services.openehr_transports import build_transport
 
@@ -125,7 +126,26 @@ def _attempt(row, transport, namespace=None):
             row.patient_guid, row.template_id, row.attempt_count, row.last_error)
     row.updated_at = _now()
     db.session.add(row)
+    outbox = None
+    if row.status == "delivered":
+        # #1058: the disclosure is written in the SAME commit as the delivered
+        # row. If building it fails, the delivery still commits and
+        # `flask send-disclosures --backfill` picks the row up (it lists
+        # delivered rows with no outbox row) — logged loudly, never raised.
+        try:
+            if not row.guid:
+                row.guid = _uuid()
+            outbox = disclosure.enqueue_for_delivery(row)
+        except Exception as exc:
+            current_app.logger.error(
+                "disclosure NOT queued for delivery %s (%s) — run send-disclosures --backfill",
+                row.guid, type(exc).__name__)
+            if outbox is not None and outbox in db.session:
+                db.session.expunge(outbox)
+            outbox = None
     db.session.commit()
+    if outbox is not None:
+        disclosure.send_quietly([outbox.guid])  # never raises; failure stays pending
     return row
 
 

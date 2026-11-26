@@ -174,3 +174,28 @@ class OpenEhrDelivery(db.Model):
     payload = db.Column(JSON, nullable=True)  # the FLAT composition, for retry
     created_at = db.Column(db.DateTime(timezone=True), default=_now, nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True), default=_now, onupdate=_now, nullable=False)
+
+
+class DisclosureOutbox(db.Model):
+    """#1058 — one disclosure (IHE BALP AuditEvent) waiting for record.pdhc.
+
+    Written in the SAME transaction as the ``openehr_delivery`` row turning
+    ``delivered``, so a delivered composition can never exist without its
+    disclosure (and a rolled-back delivery leaves none). ``payload`` is the
+    AuditEvent built at that moment; sending it is retried from here
+    (``flask send-disclosures``) and is idempotent because record dedupes on
+    (X-Source-Service, source_event_id).
+    """
+    __tablename__ = "disclosure_outbox"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    guid = db.Column(db.String(36), unique=True, nullable=False, default=_uuid)
+    source_event_id = db.Column(db.String(128), unique=True, nullable=False)
+    patient_guid = db.Column(db.String(36), nullable=False, index=True)
+    export_ref = db.Column(db.String(36), nullable=True, index=True)  # openehr_delivery.guid
+    payload = db.Column(JSON, nullable=False)
+    status = db.Column(db.String(16), nullable=False, default="pending", index=True)  # pending|sent
+    attempts = db.Column(db.Integer, nullable=False, default=0)
+    last_error = db.Column(db.Text, nullable=True)
+    record_id = db.Column(db.String(128), nullable=True)
+    created_at = db.Column(db.DateTime(timezone=True), default=_now, nullable=False)
+    sent_at = db.Column(db.DateTime(timezone=True), nullable=True)

@@ -42,6 +42,11 @@ def create_app(config=None):
         OEHR_PASS=os.environ.get("OEHR_PASS", ""),
         OEHR_INSTANCE=os.environ.get("OEHR_INSTANCE", "cdr1"),
         OEHR_TOKEN=os.environ.get("OEHR_TOKEN", ""),  # reserved for spec_rest transport
+        # #1058 — disclosures (BALP AuditEvent) to record.pdhc. NO default:
+        # unset reads as unset and is named on the outbox row
+        # ("record_not_configured: RECORD_BASE_URL unset"), never a guessed URL.
+        RECORD_BASE_URL=os.environ.get("RECORD_BASE_URL", ""),
+        RECORD_DISCLOSURE_KEY=os.environ.get("RECORD_DISCLOSURE_KEY", ""),
     )
     if config:
         app.config.update(config)
@@ -84,6 +89,8 @@ def create_app(config=None):
     from app.auth import register_cli, install_request_loader
     register_cli(app)
     install_request_loader(app)
+    from app.services.disclosure import register_cli as register_disclosure_cli
+    register_disclosure_cli(app)
 
     from app.routes.views import bp as views_bp
     from app.routes.api import bp as api_bp

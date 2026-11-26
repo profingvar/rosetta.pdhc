@@ -106,3 +106,26 @@ shared/.env (env_file passes it), then docker-compose up -d.
 - Health 200 and file hashes verified in the container; sibling smoke green before (pre-rename smoke) and after.
 - No behaviour change until `EPS_*` is set in .env: operator script `/tmp/epsdep/eps_env.sh <group>` (refuses until https://eps.pdhc.se answers as eps.pdhc).
 
+
+## 2026-11-26 — #1058 disclosures to record.pdhc (local commit, NOT deployed)
+What counts as a disclosure: an `openehr_delivery` row reaching `delivered` — one
+FLAT composition about one patient accepted by the external openEHR CDR (Phanera
+sandbox). One BALP AuditEvent (`PrivacyDisclosure.Source`) per delivered row.
+Failed attempts are not reported (they are retried and reported once they land).
+- `disclosure_outbox` (migration f1a2b3c4d5e6) is written in the SAME commit as the
+  delivered row; send is tried right after commit and can never fail the delivery
+  (errors stay on the row: `last_error`, `attempts`).
+- `flask send-disclosures [--limit N] [--dry-run]` drains pending rows;
+  `--backfill [--apply]` creates rows for deliveries made before this change
+  (dry run by default).
+- New env: `RECORD_BASE_URL` (prod https://record.pdhc.se, no default — unset is
+  named on the row), `RECORD_DISCLOSURE_KEY` (= record's RECORD_DISCLOSURE_KEY_ROSETTA).
+- Purpose of use HTEST while the only target is the sandbox (constant
+  `PURPOSE_OF_USE` in app/services/disclosure.py; TREAT for a real receiver).
+- Note: `deliver()` still has no production caller (delivery flag OFF), so the
+  backfill is expected to find only whatever sandbox rounds were delivered.
+pytest: 179 passed / 7 skipped before -> 197 / 7 after (+18). Mutation: removing
+the enqueue fails 11 of the 18; the blocking-send control proves the
+never-blocks test detects a send that raises.
+Deploy order: record.pdhc live first; then `flask db upgrade`; set the two env
+keys; run `send-disclosures --backfill` (read counts) then `--backfill --apply`.

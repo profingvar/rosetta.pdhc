@@ -162,3 +162,13 @@ app/tests/test_converters.py (edit — openEHR tests updated to FLAT + mapped co
 - app/tests/test_eps_env.py (NEW, 10 tests)
 - .env.example, docs/technical.md — EPS_BASE_URL=https://eps.pdhc.se; IPS_BASE_URL marked deprecated
 - deploy/smoke_siblings.py — messages name EPS_BASE_URL
+
+## 2026-11-26 — #1058 disclosures (BALP AuditEvent) to record.pdhc
+- app/services/disclosure.py (NEW) — BALP constants, AuditEvent builder, outbox, sender, CLI send-disclosures
+- app/services/openehr_delivery.py — outbox row in the delivered commit, send after commit
+- app/models/__init__.py — DisclosureOutbox
+- app/migrations/versions/f1a2b3c4d5e6_disclosure_outbox.py (NEW)
+- app/__init__.py — RECORD_BASE_URL / RECORD_DISCLOSURE_KEY config, CLI registered
+- app/tests/test_disclosure_1058.py (NEW, 18 tests)
+- .env.example — RECORD_BASE_URL, RECORD_DISCLOSURE_KEY
+- progress.md, changed_files.md
