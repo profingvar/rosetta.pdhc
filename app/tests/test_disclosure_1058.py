@@ -68,6 +68,84 @@ def app():
 
 # -- the AuditEvent ----------------------------------------------------------
 
+def record_validation_errors(ev, source_service="rosetta.pdhc"):
+    """record.pdhc's acceptance rules (#1058, as stated by the record side),
+    re-implemented independently so a drift in our builder shows up here."""
+    import re
+    errs = []
+    if ev.get("meta", {}).get("profile") != [
+            "https://profiles.ihe.net/ITI/BALP/StructureDefinition/IHE.BasicAudit.PrivacyDisclosure.Source"]:
+        errs.append("profile")
+    system = f"https://{source_service.split('.')[0]}.pdhc.se/disclosure"
+    ids = ev.get("identifier") or []
+    exts = [e for e in ev.get("extension") or []
+            if e.get("url") == "https://record.pdhc.se/fhir/StructureDefinition/source-event-id"]
+    vals = [i for i in ids] + [e.get("valueIdentifier") or {} for e in exts]
+    if not vals or any(v.get("system") != system or not v.get("value") or len(v["value"]) > 128 for v in vals) \
+            or len({v.get("value") for v in vals}) != 1:
+        errs.append("source_event_id")
+    if ev.get("action") != "R":
+        errs.append("action")
+    if not re.search(r"(Z|[+-]\d\d:\d\d)$", ev.get("recorded", "")):
+        errs.append("recorded")
+    oc = (ev.get("outcome") or {}).get("code") or {}
+    if oc.get("system") != "http://terminology.hl7.org/CodeSystem/issue-severity" or \
+            oc.get("code") not in {"success", "information", "warning", "error", "fatal"}:
+        errs.append("outcome")
+    pous = [c for a in ev.get("authorization") or [] for c in a.get("coding") or []]
+    if not pous or any(c.get("system") != "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+                       or c.get("code") not in {"TREAT", "COC", "PATRQT", "HRESCH", "HLEGAL"} for c in pous):
+        errs.append("authorization")
+    role = lambda e: ((e.get("role") or {}).get("coding") or [{}])[0].get("code")
+    pats = [e for e in ev.get("entity") or [] if role(e) == "1"]
+    if len(pats) != 1 or pats[0]["what"].get("identifier") != ev.get("patient", {}).get("identifier"):
+        errs.append("patient")
+    atype = lambda a: ((a.get("type") or {}).get("coding") or [{}])[0].get("code")
+    srcs = [a for a in ev.get("agent") or [] if atype(a) == "110153"]
+    want = {"system": "https://pdhc.se/fhir/service", "value": source_service}
+    if len(srcs) != 1 or srcs[0]["who"].get("identifier") != want or \
+            ev.get("source", {}).get("observer") != srcs[0]["who"]:
+        errs.append("source_agent")
+    recs = [a for a in ev.get("agent") or [] if atype(a) == "110152"]
+    if len(recs) != 1 or not (recs[0]["who"].get("display") or (recs[0]["who"].get("identifier") or {}).get("value")):
+        errs.append("recipient_agent")
+    data = [e for e in ev.get("entity") or [] if role(e) == "4"]
+    if not data or len(data) > 5000:
+        errs.append("data_entity")
+    for e in data:
+        det = {d["type"]["text"]: d for d in e.get("detail") or []}
+        ref = (e.get("what") or {}).get("reference")
+        ok_ref = bool(ref and re.fullmatch(r"[A-Z][A-Za-z]+/[A-Za-z0-9\-.]{1,64}(/_history/[A-Za-z0-9\-.]{1,64})?", ref))
+        ok_det = bool((det.get("description") or {}).get("valueString")) and \
+            isinstance((det.get("count") or {}).get("valueInteger"), int) and det["count"]["valueInteger"] >= 0
+        if not (ok_ref or ok_det):
+            errs.append("data_entity")
+        if "sha256" in det and not re.fullmatch(r"[0-9a-f]{64}", det["sha256"].get("valueString", "")):
+            errs.append("sha256")
+    if len(json.dumps(ev).encode()) > 1024 * 1024:
+        errs.append("size")
+    return errs
+
+
+def test_validator_controls_refuse_broken_events(app):
+    """The validator above must actually refuse — otherwise a pass means nothing."""
+    import copy
+    with mock.patch.object(disclosure, "send_quietly"):
+        deliver(P1, "t", FLAT, transport=FakeTransport())
+    good = DisclosureOutbox.query.one().payload
+    assert record_validation_errors(good) == []
+    for mutate, err in [
+        (lambda e: e["meta"].update(profile=["x"]), "profile"),
+        (lambda e: e["extension"][0]["valueIdentifier"].update(value="other"), "source_event_id"),
+        (lambda e: e.update(recorded="2026-11-26T10:00:00"), "recorded"),
+        (lambda e: e["authorization"][0]["coding"][0].update(code="HTEST"), "authorization"),
+        (lambda e: e["entity"][1].update(what={"reference": "https://x/y::z::1"}, detail=[]), "data_entity"),
+        (lambda e: e["agent"].pop(1), "recipient_agent"),
+    ]:
+        bad = copy.deepcopy(good)
+        mutate(bad)
+        assert err in record_validation_errors(bad), err
+
 def _assert_contract(ev, patient):
     assert ev["resourceType"] == "AuditEvent"
     assert ev["meta"]["profile"] == [BALP["profile"]]
@@ -103,8 +181,10 @@ def test_delivered_row_writes_contract_shaped_outbox_and_sends(app):
     assert ob.export_ref == row.guid and ob.patient_guid == P1
     assert ob.status == "sent" and ob.record_id == "rec-1" and ob.attempts == 1
     _assert_contract(ob.payload, P1)
+    assert record_validation_errors(ob.payload) == []
     data = [e for e in ob.payload["entity"] if e["role"]["coding"][0]["code"] == "4"][0]
-    assert data["what"]["identifier"]["value"] == "cid-1::sandbox::1"  # version-specific
+    assert "reference" not in data["what"]                 # an openEHR uid is not a FHIR reference
+    assert "cid-1::sandbox::1" in data["what"]["display"]  # version-specific uid kept
     assert {d["type"]["text"] for d in data["detail"]} == {"description", "count", "sha256"}
     # wire
     args, kwargs = post.call_args
@@ -131,15 +211,26 @@ def test_duplicate_200_counts_as_sent(app):
     assert ob.status == "sent" and ob.record_id == "rec-9"
 
 
-@pytest.mark.parametrize("status,expect", [(400, "http_400: bad_profile"), (401, "http_401"),
-                                           (403, "http_403"), (500, "http_500")])
-def test_record_refusal_keeps_pending_with_named_error(app, status, expect):
-    body = {"error": "bad_profile"} if status == 400 else {}
+@pytest.mark.parametrize("status,body,expect", [(401, {"error": "unknown_key"}, "http_401: unknown_key"),
+                                                (403, {"error": "key_for_other_source"}, "http_403: key_for_other_source"),
+                                                (500, {}, "http_500")])
+def test_retryable_refusal_keeps_pending_with_named_error(app, status, body, expect):
     with mock.patch.object(disclosure.requests, "post", return_value=_resp(status, body)):
         row = deliver(P1, "t", FLAT, transport=FakeTransport())
     assert row.status == "delivered"
     ob = DisclosureOutbox.query.one()
     assert ob.status == "pending" and ob.last_error == expect and ob.attempts == 1
+
+
+def test_400_is_terminal_and_not_resent(app):
+    with mock.patch.object(disclosure.requests, "post", return_value=_resp(400, {"error": "profile"})) as post:
+        row = deliver(P1, "t", FLAT, transport=FakeTransport())
+        assert row.status == "delivered"
+        ob = DisclosureOutbox.query.one()
+        assert ob.status == "rejected" and ob.last_error == "http_400: profile"
+        res = app.test_cli_runner().invoke(args=["send-disclosures"])
+        assert json.loads(res.output)["send"]["pending_selected"] == 0
+        assert post.call_count == 1
 
 
 def test_transport_error_keeps_pending(app):
@@ -257,6 +348,7 @@ def test_backfill_apply_then_send_and_idempotent(app):
         assert post.call_count == 2
         for ob in DisclosureOutbox.query.all():
             _assert_contract(ob.payload, P2)
+            assert record_validation_errors(ob.payload) == []
         res2 = runner.invoke(args=["send-disclosures", "--backfill", "--apply"])
         assert json.loads(res2.output.strip().splitlines()[0])["backfill"]["to_create"] == 0
         assert post.call_count == 2

@@ -169,6 +169,6 @@ app/tests/test_converters.py (edit — openEHR tests updated to FLAT + mapped co
 - app/models/__init__.py — DisclosureOutbox
 - app/migrations/versions/f1a2b3c4d5e6_disclosure_outbox.py (NEW)
 - app/__init__.py — RECORD_BASE_URL / RECORD_DISCLOSURE_KEY config, CLI registered
-- app/tests/test_disclosure_1058.py (NEW, 18 tests)
+- app/tests/test_disclosure_1058.py (NEW, 19 tests; record's validation rules)
 - .env.example — RECORD_BASE_URL, RECORD_DISCLOSURE_KEY
 - progress.md, changed_files.md

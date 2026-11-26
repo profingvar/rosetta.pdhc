@@ -38,6 +38,9 @@ from app.models import db, DisclosureOutbox, OpenEhrDelivery, _now
 
 SERVICE = "rosetta.pdhc"
 SOURCE_EVENT_SYSTEM = "https://rosetta.pdhc.se/disclosure"
+# R5 AuditEvent has no `identifier`; record accepts the top-level one AND this
+# conformant extension, and both are sent (they must agree).
+SOURCE_EVENT_EXTENSION = "https://record.pdhc.se/fhir/StructureDefinition/source-event-id"
 SEND_TIMEOUT_SECONDS = 5
 
 # The ONE place the BALP profile canonical and codes live (record pins the same;
@@ -59,11 +62,10 @@ BALP = {
     "service_system": "https://pdhc.se/fhir/service",
 }
 
-# Purpose of use. The only openEHR target rosetta has ever had is the Phanera
-# SANDBOX, and .env.example forbids pointing delivery at a production CDR, so
-# the honest purpose is HTEST (test health data). Change to TREAT when a real
-# receiving care provider is wired.
-PURPOSE_OF_USE = {"code": "HTEST", "display": "test health data"}
+# Purpose of use. Delivery hands a patient's results to another care record
+# system: continuity of care. (HTEST would describe today's sandbox target more
+# exactly, but record accepts only TREAT|COC|PATRQT|HRESCH|HLEGAL.)
+PURPOSE_OF_USE = {"code": "COC", "display": "continuity of care"}
 
 
 def _iso(dt):
@@ -91,10 +93,11 @@ def build_audit_event(delivery, *, target_base=None, target_instance=None):
     service_ref = {"identifier": {"system": BALP["service_system"], "value": SERVICE}, "display": SERVICE}
     patient_ident = {"system": BALP["patient_system"], "value": delivery.patient_guid}
     recipient_display = f"openEHR CDR {target_base}" + (f" ({target_instance})" if target_instance else "")
-    what = {"display": f"openEHR composition, template {delivery.template_id or 'unknown'}"}
-    if delivery.composition_id:
-        # openEHR composition uids are version-specific (uuid::system::version).
-        what["identifier"] = {"system": f"{target_base.rstrip('/')}/composition", "value": delivery.composition_id}
+    # openEHR composition uids are version-specific (uuid::system::version) but
+    # are not FHIR references; record refuses them as what.reference, so the uid
+    # rides in what.display next to the description/count details.
+    what = {"display": f"openEHR composition {delivery.composition_id or '(uid not returned)'}, "
+                       f"template {delivery.template_id or 'unknown'}"}
     details = [
         {"type": {"text": "description"},
          "valueString": f"FLAT composition ({delivery.template_id or 'unknown template'}) delivered to {recipient_display}"},
@@ -105,6 +108,8 @@ def build_audit_event(delivery, *, target_base=None, target_instance=None):
     return {
         "resourceType": "AuditEvent",
         "meta": {"profile": [BALP["profile"]]},
+        "extension": [{"url": SOURCE_EVENT_EXTENSION,
+                       "valueIdentifier": {"system": SOURCE_EVENT_SYSTEM, "value": source_event_id_for(delivery)}}],
         "identifier": [{"system": SOURCE_EVENT_SYSTEM, "value": source_event_id_for(delivery)}],
         "category": [{"coding": [BALP["category"]]}],
         "code": {"coding": [BALP["code"]]},
@@ -168,7 +173,8 @@ def _endpoint_and_key():
 def send_one(row):
     """POST one outbox row to record. Updates the row; does NOT commit.
 
-    Returns True when record accepted it (201 new, 200 duplicate).
+    Returns True when record accepted it (201 new, 200 duplicate). A 400 marks
+    the row ``rejected`` (terminal); anything else leaves it ``pending``.
     """
     row.attempts = (row.attempts or 0) + 1
     try:
@@ -208,6 +214,11 @@ def send_one(row):
     except ValueError:
         pass
     row.last_error = f"http_{resp.status_code}" + (f": {reason}" if reason else "")
+    if resp.status_code == 400:
+        # record named a defect in the event itself; resending the same payload
+        # cannot succeed. Terminal, kept for review, never re-sent.
+        row.status = "rejected"
+    # 401/403/5xx: retryable (key or record not ready) — stays pending.
     return False
 
 

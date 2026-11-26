@@ -120,11 +120,19 @@ Failed attempts are not reported (they are retried and reported once they land).
   (dry run by default).
 - New env: `RECORD_BASE_URL` (prod https://record.pdhc.se, no default — unset is
   named on the row), `RECORD_DISCLOSURE_KEY` (= record's RECORD_DISCLOSURE_KEY_ROSETTA).
-- Purpose of use HTEST while the only target is the sandbox (constant
-  `PURPOSE_OF_USE` in app/services/disclosure.py; TREAT for a real receiver).
+- Purpose of use COC (continuity of care; record accepts only
+  TREAT|COC|PATRQT|HRESCH|HLEGAL, so HTEST for the sandbox is not available).
+  Constant `PURPOSE_OF_USE` in app/services/disclosure.py.
+- Aligned with record's validator: source_event_id sent both as top-level
+  identifier and as the R5-conformant extension
+  https://record.pdhc.se/fhir/StructureDefinition/source-event-id; the openEHR
+  composition uid (`::` form, not a FHIR reference) rides in what.display with
+  description/count details. A 400 from record marks the row `rejected`
+  (terminal, not re-sent); 401/403/5xx/network stay `pending`.
 - Note: `deliver()` still has no production caller (delivery flag OFF), so the
   backfill is expected to find only whatever sandbox rounds were delivered.
-pytest: 179 passed / 7 skipped before -> 197 / 7 after (+18). Mutation: removing
+pytest: 179 passed / 7 skipped before -> 198 / 7 after (+19, incl. an independent
+re-implementation of record's acceptance rules with refusing controls). Mutation: removing
 the enqueue fails 11 of the 18; the blocking-send control proves the
 never-blocks test detects a send that raises.
 Deploy order: record.pdhc live first; then `flask db upgrade`; set the two env

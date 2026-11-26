@@ -193,7 +193,7 @@ class DisclosureOutbox(db.Model):
     patient_guid = db.Column(db.String(36), nullable=False, index=True)
     export_ref = db.Column(db.String(36), nullable=True, index=True)  # openehr_delivery.guid
     payload = db.Column(JSON, nullable=False)
-    status = db.Column(db.String(16), nullable=False, default="pending", index=True)  # pending|sent
+    status = db.Column(db.String(16), nullable=False, default="pending", index=True)  # pending|sent|rejected (400, terminal)
     attempts = db.Column(db.Integer, nullable=False, default=0)
     last_error = db.Column(db.Text, nullable=True)
     record_id = db.Column(db.String(128), nullable=True)
